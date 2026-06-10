@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Prode TAFA Copa del Mundo 2026">
+  <title>Prode TAFA Copa del Mundo 2026</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar-superior" aria-label="Secciones del prode">
+    <div class="navbar-contenido">
+      <a class="navbar-marca" href="#seccion-pronostico" aria-label="Ir al inicio del prode">
+        <span class="navbar-logo">
+          <img src="assets/logo-tafa.png" alt="" onerror="this.hidden=true; this.nextElementSibling.hidden=false;">
+          <span class="fallback-logo-text" hidden>TAFA</span>
+        </span>
+        <span>Prode TAFA 2026</span>
+      </a>
+
+      <div class="navbar-acciones">
+        <div class="navbar-links">
+          <button class="nav-boton activo" type="button" data-seccion="pronostico" aria-selected="true">
+            <span class="nav-texto-desktop">Pronóstico</span>
+            <span class="nav-texto-mobile">Pronóstico</span>
+          </button>
+          <button class="nav-boton" type="button" data-seccion="calcular" aria-selected="false">
+            <span class="nav-texto-desktop">Puntos</span>
+            <span class="nav-texto-mobile">Puntos</span>
+          </button>
+          <button class="nav-boton" type="button" data-seccion="tabla" aria-selected="false">
+            <span class="nav-texto-desktop">Tabla</span>
+            <span class="nav-texto-mobile">Tabla</span>
+          </button>
+        </div>
+        <span id="estado-notificaciones" class="estado-notificaciones" hidden>Avisos</span>
+        <button class="boton-notificaciones" type="button" id="boton-notificaciones">
+          Activar notificaciones
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="app">
+    <header class="encabezado">
+      <div class="marca">
+        <div class="marca-logo" aria-label="Logo TAFA">
+          <img src="assets/logo-tafa.png" alt="Logo TAFA" onerror="this.hidden=true; this.nextElementSibling.hidden=false;">
+          <span class="fallback-logo-text" hidden>TAFA</span>
+        </div>
+        <div>
+          <h1 id="titulo-prode">Prode TAFA Copa del Mundo 2026</h1>
+        </div>
+      </div>
+    </header>
+
+    <div class="avisos-visuales" id="avisos-visuales" aria-live="polite"></div>
+
+    <main>
+      <section class="seccion-app activa" id="seccion-pronostico" aria-labelledby="titulo-seccion-pronostico">
+        <div class="barra-seccion">
+          <div>
+            <p class="seccion-kicker">Fixture</p>
+            <h2 id="titulo-seccion-pronostico">Pronóstico</h2>
+          </div>
+          <p class="resumen-seleccion" id="resumen-seleccion">Seleccioná participante y fecha</p>
+        </div>
+
+        <div class="controles-pronostico">
+          <label class="campo">
+            <span>Participante</span>
+            <select id="selector-participante"></select>
+          </label>
+
+          <label class="campo">
+            <span>Fecha</span>
+            <select id="selector-fecha"></select>
+          </label>
+        </div>
+
+        <div class="fecha-activa">
+          <div class="fecha-titulo">
+            <p id="fecha-activa-fase" class="fecha-fase">Fase de grupos</p>
+            <h3 id="fecha-activa-nombre">Fecha 1</h3>
+            <p id="fecha-activa-descripcion"></p>
+          </div>
+          <div class="fecha-datos">
+            <span class="chip-horario">Hora ARG</span>
+            <span class="cuenta-regresiva" id="cuenta-regresiva">Sin cierre</span>
+          </div>
+        </div>
+
+        <div class="lista-partidos" id="lista-partidos"></div>
+
+        <div class="resumen-pronostico" id="resumen-pronostico" aria-live="polite">
+          <div class="resumen-item">
+            <span>Fecha</span>
+            <strong id="resumen-fecha">Fecha 1</strong>
+          </div>
+          <div class="resumen-item">
+            <span>Participante</span>
+            <strong id="resumen-participante">Sin participante</strong>
+          </div>
+          <div class="resumen-item">
+            <span>Completos</span>
+            <strong id="resumen-completos">0/0</strong>
+          </div>
+          <div class="resumen-item">
+            <span>Estado</span>
+            <strong id="resumen-estado">Incompleto</strong>
+          </div>
+        </div>
+
+        <div class="acciones-pronostico">
+          <button class="boton boton-primario" type="button" id="boton-whatsapp">
+            WhatsApp
+          </button>
+          <button class="boton boton-secundario" type="button" id="boton-descargar-imagen">
+            Imagen
+          </button>
+          <button class="boton boton-fantasma" type="button" id="boton-limpiar">
+            Limpiar
+          </button>
+        </div>
+
+        <p class="mensaje-estado" id="mensaje-estado" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="seccion-app" id="seccion-calcular" aria-labelledby="titulo-seccion-calcular" hidden>
+        <div class="barra-seccion">
+          <div>
+            <p class="seccion-kicker">Puntos</p>
+            <h2 id="titulo-seccion-calcular">Calcular</h2>
+          </div>
+        </div>
+
+        <div class="panel-herramienta">
+          <label class="campo">
+            <span>Fecha</span>
+            <select id="selector-fecha-calculo"></select>
+          </label>
+
+          <label class="campo campo-textarea">
+            <span>Mensaje WhatsApp</span>
+            <textarea id="textarea-pronostico-calculo" rows="8" placeholder="Pegá mensaje"></textarea>
+          </label>
+
+          <div class="acciones-pronostico">
+            <button class="boton boton-primario" type="button" id="boton-calcular-puntos">
+              Calcular
+            </button>
+          </div>
+        </div>
+
+        <div class="resultado-total" id="resultado-total-individual" hidden></div>
+        <div class="lista-resultados" id="resultado-calculo-individual"></div>
+        <div class="advertencias" id="advertencias-calculo"></div>
+      </section>
+
+      <section class="seccion-app" id="seccion-tabla" aria-labelledby="titulo-seccion-tabla" hidden>
+        <div class="barra-seccion">
+          <div>
+            <p class="seccion-kicker">Posiciones</p>
+            <h2 id="titulo-seccion-tabla">Tabla</h2>
+          </div>
+        </div>
+
+        <div class="panel-herramienta">
+          <label class="campo">
+            <span>Fecha</span>
+            <select id="selector-fecha-tabla"></select>
+          </label>
+
+          <label class="campo campo-textarea">
+            <span>Mensajes WhatsApp</span>
+            <textarea id="textarea-mensajes-tabla" rows="10" placeholder="Pegá mensajes"></textarea>
+          </label>
+
+          <div class="acciones-pronostico">
+            <button class="boton boton-primario" type="button" id="boton-generar-tabla">
+              Tabla
+            </button>
+          </div>
+        </div>
+
+        <div class="tabla-posiciones-wrap" id="tabla-posiciones"></div>
+        <div class="advertencias" id="advertencias-tabla"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <div id="tarjeta-imagen-pronostico" class="tarjeta-imagen-pronostico" aria-hidden="true"></div>
+
+  <script src="data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+Creditos de imagenes - Prode TAFA Copa del Mundo 2026
+
+Imagenes locales provistas por el usuario
+- assets/logo-tafa.png
+  Fuente: C:\Users\rodry\OneDrive\Escritorio\PRODE\Archivos\LOGO TAFA.png
+  Autor/licencia: imagen provista por el usuario para este proyecto. Verificar permisos si se publica fuera del ambito propio.
+
+- assets/banner-tafa-awar.png
+  Fuente: C:\Users\rodry\OneDrive\Escritorio\PRODE\Archivos\banner tafa awar.png
+  Autor/licencia: imagen provista por el usuario para este proyecto. Verificar permisos si se publica fuera del ambito propio.
+
+- assets/banner-tafa-awar-transparente.png
+  Fuente: derivado local de assets/banner-tafa-awar.png para quitar fondo blanco y usarlo sin recuadro visual.
+  Autor/licencia: misma imagen provista por el usuario para este proyecto.
+
+Imagenes decorativas descargadas de OpenMoji
+- assets/deco-pelota.svg
+  Recurso: OpenMoji Soccer Ball, U+26BD
+  URL: https://openmoji.org/library/emoji-26BD/
+  Autor: OpenMoji / HfG Schwabisch Gmund
+  Licencia: CC BY-SA 4.0
+
+- assets/deco-copa.svg
+  Recurso: OpenMoji Trophy, U+1F3C6
+  URL: https://openmoji.org/library/emoji-1F3C6/
+  Autor: OpenMoji / HfG Schwabisch Gmund
+  Licencia: CC BY-SA 4.0
+
+- assets/deco-estadio.svg
+  Recurso: OpenMoji Stadium, U+1F3DF
+  URL: https://openmoji.org/library/emoji-1F3DF/
+  Autor: OpenMoji / HfG Schwabisch Gmund
+  Licencia: CC BY-SA 4.0
+
+- assets/deco-banderines.svg
+  Recurso: OpenMoji Triangular Flag, U+1F6A9
+  URL: https://openmoji.org/library/emoji-1F6A9/
+  Autor: OpenMoji / HfG Schwabisch Gmund
+  Licencia: CC BY-SA 4.0
+
+Licencia OpenMoji
+- Proyecto: https://openmoji.org/
+- Repositorio: https://github.com/hfg-gmuend/openmoji
+- Licencia: https://creativecommons.org/licenses/by-sa/4.0/
+
+Imagen creada localmente
+- assets/fondo-cancha.svg
+  Fuente: creado para este proyecto como patron simple de cancha.
+  Licencia: sin fuente externa.
+
+Nota
+- No se usaron logos oficiales de FIFA, mascota, copa oficial, posters oficiales ni imagenes promocionales del Mundial 2026.
