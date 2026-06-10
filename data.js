@@ -600,6 +600,134 @@ const FECHAS = [
 ];
 
 /*
+  Grupos editables para pronosticar posiciones finales.
+  Para cambiar un grupo, editar el orden o los equipos aca.
+  Mantener id, nombre, codigo y banderaImagen para que la app pueda guardar y mostrar sin imagenes rotas.
+*/
+const GRUPOS_MUNDIAL = [
+  {
+    id: "grupo-a",
+    nombre: "Grupo A",
+    equipos: [
+      { nombre: "México", codigo: "MEX", bandera: "", banderaImagen: "assets/flags/mx.svg" },
+      { nombre: "Sudáfrica", codigo: "RSA", bandera: "", banderaImagen: "assets/flags/za.svg" },
+      { nombre: "Corea del Sur", codigo: "KOR", bandera: "", banderaImagen: "assets/flags/kor.svg" },
+      { nombre: "Chequia", codigo: "CZE", bandera: "", banderaImagen: "assets/flags/cze.svg" }
+    ]
+  },
+  {
+    id: "grupo-b",
+    nombre: "Grupo B",
+    equipos: [
+      { nombre: "Canadá", codigo: "CAN", bandera: "", banderaImagen: "assets/flags/ca.svg" },
+      { nombre: "Bosnia y Herzegovina", codigo: "BIH", bandera: "", banderaImagen: "assets/flags/bih.svg" },
+      { nombre: "Qatar", codigo: "QAT", bandera: "", banderaImagen: "assets/flags/qat.svg" },
+      { nombre: "Suiza", codigo: "SUI", bandera: "", banderaImagen: "assets/flags/sui.svg" }
+    ]
+  },
+  {
+    id: "grupo-c",
+    nombre: "Grupo C",
+    equipos: [
+      { nombre: "Brasil", codigo: "BRA", bandera: "", banderaImagen: "assets/flags/br.svg" },
+      { nombre: "Marruecos", codigo: "MAR", bandera: "", banderaImagen: "assets/flags/ma.svg" },
+      { nombre: "Haití", codigo: "HAI", bandera: "", banderaImagen: "assets/flags/hai.svg" },
+      { nombre: "Escocia", codigo: "SCO", bandera: "", banderaImagen: "assets/flags/sco.svg" }
+    ]
+  },
+  {
+    id: "grupo-d",
+    nombre: "Grupo D",
+    equipos: [
+      { nombre: "Estados Unidos", codigo: "USA", bandera: "", banderaImagen: "assets/flags/us.svg" },
+      { nombre: "Paraguay", codigo: "PAR", bandera: "", banderaImagen: "assets/flags/par.svg" },
+      { nombre: "Australia", codigo: "AUS", bandera: "", banderaImagen: "assets/flags/aus.svg" },
+      { nombre: "Turquía", codigo: "TUR", bandera: "", banderaImagen: "assets/flags/tur.svg" }
+    ]
+  },
+  {
+    id: "grupo-e",
+    nombre: "Grupo E",
+    equipos: [
+      { nombre: "Alemania", codigo: "GER", bandera: "", banderaImagen: "assets/flags/de.svg" },
+      { nombre: "Curazao", codigo: "CUW", bandera: "", banderaImagen: "assets/flags/cuw.svg" },
+      { nombre: "Costa de Marfil", codigo: "CIV", bandera: "", banderaImagen: "assets/flags/civ.svg" },
+      { nombre: "Ecuador", codigo: "ECU", bandera: "", banderaImagen: "assets/flags/ecu.svg" }
+    ]
+  },
+  {
+    id: "grupo-f",
+    nombre: "Grupo F",
+    equipos: [
+      { nombre: "Países Bajos", codigo: "NED", bandera: "", banderaImagen: "assets/flags/ned.svg" },
+      { nombre: "Japón", codigo: "JPN", bandera: "", banderaImagen: "assets/flags/jp.svg" },
+      { nombre: "Suecia", codigo: "SWE", bandera: "", banderaImagen: "assets/flags/swe.svg" },
+      { nombre: "Túnez", codigo: "TUN", bandera: "", banderaImagen: "assets/flags/tun.svg" }
+    ]
+  },
+  {
+    id: "grupo-g",
+    nombre: "Grupo G",
+    equipos: [
+      { nombre: "Bélgica", codigo: "BEL", bandera: "", banderaImagen: "assets/flags/bel.svg" },
+      { nombre: "Egipto", codigo: "EGY", bandera: "", banderaImagen: "assets/flags/egy.svg" },
+      { nombre: "Irán", codigo: "IRN", bandera: "", banderaImagen: "assets/flags/irn.svg" },
+      { nombre: "Nueva Zelanda", codigo: "NZL", bandera: "", banderaImagen: "assets/flags/nzl.svg" }
+    ]
+  },
+  {
+    id: "grupo-h",
+    nombre: "Grupo H",
+    equipos: [
+      { nombre: "España", codigo: "ESP", bandera: "", banderaImagen: "assets/flags/es.svg" },
+      { nombre: "Cabo Verde", codigo: "CPV", bandera: "", banderaImagen: "assets/flags/cpv.svg" },
+      { nombre: "Arabia Saudita", codigo: "KSA", bandera: "", banderaImagen: "assets/flags/ksa.svg" },
+      { nombre: "Uruguay", codigo: "URU", bandera: "", banderaImagen: "assets/flags/uy.svg" }
+    ]
+  },
+  {
+    id: "grupo-i",
+    nombre: "Grupo I",
+    equipos: [
+      { nombre: "Francia", codigo: "FRA", bandera: "", banderaImagen: "assets/flags/fr.svg" },
+      { nombre: "Senegal", codigo: "SEN", bandera: "", banderaImagen: "assets/flags/sen.svg" },
+      { nombre: "Irak", codigo: "IRQ", bandera: "", banderaImagen: "assets/flags/irq.svg" },
+      { nombre: "Noruega", codigo: "NOR", bandera: "", banderaImagen: "assets/flags/nor.svg" }
+    ]
+  },
+  {
+    id: "grupo-j",
+    nombre: "Grupo J",
+    equipos: [
+      { nombre: "Argentina", codigo: "ARG", bandera: "", banderaImagen: "assets/flags/ar.svg" },
+      { nombre: "Argelia", codigo: "ALG", bandera: "", banderaImagen: "assets/flags/alg.svg" },
+      { nombre: "Austria", codigo: "AUT", bandera: "", banderaImagen: "assets/flags/aut.svg" },
+      { nombre: "Jordania", codigo: "JOR", bandera: "", banderaImagen: "assets/flags/jor.svg" }
+    ]
+  },
+  {
+    id: "grupo-k",
+    nombre: "Grupo K",
+    equipos: [
+      { nombre: "Portugal", codigo: "POR", bandera: "", banderaImagen: "assets/flags/pt.svg" },
+      { nombre: "RD Congo", codigo: "COD", bandera: "", banderaImagen: "assets/flags/cod.svg" },
+      { nombre: "Uzbekistán", codigo: "UZB", bandera: "", banderaImagen: "assets/flags/uzb.svg" },
+      { nombre: "Colombia", codigo: "COL", bandera: "", banderaImagen: "assets/flags/co.svg" }
+    ]
+  },
+  {
+    id: "grupo-l",
+    nombre: "Grupo L",
+    equipos: [
+      { nombre: "Inglaterra", codigo: "ENG", bandera: "", banderaImagen: "assets/flags/gb-eng.svg" },
+      { nombre: "Croacia", codigo: "CRO", bandera: "", banderaImagen: "assets/flags/cro.svg" },
+      { nombre: "Ghana", codigo: "GHA", bandera: "", banderaImagen: "assets/flags/gha.svg" },
+      { nombre: "Panamá", codigo: "PAN", bandera: "", banderaImagen: "assets/flags/pan.svg" }
+    ]
+  }
+];
+
+/*
   Resultados oficiales.
   Para cargar un resultado oficial, reemplazar null por el numero de goles.
   No modificar el id del partido.

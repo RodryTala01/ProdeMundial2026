@@ -2,13 +2,19 @@ const CLAVE_ESTADO = "prodeTafa2026_state";
 const CLAVE_NOTIFICACIONES_VISTAS = "prodeTafa2026_notificaciones_vistas";
 const CLAVE_NOTIFICACIONES_INTERACCION = "prodeTafa2026_notificaciones_interaccion";
 const CLAVE_AVISOS_VISUALES_CERRADOS = "prodeTafa2026_avisos_visuales_cerrados";
+const SECCIONES_DESHABILITADAS = new Set(["calcular", "tabla"]);
 
 let intervaloCuentaRegresiva = null;
+let modalGrupoActivo = {
+  grupoId: "",
+  posicion: -1
+};
 
 let estadoApp = {
   fechaSeleccionada: "",
   participanteSeleccionado: "",
-  pronosticos: {}
+  pronosticos: {},
+  pronosticosGrupos: {}
 };
 
 document.addEventListener("DOMContentLoaded", inicializarApp);
@@ -20,15 +26,19 @@ function inicializarApp() {
   estadoApp = cargarEstado();
 
   renderizarParticipantes();
+  renderizarParticipantesGrupos();
   renderizarFechas();
   renderizarFechasHerramientas();
   restaurarSelectoresDesdeEstado();
   enlazarNavegacion();
   enlazarAcciones();
   renderizarPartidos();
+  renderizarSeccionGrupos();
   cargarPronosticoActual();
+  cargarPronosticoGruposActual();
   actualizarResumenSeleccion();
   actualizarResumenPronostico();
+  actualizarResumenGrupos();
   inicializarNotificaciones();
 }
 
@@ -61,7 +71,45 @@ function renderizarParticipantes() {
 
     actualizarResumenSeleccion();
     actualizarResumenPronostico();
+    sincronizarSelectorParticipanteGrupos(selectorParticipante.value);
+    cargarPronosticoGruposActual();
+    limpiarMensajeGrupos();
     limpiarMensaje();
+  });
+}
+
+function renderizarParticipantesGrupos() {
+  const selectorParticipante = document.getElementById("selector-grupos-participante");
+
+  if (!selectorParticipante) {
+    return;
+  }
+
+  selectorParticipante.innerHTML = "";
+
+  const opcionInicial = document.createElement("option");
+  opcionInicial.value = "";
+  opcionInicial.textContent = "Elegí participante";
+  selectorParticipante.appendChild(opcionInicial);
+
+  PARTICIPANTES.forEach((participante) => {
+    const opcion = document.createElement("option");
+    opcion.value = participante;
+    opcion.textContent = participante;
+    selectorParticipante.appendChild(opcion);
+  });
+
+  selectorParticipante.addEventListener("change", () => {
+    estadoApp.participanteSeleccionado = selectorParticipante.value;
+    sincronizarSelectorParticipantePartidos(selectorParticipante.value);
+    guardarEstado();
+    cargarPronosticoActual();
+    cargarPronosticoGruposActual();
+    actualizarResumenSeleccion();
+    actualizarResumenPronostico();
+    actualizarResumenGrupos();
+    limpiarMensaje();
+    limpiarMensajeGrupos();
   });
 }
 
@@ -125,6 +173,7 @@ function renderizarFechasHerramientas() {
 function restaurarSelectoresDesdeEstado() {
   const selectorFecha = document.getElementById("selector-fecha");
   const selectorParticipante = document.getElementById("selector-participante");
+  const selectorParticipanteGrupos = document.getElementById("selector-grupos-participante");
   const existeFechaGuardada = FECHAS.some((fecha) => fecha.id === estadoApp.fechaSeleccionada);
   const existeParticipanteGuardado = PARTICIPANTES.includes(estadoApp.participanteSeleccionado);
 
@@ -138,7 +187,28 @@ function restaurarSelectoresDesdeEstado() {
 
   selectorFecha.value = estadoApp.fechaSeleccionada;
   selectorParticipante.value = estadoApp.participanteSeleccionado;
+
+  if (selectorParticipanteGrupos) {
+    selectorParticipanteGrupos.value = estadoApp.participanteSeleccionado;
+  }
+
   guardarEstado();
+}
+
+function sincronizarSelectorParticipanteGrupos(participante) {
+  const selectorParticipanteGrupos = document.getElementById("selector-grupos-participante");
+
+  if (selectorParticipanteGrupos) {
+    selectorParticipanteGrupos.value = participante || "";
+  }
+}
+
+function sincronizarSelectorParticipantePartidos(participante) {
+  const selectorParticipante = document.getElementById("selector-participante");
+
+  if (selectorParticipante) {
+    selectorParticipante.value = participante || "";
+  }
 }
 
 function renderizarPartidos() {
@@ -250,7 +320,10 @@ function crearBanderaEquipo(equipo, clase, usarCargaDiferida) {
   const imagen = document.createElement("img");
   imagen.alt = `Bandera de ${equipo.nombre}`;
   imagen.decoding = "async";
-  imagen.crossOrigin = "anonymous";
+
+  if (/^https?:\/\//i.test(equipo.banderaImagen)) {
+    imagen.crossOrigin = "anonymous";
+  }
 
   if (usarCargaDiferida) {
     imagen.loading = "lazy";
@@ -345,12 +418,20 @@ function enlazarNavegacion() {
 
   botones.forEach((boton) => {
     boton.addEventListener("click", () => {
+      if (boton.disabled || boton.getAttribute("aria-disabled") === "true") {
+        return;
+      }
+
       cambiarSeccion(boton.dataset.seccion);
     });
   });
 }
 
 function cambiarSeccion(seccionActiva) {
+  if (SECCIONES_DESHABILITADAS.has(seccionActiva)) {
+    return;
+  }
+
   document.querySelectorAll(".nav-boton").forEach((boton) => {
     const estaActivo = boton.dataset.seccion === seccionActiva;
     boton.classList.toggle("activo", estaActivo);
@@ -362,6 +443,10 @@ function cambiarSeccion(seccionActiva) {
     seccion.classList.toggle("activa", estaActiva);
     seccion.hidden = !estaActiva;
   });
+
+  if (seccionActiva === "grupos") {
+    renderizarSeccionGrupos();
+  }
 }
 
 function enlazarAcciones() {
@@ -371,6 +456,12 @@ function enlazarAcciones() {
 
   const botonCalcular = document.getElementById("boton-calcular-puntos");
   const botonTabla = document.getElementById("boton-generar-tabla");
+  const botonGruposWhatsApp = document.getElementById("boton-grupos-whatsapp");
+  const botonGruposImagen = document.getElementById("boton-grupos-imagen");
+  const botonGruposLimpiar = document.getElementById("boton-grupos-limpiar");
+  const modalGrupos = document.getElementById("modal-grupos");
+  const modalCerrar = document.getElementById("modal-grupos-cerrar");
+  const modalCancelar = document.getElementById("modal-grupos-cancelar");
 
   if (botonCalcular) {
     botonCalcular.addEventListener("click", renderizarResultadoIndividual);
@@ -382,6 +473,40 @@ function enlazarAcciones() {
       renderizarTablaPosiciones(resultado);
     });
   }
+
+  if (botonGruposWhatsApp) {
+    botonGruposWhatsApp.addEventListener("click", enviarGruposPorWhatsApp);
+  }
+
+  if (botonGruposImagen) {
+    botonGruposImagen.addEventListener("click", descargarImagenGrupos);
+  }
+
+  if (botonGruposLimpiar) {
+    botonGruposLimpiar.addEventListener("click", limpiarPronosticoGruposActual);
+  }
+
+  if (modalCerrar) {
+    modalCerrar.addEventListener("click", cerrarModalEquipo);
+  }
+
+  if (modalCancelar) {
+    modalCancelar.addEventListener("click", cerrarModalEquipo);
+  }
+
+  if (modalGrupos) {
+    modalGrupos.addEventListener("click", (evento) => {
+      if (evento.target === modalGrupos) {
+        cerrarModalEquipo();
+      }
+    });
+  }
+
+  document.addEventListener("keydown", (evento) => {
+    if (evento.key === "Escape") {
+      cerrarModalEquipo();
+    }
+  });
 }
 
 function obtenerClavePronostico(participante, fechaId) {
@@ -411,7 +536,8 @@ function cargarEstado() {
   const estadoBase = {
     fechaSeleccionada: "",
     participanteSeleccionado: "",
-    pronosticos: {}
+    pronosticos: {},
+    pronosticosGrupos: {}
   };
 
   try {
@@ -428,6 +554,9 @@ function cargarEstado() {
       participanteSeleccionado: estadoParseado.participanteSeleccionado || "",
       pronosticos: estadoParseado.pronosticos && typeof estadoParseado.pronosticos === "object"
         ? estadoParseado.pronosticos
+        : {},
+      pronosticosGrupos: estadoParseado.pronosticosGrupos && typeof estadoParseado.pronosticosGrupos === "object"
+        ? estadoParseado.pronosticosGrupos
         : {}
     };
   } catch (error) {
@@ -675,6 +804,959 @@ function limpiarPronosticoActual() {
   mostrarMensaje("Se limpió solamente este participante y esta fecha.", "info");
 }
 
+function renderizarSeccionGrupos() {
+  const contenedor = document.getElementById("lista-grupos");
+
+  if (!contenedor) {
+    return;
+  }
+
+  contenedor.innerHTML = "";
+
+  const grupos = obtenerGruposMundial();
+
+  if (!grupos.length) {
+    contenedor.innerHTML = '<p class="mensaje-estado error">No hay grupos cargados.</p>';
+    actualizarResumenGrupos();
+    return;
+  }
+
+  grupos.forEach((grupo) => {
+    contenedor.appendChild(renderizarGrupoPronostico(grupo));
+  });
+
+  actualizarResumenGrupos();
+}
+
+function renderizarGrupoPronostico(grupo) {
+  const pronostico = obtenerPronosticoGruposActual();
+  const posiciones = normalizarPronosticoGrupo(pronostico[grupo.id], grupo);
+  const tarjeta = document.createElement("article");
+  tarjeta.className = "grupo-card";
+
+  const encabezado = document.createElement("div");
+  encabezado.className = "grupo-card-encabezado";
+
+  const titulo = document.createElement("h3");
+  titulo.textContent = grupo.nombre;
+
+  const contador = document.createElement("span");
+  contador.textContent = `${posiciones.filter(Boolean).length}/4`;
+
+  encabezado.append(titulo, contador);
+
+  const lista = document.createElement("div");
+  lista.className = "grupo-posiciones";
+
+  posiciones.forEach((equipoCodigo, indice) => {
+    const fila = document.createElement("div");
+    fila.className = "grupo-posicion-fila";
+
+    const posicion = document.createElement("span");
+    posicion.className = "grupo-posicion-numero";
+    posicion.textContent = `${indice + 1}°`;
+
+    const equipo = obtenerEquipoGrupo(grupo, equipoCodigo);
+    const botonEquipo = document.createElement("button");
+    botonEquipo.type = "button";
+    botonEquipo.className = equipo ? "grupo-equipo-elegido" : "grupo-equipo-placeholder";
+    botonEquipo.addEventListener("click", () => abrirModalEquipo(grupo.id, indice));
+
+    if (equipo) {
+      botonEquipo.appendChild(crearEquipoResumenGrupo(equipo));
+    } else {
+      botonEquipo.textContent = "+ Elegir equipo";
+    }
+
+    const quitar = document.createElement("button");
+    quitar.type = "button";
+    quitar.className = "grupo-quitar";
+    quitar.textContent = "X";
+    quitar.hidden = !equipo;
+    quitar.addEventListener("click", (evento) => {
+      evento.stopPropagation();
+      quitarEquipoGrupo(grupo.id, indice);
+    });
+
+    fila.append(posicion, botonEquipo, quitar);
+    lista.appendChild(fila);
+  });
+
+  tarjeta.append(encabezado, lista);
+  return tarjeta;
+}
+
+function abrirModalEquipo(grupoId, posicion) {
+  const participante = obtenerParticipanteGruposActual();
+  const grupo = obtenerGrupoPorId(grupoId);
+  const modal = document.getElementById("modal-grupos");
+  const titulo = document.getElementById("modal-grupos-titulo");
+  const lista = document.getElementById("modal-grupos-lista");
+
+  if (!participante) {
+    mostrarMensajeGrupos("Elegí un participante antes de cargar grupos.", "error");
+
+    const selectorParticipante = document.getElementById("selector-grupos-participante");
+
+    if (selectorParticipante) {
+      selectorParticipante.focus();
+      selectorParticipante.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    return;
+  }
+
+  if (!grupo || !modal || !titulo || !lista) {
+    return;
+  }
+
+  modalGrupoActivo = {
+    grupoId,
+    posicion
+  };
+
+  const pronostico = obtenerPronosticoGruposActual();
+  const posiciones = normalizarPronosticoGrupo(pronostico[grupo.id], grupo);
+  const codigoActual = posiciones[posicion] || "";
+  const codigosElegidos = posiciones.filter((codigo) => codigo && codigo !== codigoActual);
+
+  titulo.textContent = `${grupo.nombre} · Elegir ${posicion + 1}°`;
+  lista.innerHTML = "";
+
+  grupo.equipos.forEach((equipo) => {
+    const yaElegido = codigosElegidos.includes(equipo.codigo);
+    const boton = document.createElement("button");
+    boton.type = "button";
+    boton.className = "modal-equipo";
+    boton.disabled = yaElegido;
+
+    const resumen = crearEquipoResumenGrupo(equipo);
+    boton.appendChild(resumen);
+
+    if (yaElegido) {
+      const estado = document.createElement("span");
+      estado.className = "modal-equipo-estado";
+      estado.textContent = "Ya elegido";
+      boton.appendChild(estado);
+    } else {
+      boton.addEventListener("click", (evento) => {
+        evento.preventDefault();
+        seleccionarEquipoGrupo(grupo.id, posicion, equipo.codigo);
+      });
+    }
+
+    lista.appendChild(boton);
+  });
+
+  modal.hidden = false;
+  modal.classList.add("visible");
+  document.body.classList.add("modal-grupos-abierto");
+
+  requestAnimationFrame(() => {
+    const primerDisponible = lista.querySelector("button:not(:disabled)");
+    if (primerDisponible) {
+      primerDisponible.focus();
+    }
+  });
+}
+
+function cerrarModalEquipo() {
+  const modal = document.getElementById("modal-grupos");
+
+  modalGrupoActivo = {
+    grupoId: "",
+    posicion: -1
+  };
+
+  if (!modal || modal.hidden) {
+    return;
+  }
+
+  modal.hidden = true;
+  modal.classList.remove("visible");
+  document.body.classList.remove("modal-grupos-abierto");
+}
+
+function seleccionarEquipoGrupo(grupoId, posicion, equipoCodigo) {
+  const participante = obtenerParticipanteGruposActual();
+  const grupo = obtenerGrupoPorId(grupoId);
+
+  if (!participante) {
+    cerrarModalEquipo();
+    mostrarMensajeGrupos("Elegí un participante", "error");
+    return;
+  }
+
+  if (!grupo || !obtenerEquipoGrupo(grupo, equipoCodigo)) {
+    mostrarMensajeGrupos("Equipo inválido", "error");
+    return;
+  }
+
+  sincronizarSelectorParticipanteGrupos(participante);
+  sincronizarSelectorParticipantePartidos(participante);
+  estadoApp.participanteSeleccionado = participante;
+
+  const pronostico = obtenerPronosticoGruposActual(true);
+  const posiciones = normalizarPronosticoGrupo(pronostico[grupo.id], grupo);
+  const repetido = posiciones.some((codigo, indice) => indice !== posicion && codigo === equipoCodigo);
+
+  if (repetido) {
+    mostrarMensajeGrupos(`Hay equipos repetidos en ${grupo.nombre}`, "error");
+    return;
+  }
+
+  posiciones[posicion] = equipoCodigo;
+  pronostico[grupo.id] = posiciones;
+  guardarPronosticoGruposActual();
+  cerrarModalEquipo();
+  renderizarSeccionGrupos();
+  mostrarMensajeGrupos("Equipo guardado.", "exito");
+}
+
+function quitarEquipoGrupo(grupoId, posicion) {
+  const participante = obtenerParticipanteGruposActual();
+  const grupo = obtenerGrupoPorId(grupoId);
+
+  if (!participante || !grupo) {
+    return;
+  }
+
+  const pronostico = obtenerPronosticoGruposActual(true);
+  const posiciones = normalizarPronosticoGrupo(pronostico[grupo.id], grupo);
+  posiciones[posicion] = "";
+  pronostico[grupo.id] = posiciones;
+  guardarPronosticoGruposActual();
+  renderizarSeccionGrupos();
+  limpiarMensajeGrupos();
+}
+
+function obtenerPronosticoGruposActual(crearRegistro = false) {
+  const participante = obtenerParticipanteGruposActual();
+
+  if (!estadoApp.pronosticosGrupos || typeof estadoApp.pronosticosGrupos !== "object") {
+    estadoApp.pronosticosGrupos = {};
+  }
+
+  if (!participante) {
+    return {};
+  }
+
+  if (!estadoApp.pronosticosGrupos[participante] || typeof estadoApp.pronosticosGrupos[participante] !== "object") {
+    if (!crearRegistro) {
+      return {};
+    }
+
+    estadoApp.pronosticosGrupos[participante] = {};
+  }
+
+  return estadoApp.pronosticosGrupos[participante];
+}
+
+function guardarPronosticoGruposActual() {
+  const participante = obtenerParticipanteGruposActual();
+
+  if (!estadoApp.pronosticosGrupos || typeof estadoApp.pronosticosGrupos !== "object") {
+    estadoApp.pronosticosGrupos = {};
+  }
+
+  estadoApp.participanteSeleccionado = participante || estadoApp.participanteSeleccionado || "";
+
+  if (participante) {
+    const registro = estadoApp.pronosticosGrupos[participante] || {};
+    const hayDatos = Object.values(registro).some((posiciones) => {
+      return Array.isArray(posiciones) && posiciones.some(Boolean);
+    });
+
+    if (!hayDatos) {
+      delete estadoApp.pronosticosGrupos[participante];
+    } else {
+      estadoApp.pronosticosGrupos[participante] = registro;
+    }
+  }
+
+  guardarEstado();
+}
+
+function cargarPronosticoGruposActual() {
+  renderizarSeccionGrupos();
+  actualizarResumenGrupos();
+}
+
+function validarPronosticoGruposCompleto() {
+  const participante = obtenerParticipanteGruposActual();
+  const grupos = obtenerGruposMundial();
+  const pronostico = obtenerPronosticoGruposActual();
+  const gruposValidos = [];
+
+  if (!participante) {
+    return {
+      valido: false,
+      mensaje: "Elegí un participante"
+    };
+  }
+
+  for (const grupo of grupos) {
+    const posiciones = normalizarPronosticoGrupo(pronostico[grupo.id], grupo);
+
+    if (posiciones.some((codigo) => !codigo)) {
+      return {
+        valido: false,
+        mensaje: `Falta completar ${grupo.nombre}`
+      };
+    }
+
+    const repetidos = posiciones.filter((codigo, indice) => posiciones.indexOf(codigo) !== indice);
+
+    if (repetidos.length) {
+      return {
+        valido: false,
+        mensaje: `Hay equipos repetidos en ${grupo.nombre}`
+      };
+    }
+
+    const equipos = posiciones.map((codigo) => obtenerEquipoGrupo(grupo, codigo));
+
+    if (equipos.some((equipo) => !equipo)) {
+      return {
+        valido: false,
+        mensaje: `Revisá ${grupo.nombre}`
+      };
+    }
+
+    gruposValidos.push({
+      grupo,
+      posiciones,
+      equipos
+    });
+  }
+
+  return {
+    valido: true,
+    mensaje: "",
+    participante,
+    grupos: gruposValidos
+  };
+}
+
+function generarMensajeGruposWhatsApp() {
+  const validacion = validarPronosticoGruposCompleto();
+
+  if (!validacion.valido) {
+    return "";
+  }
+
+  const lineas = [
+    CONFIG.nombreProde,
+    "Pronóstico de grupos",
+    `Participante: ${validacion.participante}`,
+    ""
+  ];
+
+  validacion.grupos.forEach(({ grupo, equipos }, indiceGrupo) => {
+    lineas.push(grupo.nombre, "");
+
+    equipos.forEach((equipo, indice) => {
+      lineas.push(`${indice + 1}. ${equipo.nombre}`);
+    });
+
+    if (indiceGrupo < validacion.grupos.length - 1) {
+      lineas.push("");
+    }
+  });
+
+  return lineas.join("\n");
+}
+
+function enviarGruposPorWhatsApp() {
+  const validacion = validarPronosticoGruposCompleto();
+
+  if (!validacion.valido) {
+    mostrarMensajeGrupos(validacion.mensaje, "error");
+    return;
+  }
+
+  guardarPronosticoGruposActual();
+
+  const mensaje = generarMensajeGruposWhatsApp();
+  const url = `https://wa.me/${CONFIG.whatsappDestino}?text=${encodeURIComponent(mensaje)}`;
+
+  window.open(url, "_blank", "noopener,noreferrer");
+  mostrarMensajeGrupos("Se abrió WhatsApp con los grupos.", "exito");
+}
+
+function prepararTarjetaImagenGrupos() {
+  const contenedor = document.getElementById("tarjeta-imagen-pronostico");
+  const validacion = validarPronosticoGruposCompleto();
+
+  contenedor.innerHTML = "";
+
+  const tarjeta = document.createElement("div");
+  tarjeta.className = "imagen-pronostico imagen-pronostico-grupos";
+
+  const encabezado = document.createElement("div");
+  encabezado.className = "imagen-encabezado";
+
+  const textos = document.createElement("div");
+  const wordmark = document.createElement("img");
+  wordmark.className = "imagen-wordmark";
+  wordmark.src = "assets/banner-tafa-awar-transparente.png";
+  wordmark.alt = "Prode TAFA";
+  wordmark.addEventListener("error", () => {
+    wordmark.remove();
+  });
+
+  const titulo = document.createElement("h2");
+  titulo.textContent = CONFIG.nombreProde;
+
+  const subtitulo = document.createElement("p");
+  subtitulo.className = "imagen-subtitulo";
+  subtitulo.textContent = "Pronóstico de grupos";
+
+  textos.append(wordmark, titulo, subtitulo);
+
+  const logo = document.createElement("div");
+  logo.className = "imagen-logo";
+  const logoImagen = document.createElement("img");
+  logoImagen.src = "assets/logo-tafa.png";
+  logoImagen.alt = "Logo TAFA";
+  logoImagen.addEventListener("error", () => {
+    logoImagen.remove();
+    logo.textContent = "TAFA";
+  });
+  logo.appendChild(logoImagen);
+
+  encabezado.append(textos, logo);
+
+  const info = document.createElement("div");
+  info.className = "imagen-info";
+  info.append(
+    crearInfoImagen("Tipo", "Grupos"),
+    crearInfoImagen("Participante", validacion.participante),
+    crearInfoImagen("Completos", `${validacion.grupos.length}/${obtenerGruposMundial().length}`)
+  );
+
+  const grilla = document.createElement("div");
+  grilla.className = "imagen-grupos-grid";
+
+  validacion.grupos.forEach(({ grupo, equipos }) => {
+    grilla.appendChild(crearGrupoImagen(grupo, equipos));
+  });
+
+  tarjeta.append(encabezado, info, grilla);
+  contenedor.appendChild(tarjeta);
+
+  return tarjeta;
+}
+
+async function descargarImagenGrupos() {
+  const validacion = validarPronosticoGruposCompleto();
+
+  if (!validacion.valido) {
+    mostrarMensajeGrupos(validacion.mensaje, "error");
+    return;
+  }
+
+  const canvasPrueba = document.createElement("canvas");
+
+  if (!canvasPrueba.getContext) {
+    mostrarMensajeGrupos("No se pudo generar la imagen.", "error");
+    return;
+  }
+
+  guardarPronosticoGruposActual();
+
+  try {
+    const canvas = await crearCanvasImagenGrupos(validacion);
+    await descargarCanvasPng(canvas, `prode-tafa-grupos-${normalizarNombreArchivo(validacion.participante)}.png`);
+
+    mostrarMensajeGrupos("Imagen descargada.", "exito");
+  } catch (error) {
+    mostrarMensajeGrupos("No se pudo generar la imagen.", "error");
+  }
+}
+
+async function crearCanvasImagenGrupos(validacion) {
+  const escala = 2;
+  const ancho = 900;
+  const margen = 22;
+  const altoEncabezado = 118;
+  const altoInfo = 58;
+  const separacion = 8;
+  const columnas = 2;
+  const separacionColumnas = 10;
+  const anchoColumna = (ancho - (margen * 2) - separacionColumnas) / columnas;
+  const altoGrupoEncabezado = 31;
+  const altoFila = 36;
+  const altoGrupo = altoGrupoEncabezado + (altoFila * 4);
+  const filas = Math.ceil(validacion.grupos.length / columnas);
+  const inicioGrupos = margen + altoEncabezado + altoInfo + 16;
+  const alto = inicioGrupos + (filas * altoGrupo) + ((filas - 1) * separacion) + margen;
+  const canvas = document.createElement("canvas");
+  const contexto = canvas.getContext("2d");
+
+  if (!contexto) {
+    throw new Error("No canvas context");
+  }
+
+  canvas.width = ancho * escala;
+  canvas.height = alto * escala;
+  contexto.scale(escala, escala);
+  contexto.imageSmoothingEnabled = true;
+  contexto.imageSmoothingQuality = "high";
+
+  const imagenes = await cargarImagenesGruposCanvas(validacion.grupos);
+  const logo = await cargarImagenCanvas("assets/logo-tafa.png");
+
+  dibujarFondoImagenGrupos(contexto, ancho, alto);
+  dibujarEncabezadoImagenGrupos(contexto, validacion, logo, margen, ancho, altoEncabezado);
+  dibujarInfoImagenGrupos(contexto, validacion, margen, margen + altoEncabezado, ancho - (margen * 2), altoInfo);
+
+  validacion.grupos.forEach((grupoValidado, indice) => {
+    const columna = indice % columnas;
+    const fila = Math.floor(indice / columnas);
+    const x = margen + (columna * (anchoColumna + separacionColumnas));
+    const y = inicioGrupos + (fila * (altoGrupo + separacion));
+
+    dibujarGrupoImagenCanvas(contexto, grupoValidado, imagenes, x, y, anchoColumna, altoGrupoEncabezado, altoFila);
+  });
+
+  return canvas;
+}
+
+function dibujarFondoImagenGrupos(contexto, ancho, alto) {
+  contexto.fillStyle = "#e7dfc8";
+  contexto.fillRect(0, 0, ancho, alto);
+
+  contexto.fillStyle = "rgba(15, 82, 45, 0.08)";
+
+  for (let y = 0; y < alto; y += 42) {
+    contexto.fillRect(0, y, ancho, 18);
+  }
+
+  contexto.fillStyle = "#0f522d";
+  contexto.fillRect(0, 0, ancho, 118);
+  contexto.fillStyle = "#d6aa34";
+  contexto.fillRect(0, 112, ancho, 6);
+}
+
+function dibujarEncabezadoImagenGrupos(contexto, validacion, logo, margen, ancho, altoEncabezado) {
+  contexto.fillStyle = "#ffffff";
+  contexto.font = "700 27px Arial, Helvetica, sans-serif";
+  contexto.fillText(CONFIG.nombreProde, margen, 44);
+
+  contexto.font = "700 17px Arial, Helvetica, sans-serif";
+  contexto.fillStyle = "#f4ecd7";
+  contexto.fillText("Pronostico de grupos", margen, 72);
+
+  contexto.font = "700 15px Arial, Helvetica, sans-serif";
+  contexto.fillStyle = "#d6aa34";
+  contexto.fillText(`Participante: ${validacion.participante}`, margen, 96);
+
+  const logoAncho = 56;
+  const logoAlto = 74;
+  const logoX = ancho - margen - logoAncho;
+  const logoY = Math.max(12, (altoEncabezado - logoAlto) / 2 - 2);
+
+  if (logo) {
+    dibujarImagenContain(contexto, logo, logoX, logoY, logoAncho, logoAlto);
+  } else {
+    contexto.fillStyle = "#d6aa34";
+    contexto.font = "800 20px Arial, Helvetica, sans-serif";
+    contexto.textAlign = "center";
+    contexto.fillText("TAFA", logoX + (logoAncho / 2), logoY + 42);
+    contexto.textAlign = "left";
+  }
+}
+
+function dibujarInfoImagenGrupos(contexto, validacion, x, y, ancho, alto) {
+  const datos = [
+    ["Tipo", "Grupos"],
+    ["Participante", validacion.participante],
+    ["Completos", `${validacion.grupos.length}/${obtenerGruposMundial().length}`]
+  ];
+  const anchoCelda = ancho / datos.length;
+
+  datos.forEach(([etiqueta, valor], indice) => {
+    const celdaX = x + (indice * anchoCelda);
+
+    contexto.fillStyle = indice % 2 === 0 ? "#dce7d6" : "#ebe4cf";
+    contexto.fillRect(celdaX, y, anchoCelda, alto);
+    contexto.strokeStyle = "#8d8d8d";
+    contexto.lineWidth = 1;
+    contexto.strokeRect(celdaX, y, anchoCelda, alto);
+
+    contexto.fillStyle = "#555555";
+    contexto.font = "700 11px Arial, Helvetica, sans-serif";
+    contexto.fillText(etiqueta.toUpperCase(), celdaX + 10, y + 21);
+
+    contexto.fillStyle = "#111111";
+    contexto.font = "700 16px Arial, Helvetica, sans-serif";
+    dibujarTextoRecortado(contexto, valor, celdaX + 10, y + 43, anchoCelda - 20);
+  });
+}
+
+function dibujarGrupoImagenCanvas(contexto, grupoValidado, imagenes, x, y, ancho, altoEncabezado, altoFila) {
+  contexto.strokeStyle = "#08391f";
+  contexto.lineWidth = 1;
+  contexto.strokeRect(x, y, ancho, altoEncabezado + (altoFila * 4));
+
+  contexto.fillStyle = "#08391f";
+  contexto.fillRect(x, y, ancho, altoEncabezado);
+
+  contexto.fillStyle = "#ffffff";
+  contexto.font = "700 16px Arial, Helvetica, sans-serif";
+  contexto.fillText(grupoValidado.grupo.nombre, x + 9, y + 21);
+
+  grupoValidado.equipos.forEach((equipo, indice) => {
+    const filaY = y + altoEncabezado + (indice * altoFila);
+    const esPar = indice % 2 === 0;
+
+    contexto.fillStyle = esPar ? "#f4ecd7" : "#dce7d6";
+    contexto.fillRect(x, filaY, ancho, altoFila);
+    contexto.strokeStyle = "#8d8d8d";
+    contexto.strokeRect(x, filaY, ancho, altoFila);
+
+    contexto.fillStyle = "#163f70";
+    contexto.fillRect(x, filaY, 32, altoFila);
+
+    contexto.fillStyle = "#ffffff";
+    contexto.font = "800 13px Arial, Helvetica, sans-serif";
+    contexto.textAlign = "center";
+    contexto.fillText(`${indice + 1}.`, x + 16, filaY + 23);
+    contexto.textAlign = "left";
+
+    dibujarBanderaCanvas(contexto, imagenes.get(equipo.codigo), equipo, x + 42, filaY + 7, 32, 22);
+
+    contexto.fillStyle = "#111111";
+    contexto.font = "700 14px Arial, Helvetica, sans-serif";
+    dibujarTextoRecortado(contexto, equipo.nombre, x + 84, filaY + 22, ancho - 142);
+
+    contexto.fillStyle = "#555555";
+    contexto.font = "700 11px Arial, Helvetica, sans-serif";
+    contexto.textAlign = "right";
+    contexto.fillText(equipo.codigo, x + ancho - 10, filaY + 22);
+    contexto.textAlign = "left";
+  });
+}
+
+function dibujarBanderaCanvas(contexto, imagen, equipo, x, y, ancho, alto) {
+  contexto.fillStyle = "#fffaf0";
+  contexto.fillRect(x, y, ancho, alto);
+  contexto.strokeStyle = "#8d8d8d";
+  contexto.lineWidth = 1;
+  contexto.strokeRect(x, y, ancho, alto);
+
+  if (imagen) {
+    contexto.save();
+    contexto.beginPath();
+    contexto.rect(x + 1, y + 1, ancho - 2, alto - 2);
+    contexto.clip();
+    dibujarImagenCover(contexto, imagen, x + 1, y + 1, ancho - 2, alto - 2);
+    contexto.restore();
+    return;
+  }
+
+  contexto.fillStyle = "#163f70";
+  contexto.font = "800 9px Arial, Helvetica, sans-serif";
+  contexto.textAlign = "center";
+  contexto.fillText(equipo.codigo, x + (ancho / 2), y + 14);
+  contexto.textAlign = "left";
+}
+
+async function cargarImagenesGruposCanvas(grupos) {
+  const entradas = [];
+
+  grupos.forEach(({ equipos }) => {
+    equipos.forEach((equipo) => {
+      entradas.push(equipo);
+    });
+  });
+
+  const imagenes = await Promise.all(entradas.map(async (equipo) => {
+    const imagen = await cargarImagenCanvas(equipo.banderaImagen);
+    return [equipo.codigo, imagen];
+  }));
+
+  return new Map(imagenes);
+}
+
+function cargarImagenCanvas(src) {
+  if (!src) {
+    return Promise.resolve(null);
+  }
+
+  return new Promise((resolve) => {
+    const imagen = new Image();
+
+    if (/^https?:\/\//i.test(src)) {
+      imagen.crossOrigin = "anonymous";
+    }
+
+    imagen.addEventListener("load", () => {
+      resolve(imagen);
+    }, { once: true });
+
+    imagen.addEventListener("error", () => {
+      resolve(null);
+    }, { once: true });
+
+    imagen.src = src;
+  });
+}
+
+function dibujarImagenContain(contexto, imagen, x, y, ancho, alto) {
+  const anchoOriginal = imagen.naturalWidth || imagen.width || ancho;
+  const altoOriginal = imagen.naturalHeight || imagen.height || alto;
+  const proporcion = Math.min(ancho / anchoOriginal, alto / altoOriginal);
+  const anchoFinal = anchoOriginal * proporcion;
+  const altoFinal = altoOriginal * proporcion;
+  const xFinal = x + ((ancho - anchoFinal) / 2);
+  const yFinal = y + ((alto - altoFinal) / 2);
+
+  contexto.drawImage(imagen, xFinal, yFinal, anchoFinal, altoFinal);
+}
+
+function dibujarImagenCover(contexto, imagen, x, y, ancho, alto) {
+  const anchoOriginal = imagen.naturalWidth || imagen.width || ancho;
+  const altoOriginal = imagen.naturalHeight || imagen.height || alto;
+  const proporcion = Math.max(ancho / anchoOriginal, alto / altoOriginal);
+  const anchoFinal = anchoOriginal * proporcion;
+  const altoFinal = altoOriginal * proporcion;
+  const xFinal = x + ((ancho - anchoFinal) / 2);
+  const yFinal = y + ((alto - altoFinal) / 2);
+
+  contexto.drawImage(imagen, xFinal, yFinal, anchoFinal, altoFinal);
+}
+
+function dibujarTextoRecortado(contexto, texto, x, y, anchoMaximo) {
+  if (contexto.measureText(texto).width <= anchoMaximo) {
+    contexto.fillText(texto, x, y);
+    return;
+  }
+
+  let textoRecortado = texto;
+
+  while (textoRecortado.length > 1 && contexto.measureText(`${textoRecortado}...`).width > anchoMaximo) {
+    textoRecortado = textoRecortado.slice(0, -1);
+  }
+
+  contexto.fillText(`${textoRecortado}...`, x, y);
+}
+
+function descargarCanvasPng(canvas, nombreArchivo) {
+  return new Promise((resolve, reject) => {
+    const descargarBlob = (blob) => {
+      if (!blob) {
+        reject(new Error("No image blob"));
+        return;
+      }
+
+      const enlace = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      enlace.href = url;
+      enlace.download = nombreArchivo;
+      document.body.appendChild(enlace);
+      enlace.click();
+      enlace.remove();
+
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 1000);
+
+      resolve();
+    };
+
+    if (canvas.toBlob) {
+      try {
+        canvas.toBlob(descargarBlob, "image/png");
+      } catch (error) {
+        reject(error);
+      }
+
+      return;
+    }
+
+    try {
+      const enlace = document.createElement("a");
+      enlace.href = canvas.toDataURL("image/png");
+      enlace.download = nombreArchivo;
+      document.body.appendChild(enlace);
+      enlace.click();
+      enlace.remove();
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+function limpiarPronosticoGruposActual() {
+  const participante = obtenerParticipanteGruposActual();
+
+  if (!participante) {
+    mostrarMensajeGrupos("Elegí un participante", "error");
+    return;
+  }
+
+  const confirmado = window.confirm(`¿Limpiar solo el pronóstico de grupos de ${participante}?`);
+
+  if (!confirmado) {
+    return;
+  }
+
+  if (estadoApp.pronosticosGrupos && estadoApp.pronosticosGrupos[participante]) {
+    delete estadoApp.pronosticosGrupos[participante];
+  }
+
+  guardarEstado();
+  renderizarSeccionGrupos();
+  actualizarResumenGrupos();
+  mostrarMensajeGrupos("Se limpiaron solo los grupos.", "info");
+}
+
+function actualizarResumenGrupos() {
+  const participante = obtenerParticipanteGruposActual() || "Sin participante";
+  const grupos = obtenerGruposMundial();
+  const completos = contarGruposCompletos();
+  const estaCompleto = Boolean(participante !== "Sin participante" && grupos.length > 0 && completos === grupos.length);
+
+  const resumenCabecera = document.getElementById("resumen-grupos-cabecera");
+  const resumenParticipante = document.getElementById("resumen-grupos-participante");
+  const resumenCompletos = document.getElementById("resumen-grupos-completos");
+  const resumenEstado = document.getElementById("resumen-grupos-estado");
+
+  if (resumenCabecera) {
+    resumenCabecera.textContent = `${participante} · ${completos}/${grupos.length}`;
+  }
+
+  if (resumenParticipante) {
+    resumenParticipante.textContent = participante;
+  }
+
+  if (resumenCompletos) {
+    resumenCompletos.textContent = `${completos}/${grupos.length}`;
+  }
+
+  if (resumenEstado) {
+    resumenEstado.textContent = estaCompleto ? "Completo" : "Incompleto";
+    resumenEstado.className = estaCompleto ? "completo" : "incompleto";
+  }
+}
+
+function contarGruposCompletos() {
+  const pronostico = obtenerPronosticoGruposActual();
+
+  return obtenerGruposMundial().filter((grupo) => {
+    const posiciones = normalizarPronosticoGrupo(pronostico[grupo.id], grupo);
+    const codigosUnicos = new Set(posiciones.filter(Boolean));
+    return posiciones.every(Boolean) && codigosUnicos.size === 4;
+  }).length;
+}
+
+function obtenerParticipanteGruposActual() {
+  const selectorGrupos = document.getElementById("selector-grupos-participante");
+  const selectorPartidos = document.getElementById("selector-participante");
+  const participante = (selectorGrupos && selectorGrupos.value)
+    || (selectorPartidos && selectorPartidos.value)
+    || estadoApp.participanteSeleccionado
+    || "";
+
+  if (participante && selectorGrupos && !selectorGrupos.value) {
+    selectorGrupos.value = participante;
+  }
+
+  return participante;
+}
+
+function obtenerGruposMundial() {
+  return typeof GRUPOS_MUNDIAL !== "undefined" && Array.isArray(GRUPOS_MUNDIAL)
+    ? GRUPOS_MUNDIAL
+    : [];
+}
+
+function obtenerGrupoPorId(grupoId) {
+  return obtenerGruposMundial().find((grupo) => grupo.id === grupoId) || null;
+}
+
+function obtenerEquipoGrupo(grupo, equipoCodigo) {
+  if (!grupo || !equipoCodigo) {
+    return null;
+  }
+
+  return grupo.equipos.find((equipo) => equipo.codigo === equipoCodigo) || null;
+}
+
+function normalizarPronosticoGrupo(registro, grupo) {
+  const valores = Array.isArray(registro) ? registro : [];
+  const codigosValidos = new Set((grupo && grupo.equipos ? grupo.equipos : []).map((equipo) => equipo.codigo));
+
+  return [0, 1, 2, 3].map((indice) => {
+    const codigo = valores[indice] || "";
+    return codigosValidos.has(codigo) ? codigo : "";
+  });
+}
+
+function crearEquipoResumenGrupo(equipo) {
+  return crearEquipoResumenGrupoConOpciones(equipo, true, "bandera grupo-bandera");
+}
+
+function crearEquipoResumenGrupoConOpciones(equipo, usarCargaDiferida, claseBandera) {
+  const resumen = document.createElement("span");
+  resumen.className = "grupo-equipo-resumen";
+
+  const bandera = crearBanderaEquipo(equipo, claseBandera, usarCargaDiferida);
+
+  const nombre = document.createElement("span");
+  nombre.className = "grupo-equipo-nombre";
+  nombre.textContent = equipo.nombre;
+
+  const codigo = document.createElement("span");
+  codigo.className = "equipo-codigo";
+  codigo.textContent = equipo.codigo;
+
+  resumen.append(bandera, nombre, codigo);
+  return resumen;
+}
+
+function crearGrupoImagen(grupo, equipos) {
+  const contenedor = document.createElement("div");
+  contenedor.className = "imagen-grupo";
+
+  const titulo = document.createElement("h3");
+  titulo.textContent = grupo.nombre;
+  contenedor.appendChild(titulo);
+
+  equipos.forEach((equipo, indice) => {
+    const fila = document.createElement("div");
+    fila.className = "imagen-grupo-fila";
+
+    const posicion = document.createElement("span");
+    posicion.className = "imagen-grupo-posicion";
+    posicion.textContent = `${indice + 1}.`;
+
+    const resumen = crearEquipoResumenGrupoConOpciones(equipo, false, "imagen-bandera grupo-bandera");
+    fila.append(posicion, resumen);
+    contenedor.appendChild(fila);
+  });
+
+  return contenedor;
+}
+
+function mostrarMensajeGrupos(mensaje, tipo) {
+  const mensajeEstado = document.getElementById("mensaje-grupos");
+
+  if (!mensajeEstado) {
+    return;
+  }
+
+  mensajeEstado.textContent = mensaje;
+  mensajeEstado.className = `mensaje-estado ${tipo || ""}`.trim();
+}
+
+function limpiarMensajeGrupos() {
+  mostrarMensajeGrupos("", "");
+}
+
 async function descargarImagenPronostico() {
   const validacion = validarPronosticoCompleto();
 
@@ -694,6 +1776,8 @@ async function descargarImagenPronostico() {
 
   try {
     await esperarRender();
+    await esperarImagenes(tarjetaImagen);
+    await convertirImagenesLocalesADataUrl(tarjetaImagen);
     await esperarImagenes(tarjetaImagen);
 
     const canvas = await html2canvas(tarjetaImagen, {
@@ -2031,6 +3115,141 @@ function esperarImagenes(contenedor) {
       setTimeout(resolve, 3000);
     })
   ]);
+}
+
+async function convertirImagenesLocalesADataUrl(contenedor) {
+  const imagenes = Array.from(contenedor.querySelectorAll("img"))
+    .filter((imagen) => {
+      const src = imagen.getAttribute("src") || "";
+      return src
+        && !src.startsWith("data:")
+        && !/^https?:\/\//i.test(src)
+        && src.includes("assets/");
+    });
+
+  await Promise.all(imagenes.map(async (imagen) => {
+    const src = imagen.getAttribute("src") || "";
+
+    try {
+      await esperarImagenIndividual(imagen);
+
+      const { ancho, alto } = obtenerMedidasImagenParaExportar(imagen);
+
+      if (/\.svg(?:$|\?)/i.test(src)) {
+        const dataUrlSvg = await obtenerDataUrlSvgLocal(src);
+
+        if (dataUrlSvg) {
+          const dataUrlPng = await convertirDataUrlImagenAPng(dataUrlSvg, ancho, alto);
+          imagen.removeAttribute("crossorigin");
+          imagen.src = dataUrlPng || dataUrlSvg;
+          await esperarImagenIndividual(imagen);
+          return;
+        }
+      }
+
+      const canvas = document.createElement("canvas");
+      const contexto = canvas.getContext("2d");
+
+      if (!contexto) {
+        return;
+      }
+
+      canvas.width = ancho;
+      canvas.height = alto;
+      contexto.drawImage(imagen, 0, 0, ancho, alto);
+      imagen.removeAttribute("crossorigin");
+      imagen.src = canvas.toDataURL("image/png");
+    } catch (error) {
+      // Si el navegador no permite convertir un asset, se deja la imagen original.
+    }
+  }));
+}
+
+function obtenerMedidasImagenParaExportar(imagen) {
+  const rect = imagen.getBoundingClientRect();
+  const ancho = Math.round(rect.width || imagen.width || imagen.naturalWidth || 60);
+  const alto = Math.round(rect.height || imagen.height || imagen.naturalHeight || 40);
+
+  return {
+    ancho: Math.max(1, ancho),
+    alto: Math.max(1, alto)
+  };
+}
+
+async function obtenerDataUrlSvgLocal(src) {
+  if (typeof fetch !== "function") {
+    return "";
+  }
+
+  try {
+    const respuesta = await fetch(src);
+
+    if (!respuesta.ok) {
+      return "";
+    }
+
+    const svg = await respuesta.text();
+    return `data:image/svg+xml;base64,${codificarBase64Utf8(svg)}`;
+  } catch (error) {
+    return "";
+  }
+}
+
+function convertirDataUrlImagenAPng(src, ancho, alto) {
+  return new Promise((resolve) => {
+    const imagen = new Image();
+
+    imagen.addEventListener("load", () => {
+      try {
+        const canvas = document.createElement("canvas");
+        const contexto = canvas.getContext("2d");
+
+        if (!contexto) {
+          resolve("");
+          return;
+        }
+
+        canvas.width = ancho || imagen.naturalWidth || 60;
+        canvas.height = alto || imagen.naturalHeight || 40;
+        contexto.drawImage(imagen, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/png"));
+      } catch (error) {
+        resolve("");
+      }
+    }, { once: true });
+
+    imagen.addEventListener("error", () => {
+      resolve("");
+    }, { once: true });
+
+    imagen.src = src;
+  });
+}
+
+function codificarBase64Utf8(texto) {
+  if (typeof TextEncoder === "function") {
+    const bytes = new TextEncoder().encode(texto);
+    let binario = "";
+
+    bytes.forEach((byte) => {
+      binario += String.fromCharCode(byte);
+    });
+
+    return btoa(binario);
+  }
+
+  return btoa(unescape(encodeURIComponent(texto)));
+}
+
+function esperarImagenIndividual(imagen) {
+  if (!imagen || imagen.complete) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => {
+    imagen.addEventListener("load", resolve, { once: true });
+    imagen.addEventListener("error", resolve, { once: true });
+  });
 }
 
 function normalizarNombreArchivo(texto) {

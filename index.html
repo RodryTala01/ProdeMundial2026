@@ -24,11 +24,15 @@
             <span class="nav-texto-desktop">Pronóstico</span>
             <span class="nav-texto-mobile">Pronóstico</span>
           </button>
-          <button class="nav-boton" type="button" data-seccion="calcular" aria-selected="false">
+          <button class="nav-boton" type="button" data-seccion="grupos" aria-selected="false">
+            <span class="nav-texto-desktop">Grupos</span>
+            <span class="nav-texto-mobile">Grupos</span>
+          </button>
+          <button class="nav-boton nav-deshabilitado" type="button" data-seccion="calcular" aria-selected="false" aria-disabled="true" disabled title="Puntos deshabilitado por ahora">
             <span class="nav-texto-desktop">Puntos</span>
             <span class="nav-texto-mobile">Puntos</span>
           </button>
-          <button class="nav-boton" type="button" data-seccion="tabla" aria-selected="false">
+          <button class="nav-boton nav-deshabilitado" type="button" data-seccion="tabla" aria-selected="false" aria-disabled="true" disabled title="Tabla deshabilitada por ahora">
             <span class="nav-texto-desktop">Tabla</span>
             <span class="nav-texto-mobile">Tabla</span>
           </button>
@@ -126,6 +130,54 @@
         <p class="mensaje-estado" id="mensaje-estado" role="status" aria-live="polite"></p>
       </section>
 
+      <section class="seccion-app" id="seccion-grupos" aria-labelledby="titulo-seccion-grupos" hidden>
+        <div class="barra-seccion">
+          <div>
+            <p class="seccion-kicker">Posiciones finales</p>
+            <h2 id="titulo-seccion-grupos">Grupos</h2>
+          </div>
+          <p class="resumen-seleccion" id="resumen-grupos-cabecera">Seleccioná participante</p>
+        </div>
+
+        <div class="controles-pronostico controles-grupos">
+          <label class="campo">
+            <span>Participante</span>
+            <select id="selector-grupos-participante"></select>
+          </label>
+        </div>
+
+        <div class="resumen-pronostico resumen-grupos" id="resumen-grupos" aria-live="polite">
+          <div class="resumen-item">
+            <span>Participante</span>
+            <strong id="resumen-grupos-participante">Sin participante</strong>
+          </div>
+          <div class="resumen-item">
+            <span>Grupos completos</span>
+            <strong id="resumen-grupos-completos">0/12</strong>
+          </div>
+          <div class="resumen-item">
+            <span>Estado</span>
+            <strong id="resumen-grupos-estado">Incompleto</strong>
+          </div>
+        </div>
+
+        <div class="lista-grupos" id="lista-grupos"></div>
+
+        <div class="acciones-pronostico acciones-grupos">
+          <button class="boton boton-primario" type="button" id="boton-grupos-whatsapp">
+            WhatsApp
+          </button>
+          <button class="boton boton-secundario" type="button" id="boton-grupos-imagen">
+            Imagen
+          </button>
+          <button class="boton boton-fantasma" type="button" id="boton-grupos-limpiar">
+            Limpiar grupos
+          </button>
+        </div>
+
+        <p class="mensaje-estado" id="mensaje-grupos" role="status" aria-live="polite"></p>
+      </section>
+
       <section class="seccion-app" id="seccion-calcular" aria-labelledby="titulo-seccion-calcular" hidden>
         <div class="barra-seccion">
           <div>
@@ -191,6 +243,19 @@
   </div>
 
   <div id="tarjeta-imagen-pronostico" class="tarjeta-imagen-pronostico" aria-hidden="true"></div>
+
+  <div class="modal-grupos" id="modal-grupos" hidden>
+    <div class="modal-grupos-panel" role="dialog" aria-modal="true" aria-labelledby="modal-grupos-titulo">
+      <div class="modal-grupos-encabezado">
+        <h3 id="modal-grupos-titulo">Elegir equipo</h3>
+        <button class="modal-grupos-cerrar" type="button" id="modal-grupos-cerrar">Cerrar</button>
+      </div>
+      <div class="modal-grupos-lista" id="modal-grupos-lista"></div>
+      <div class="modal-grupos-acciones">
+        <button class="boton boton-fantasma" type="button" id="modal-grupos-cancelar">Cancelar</button>
+      </div>
+    </div>
+  </div>
 
   <script src="data.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
