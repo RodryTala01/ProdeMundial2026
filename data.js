@@ -596,6 +596,519 @@ const FECHAS = [
         }
       }
     ]
+  },
+  {
+    id: "fecha-2",
+    nombre: "Fecha 2",
+    fase: "Fase de grupos",
+    cierrePronostico: "2026-06-18T12:30:00-03:00",
+    descripcion: "Segunda fecha de la fase de grupos",
+    partidos: [
+      {
+        id: "cze-rsa-fecha-2",
+        grupo: "Grupo A",
+        dia: "Jueves 18 de junio",
+        fechaISO: "2026-06-18",
+        horario: "13:00",
+        estadio: "Mercedes-Benz Stadium",
+        ciudad: "Atlanta",
+        local: {
+          nombre: "Chequia",
+          bandera: "",
+          banderaImagen: "assets/flags/cze.svg",
+          codigo: "CZE"
+        },
+        visitante: {
+          nombre: "Sudáfrica",
+          bandera: "",
+          banderaImagen: "assets/flags/za.svg",
+          codigo: "RSA"
+        }
+      },
+      {
+        id: "sui-bih-fecha-2",
+        grupo: "Grupo B",
+        dia: "Jueves 18 de junio",
+        fechaISO: "2026-06-18",
+        horario: "16:00",
+        estadio: "SoFi Stadium",
+        ciudad: "Inglewood",
+        local: {
+          nombre: "Suiza",
+          bandera: "",
+          banderaImagen: "assets/flags/sui.svg",
+          codigo: "SUI"
+        },
+        visitante: {
+          nombre: "Bosnia y Herzegovina",
+          bandera: "",
+          banderaImagen: "assets/flags/bih.svg",
+          codigo: "BIH"
+        }
+      },
+      {
+        id: "can-qat-fecha-2",
+        grupo: "Grupo B",
+        dia: "Jueves 18 de junio",
+        fechaISO: "2026-06-18",
+        horario: "19:00",
+        estadio: "BC Place",
+        ciudad: "Vancouver",
+        local: {
+          nombre: "Canadá",
+          bandera: "",
+          banderaImagen: "assets/flags/ca.svg",
+          codigo: "CAN"
+        },
+        visitante: {
+          nombre: "Qatar",
+          bandera: "",
+          banderaImagen: "assets/flags/qat.svg",
+          codigo: "QAT"
+        }
+      },
+      {
+        id: "mex-kor-fecha-2",
+        grupo: "Grupo A",
+        dia: "Jueves 18 de junio",
+        fechaISO: "2026-06-18",
+        horario: "22:00",
+        estadio: "Estadio Akron",
+        ciudad: "Zapopan",
+        local: {
+          nombre: "México",
+          bandera: "",
+          banderaImagen: "assets/flags/mx.svg",
+          codigo: "MEX"
+        },
+        visitante: {
+          nombre: "Corea del Sur",
+          bandera: "",
+          banderaImagen: "assets/flags/kor.svg",
+          codigo: "KOR"
+        }
+      },
+      {
+        id: "usa-aus-fecha-2",
+        grupo: "Grupo D",
+        dia: "Viernes 19 de junio",
+        fechaISO: "2026-06-19",
+        horario: "16:00",
+        estadio: "Lumen Field",
+        ciudad: "Seattle",
+        local: {
+          nombre: "Estados Unidos",
+          bandera: "",
+          banderaImagen: "assets/flags/us.svg",
+          codigo: "USA"
+        },
+        visitante: {
+          nombre: "Australia",
+          bandera: "",
+          banderaImagen: "assets/flags/aus.svg",
+          codigo: "AUS"
+        }
+      },
+      {
+        id: "sco-mar-fecha-2",
+        grupo: "Grupo C",
+        dia: "Viernes 19 de junio",
+        fechaISO: "2026-06-19",
+        horario: "19:00",
+        estadio: "Gillette Stadium",
+        ciudad: "Foxborough",
+        local: {
+          nombre: "Escocia",
+          bandera: "",
+          banderaImagen: "assets/flags/sco.svg",
+          codigo: "SCO"
+        },
+        visitante: {
+          nombre: "Marruecos",
+          bandera: "",
+          banderaImagen: "assets/flags/ma.svg",
+          codigo: "MAR"
+        }
+      },
+      {
+        id: "bra-hai-fecha-2",
+        grupo: "Grupo C",
+        dia: "Viernes 19 de junio",
+        fechaISO: "2026-06-19",
+        horario: "21:30",
+        estadio: "Lincoln Financial Field",
+        ciudad: "Filadelfia",
+        local: {
+          nombre: "Brasil",
+          bandera: "",
+          banderaImagen: "assets/flags/br.svg",
+          codigo: "BRA"
+        },
+        visitante: {
+          nombre: "Haití",
+          bandera: "",
+          banderaImagen: "assets/flags/hai.svg",
+          codigo: "HAI"
+        }
+      },
+      {
+        id: "tur-par-fecha-2",
+        grupo: "Grupo D",
+        dia: "Sábado 20 de junio",
+        fechaISO: "2026-06-20",
+        horario: "00:00",
+        estadio: "Levi's Stadium",
+        ciudad: "Santa Clara",
+        local: {
+          nombre: "Turquía",
+          bandera: "",
+          banderaImagen: "assets/flags/tur.svg",
+          codigo: "TUR"
+        },
+        visitante: {
+          nombre: "Paraguay",
+          bandera: "",
+          banderaImagen: "assets/flags/par.svg",
+          codigo: "PAR"
+        }
+      },
+      {
+        id: "ned-swe-fecha-2",
+        grupo: "Grupo F",
+        dia: "Sábado 20 de junio",
+        fechaISO: "2026-06-20",
+        horario: "14:00",
+        estadio: "NRG Stadium",
+        ciudad: "Houston",
+        local: {
+          nombre: "Países Bajos",
+          bandera: "",
+          banderaImagen: "assets/flags/ned.svg",
+          codigo: "NED"
+        },
+        visitante: {
+          nombre: "Suecia",
+          bandera: "",
+          banderaImagen: "assets/flags/swe.svg",
+          codigo: "SWE"
+        }
+      },
+      {
+        id: "ger-civ-fecha-2",
+        grupo: "Grupo E",
+        dia: "Sábado 20 de junio",
+        fechaISO: "2026-06-20",
+        horario: "17:00",
+        estadio: "BMO Field",
+        ciudad: "Toronto",
+        local: {
+          nombre: "Alemania",
+          bandera: "",
+          banderaImagen: "assets/flags/de.svg",
+          codigo: "GER"
+        },
+        visitante: {
+          nombre: "Costa de Marfil",
+          bandera: "",
+          banderaImagen: "assets/flags/civ.svg",
+          codigo: "CIV"
+        }
+      },
+      {
+        id: "ecu-cuw-fecha-2",
+        grupo: "Grupo E",
+        dia: "Sábado 20 de junio",
+        fechaISO: "2026-06-20",
+        horario: "21:00",
+        estadio: "Arrowhead Stadium",
+        ciudad: "Kansas City",
+        local: {
+          nombre: "Ecuador",
+          bandera: "",
+          banderaImagen: "assets/flags/ecu.svg",
+          codigo: "ECU"
+        },
+        visitante: {
+          nombre: "Curazao",
+          bandera: "",
+          banderaImagen: "assets/flags/cuw.svg",
+          codigo: "CUW"
+        }
+      },
+      {
+        id: "tun-jpn-fecha-2",
+        grupo: "Grupo F",
+        dia: "Domingo 21 de junio",
+        fechaISO: "2026-06-21",
+        horario: "01:00",
+        estadio: "Estadio BBVA",
+        ciudad: "Guadalupe",
+        local: {
+          nombre: "Túnez",
+          bandera: "",
+          banderaImagen: "assets/flags/tun.svg",
+          codigo: "TUN"
+        },
+        visitante: {
+          nombre: "Japón",
+          bandera: "",
+          banderaImagen: "assets/flags/jp.svg",
+          codigo: "JPN"
+        }
+      },
+      {
+        id: "esp-ksa-fecha-2",
+        grupo: "Grupo H",
+        dia: "Domingo 21 de junio",
+        fechaISO: "2026-06-21",
+        horario: "13:00",
+        estadio: "Mercedes-Benz Stadium",
+        ciudad: "Atlanta",
+        local: {
+          nombre: "España",
+          bandera: "",
+          banderaImagen: "assets/flags/es.svg",
+          codigo: "ESP"
+        },
+        visitante: {
+          nombre: "Arabia Saudita",
+          bandera: "",
+          banderaImagen: "assets/flags/ksa.svg",
+          codigo: "KSA"
+        }
+      },
+      {
+        id: "bel-irn-fecha-2",
+        grupo: "Grupo G",
+        dia: "Domingo 21 de junio",
+        fechaISO: "2026-06-21",
+        horario: "16:00",
+        estadio: "SoFi Stadium",
+        ciudad: "Inglewood",
+        local: {
+          nombre: "Bélgica",
+          bandera: "",
+          banderaImagen: "assets/flags/bel.svg",
+          codigo: "BEL"
+        },
+        visitante: {
+          nombre: "Irán",
+          bandera: "",
+          banderaImagen: "assets/flags/irn.svg",
+          codigo: "IRN"
+        }
+      },
+      {
+        id: "uru-cpv-fecha-2",
+        grupo: "Grupo H",
+        dia: "Domingo 21 de junio",
+        fechaISO: "2026-06-21",
+        horario: "19:00",
+        estadio: "Hard Rock Stadium",
+        ciudad: "Miami Gardens",
+        local: {
+          nombre: "Uruguay",
+          bandera: "",
+          banderaImagen: "assets/flags/uy.svg",
+          codigo: "URU"
+        },
+        visitante: {
+          nombre: "Cabo Verde",
+          bandera: "",
+          banderaImagen: "assets/flags/cpv.svg",
+          codigo: "CPV"
+        }
+      },
+      {
+        id: "nzl-egy-fecha-2",
+        grupo: "Grupo G",
+        dia: "Domingo 21 de junio",
+        fechaISO: "2026-06-21",
+        horario: "22:00",
+        estadio: "BC Place",
+        ciudad: "Vancouver",
+        local: {
+          nombre: "Nueva Zelanda",
+          bandera: "",
+          banderaImagen: "assets/flags/nzl.svg",
+          codigo: "NZL"
+        },
+        visitante: {
+          nombre: "Egipto",
+          bandera: "",
+          banderaImagen: "assets/flags/egy.svg",
+          codigo: "EGY"
+        }
+      },
+      {
+        id: "arg-aut-fecha-2",
+        grupo: "Grupo J",
+        dia: "Lunes 22 de junio",
+        fechaISO: "2026-06-22",
+        horario: "14:00",
+        estadio: "AT&T Stadium",
+        ciudad: "Arlington",
+        local: {
+          nombre: "Argentina",
+          bandera: "",
+          banderaImagen: "assets/flags/ar.svg",
+          codigo: "ARG"
+        },
+        visitante: {
+          nombre: "Austria",
+          bandera: "",
+          banderaImagen: "assets/flags/aut.svg",
+          codigo: "AUT"
+        }
+      },
+      {
+        id: "fra-irq-fecha-2",
+        grupo: "Grupo I",
+        dia: "Lunes 22 de junio",
+        fechaISO: "2026-06-22",
+        horario: "18:00",
+        estadio: "Lincoln Financial Field",
+        ciudad: "Filadelfia",
+        local: {
+          nombre: "Francia",
+          bandera: "",
+          banderaImagen: "assets/flags/fr.svg",
+          codigo: "FRA"
+        },
+        visitante: {
+          nombre: "Irak",
+          bandera: "",
+          banderaImagen: "assets/flags/irq.svg",
+          codigo: "IRQ"
+        }
+      },
+      {
+        id: "nor-sen-fecha-2",
+        grupo: "Grupo I",
+        dia: "Lunes 22 de junio",
+        fechaISO: "2026-06-22",
+        horario: "21:00",
+        estadio: "MetLife Stadium",
+        ciudad: "East Rutherford",
+        local: {
+          nombre: "Noruega",
+          bandera: "",
+          banderaImagen: "assets/flags/nor.svg",
+          codigo: "NOR"
+        },
+        visitante: {
+          nombre: "Senegal",
+          bandera: "",
+          banderaImagen: "assets/flags/sen.svg",
+          codigo: "SEN"
+        }
+      },
+      {
+        id: "jor-alg-fecha-2",
+        grupo: "Grupo J",
+        dia: "Martes 23 de junio",
+        fechaISO: "2026-06-23",
+        horario: "00:00",
+        estadio: "Levi's Stadium",
+        ciudad: "Santa Clara",
+        local: {
+          nombre: "Jordania",
+          bandera: "",
+          banderaImagen: "assets/flags/jor.svg",
+          codigo: "JOR"
+        },
+        visitante: {
+          nombre: "Argelia",
+          bandera: "",
+          banderaImagen: "assets/flags/alg.svg",
+          codigo: "ALG"
+        }
+      },
+      {
+        id: "por-uzb-fecha-2",
+        grupo: "Grupo K",
+        dia: "Martes 23 de junio",
+        fechaISO: "2026-06-23",
+        horario: "14:00",
+        estadio: "NRG Stadium",
+        ciudad: "Houston",
+        local: {
+          nombre: "Portugal",
+          bandera: "",
+          banderaImagen: "assets/flags/pt.svg",
+          codigo: "POR"
+        },
+        visitante: {
+          nombre: "Uzbekistán",
+          bandera: "",
+          banderaImagen: "assets/flags/uzb.svg",
+          codigo: "UZB"
+        }
+      },
+      {
+        id: "eng-gha-fecha-2",
+        grupo: "Grupo L",
+        dia: "Martes 23 de junio",
+        fechaISO: "2026-06-23",
+        horario: "17:00",
+        estadio: "Gillette Stadium",
+        ciudad: "Foxborough",
+        local: {
+          nombre: "Inglaterra",
+          bandera: "",
+          banderaImagen: "assets/flags/gb-eng.svg",
+          codigo: "ENG"
+        },
+        visitante: {
+          nombre: "Ghana",
+          bandera: "",
+          banderaImagen: "assets/flags/gha.svg",
+          codigo: "GHA"
+        }
+      },
+      {
+        id: "pan-cro-fecha-2",
+        grupo: "Grupo L",
+        dia: "Martes 23 de junio",
+        fechaISO: "2026-06-23",
+        horario: "20:00",
+        estadio: "BMO Field",
+        ciudad: "Toronto",
+        local: {
+          nombre: "Panamá",
+          bandera: "",
+          banderaImagen: "assets/flags/pan.svg",
+          codigo: "PAN"
+        },
+        visitante: {
+          nombre: "Croacia",
+          bandera: "",
+          banderaImagen: "assets/flags/cro.svg",
+          codigo: "CRO"
+        }
+      },
+      {
+        id: "col-cod-fecha-2",
+        grupo: "Grupo K",
+        dia: "Martes 23 de junio",
+        fechaISO: "2026-06-23",
+        horario: "23:00",
+        estadio: "Estadio Akron",
+        ciudad: "Zapopan",
+        local: {
+          nombre: "Colombia",
+          bandera: "",
+          banderaImagen: "assets/flags/co.svg",
+          codigo: "COL"
+        },
+        visitante: {
+          nombre: "RD Congo",
+          bandera: "",
+          banderaImagen: "assets/flags/cod.svg",
+          codigo: "COD"
+        }
+      }
+    ]
   }
 ];
 
@@ -826,6 +1339,102 @@ const RESULTADOS_OFICIALES = {
     golesVisitante: null
   },
   "uzb-col-fecha-1": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "cze-rsa-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "sui-bih-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "can-qat-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "mex-kor-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "usa-aus-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "sco-mar-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "bra-hai-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "tur-par-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "ned-swe-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "ger-civ-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "ecu-cuw-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "tun-jpn-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "esp-ksa-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "bel-irn-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "uru-cpv-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "nzl-egy-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "arg-aut-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "fra-irq-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "nor-sen-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "jor-alg-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "por-uzb-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "eng-gha-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "pan-cro-fecha-2": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "col-cod-fecha-2": {
     golesLocal: null,
     golesVisitante: null
   }
