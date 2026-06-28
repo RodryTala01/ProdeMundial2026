@@ -1622,6 +1622,351 @@ const FECHAS = [
         }
       }
     ]
+  },
+  {
+    id: "16avos",
+    nombre: "16avos",
+    fase: "Eliminacion directa",
+    cierrePronostico: "2026-06-29T13:30:00-03:00",
+    descripcion: "16avos de final",
+    partidos: [
+      {
+        id: "rsa-can-16avos",
+        grupo: "16avos",
+        dia: "Domingo 28 de junio",
+        fechaISO: "2026-06-28",
+        horario: "16:00",
+        estadio: "SoFi Stadium",
+        ciudad: "Inglewood",
+        local: {
+          nombre: "Sudafrica",
+          bandera: "",
+          banderaImagen: "assets/flags/za.svg",
+          codigo: "RSA"
+        },
+        visitante: {
+          nombre: "Canada",
+          bandera: "",
+          banderaImagen: "assets/flags/ca.svg",
+          codigo: "CAN"
+        }
+      },
+      {
+        id: "bra-jpn-16avos",
+        grupo: "16avos",
+        dia: "Lunes 29 de junio",
+        fechaISO: "2026-06-29",
+        horario: "14:00",
+        estadio: "NRG Stadium",
+        ciudad: "Houston",
+        local: {
+          nombre: "Brasil",
+          bandera: "",
+          banderaImagen: "assets/flags/br.svg",
+          codigo: "BRA"
+        },
+        visitante: {
+          nombre: "Japon",
+          bandera: "",
+          banderaImagen: "assets/flags/jp.svg",
+          codigo: "JPN"
+        }
+      },
+      {
+        id: "ger-par-16avos",
+        grupo: "16avos",
+        dia: "Lunes 29 de junio",
+        fechaISO: "2026-06-29",
+        horario: "17:30",
+        estadio: "Gillette Stadium",
+        ciudad: "Foxborough",
+        local: {
+          nombre: "Alemania",
+          bandera: "",
+          banderaImagen: "assets/flags/de.svg",
+          codigo: "GER"
+        },
+        visitante: {
+          nombre: "Paraguay",
+          bandera: "",
+          banderaImagen: "assets/flags/par.svg",
+          codigo: "PAR"
+        }
+      },
+      {
+        id: "ned-mar-16avos",
+        grupo: "16avos",
+        dia: "Lunes 29 de junio",
+        fechaISO: "2026-06-29",
+        horario: "22:00",
+        estadio: "Estadio BBVA",
+        ciudad: "Guadalupe",
+        local: {
+          nombre: "Paises Bajos",
+          bandera: "",
+          banderaImagen: "assets/flags/ned.svg",
+          codigo: "NED"
+        },
+        visitante: {
+          nombre: "Marruecos",
+          bandera: "",
+          banderaImagen: "assets/flags/ma.svg",
+          codigo: "MAR"
+        }
+      },
+      {
+        id: "civ-nor-16avos",
+        grupo: "16avos",
+        dia: "Martes 30 de junio",
+        fechaISO: "2026-06-30",
+        horario: "14:00",
+        estadio: "AT&T Stadium",
+        ciudad: "Arlington",
+        local: {
+          nombre: "Costa de Marfil",
+          bandera: "",
+          banderaImagen: "assets/flags/civ.svg",
+          codigo: "CIV"
+        },
+        visitante: {
+          nombre: "Noruega",
+          bandera: "",
+          banderaImagen: "assets/flags/nor.svg",
+          codigo: "NOR"
+        }
+      },
+      {
+        id: "fra-swe-16avos",
+        grupo: "16avos",
+        dia: "Martes 30 de junio",
+        fechaISO: "2026-06-30",
+        horario: "18:00",
+        estadio: "MetLife Stadium",
+        ciudad: "East Rutherford",
+        local: {
+          nombre: "Francia",
+          bandera: "",
+          banderaImagen: "assets/flags/fr.svg",
+          codigo: "FRA"
+        },
+        visitante: {
+          nombre: "Suecia",
+          bandera: "",
+          banderaImagen: "assets/flags/swe.svg",
+          codigo: "SWE"
+        }
+      },
+      {
+        id: "mex-ecu-16avos",
+        grupo: "16avos",
+        dia: "Martes 30 de junio",
+        fechaISO: "2026-06-30",
+        horario: "22:00",
+        estadio: "Estadio Azteca",
+        ciudad: "Ciudad de Mexico",
+        local: {
+          nombre: "Mexico",
+          bandera: "",
+          banderaImagen: "assets/flags/mx.svg",
+          codigo: "MEX"
+        },
+        visitante: {
+          nombre: "Ecuador",
+          bandera: "",
+          banderaImagen: "assets/flags/ecu.svg",
+          codigo: "ECU"
+        }
+      },
+      {
+        id: "eng-cod-16avos",
+        grupo: "16avos",
+        dia: "Miercoles 1 de julio",
+        fechaISO: "2026-07-01",
+        horario: "13:00",
+        estadio: "Mercedes-Benz Stadium",
+        ciudad: "Atlanta",
+        local: {
+          nombre: "Inglaterra",
+          bandera: "",
+          banderaImagen: "assets/flags/gb-eng.svg",
+          codigo: "ENG"
+        },
+        visitante: {
+          nombre: "RD Congo",
+          bandera: "",
+          banderaImagen: "assets/flags/cod.svg",
+          codigo: "COD"
+        }
+      },
+      {
+        id: "bel-sen-16avos",
+        grupo: "16avos",
+        dia: "Miercoles 1 de julio",
+        fechaISO: "2026-07-01",
+        horario: "17:00",
+        estadio: "Lumen Field",
+        ciudad: "Seattle",
+        local: {
+          nombre: "Belgica",
+          bandera: "",
+          banderaImagen: "assets/flags/bel.svg",
+          codigo: "BEL"
+        },
+        visitante: {
+          nombre: "Senegal",
+          bandera: "",
+          banderaImagen: "assets/flags/sen.svg",
+          codigo: "SEN"
+        }
+      },
+      {
+        id: "usa-bih-16avos",
+        grupo: "16avos",
+        dia: "Miercoles 1 de julio",
+        fechaISO: "2026-07-01",
+        horario: "21:00",
+        estadio: "Levi's Stadium",
+        ciudad: "Santa Clara",
+        local: {
+          nombre: "Estados Unidos",
+          bandera: "",
+          banderaImagen: "assets/flags/us.svg",
+          codigo: "USA"
+        },
+        visitante: {
+          nombre: "Bosnia y Herzegovina",
+          bandera: "",
+          banderaImagen: "assets/flags/bih.svg",
+          codigo: "BIH"
+        }
+      },
+      {
+        id: "esp-aut-16avos",
+        grupo: "16avos",
+        dia: "Jueves 2 de julio",
+        fechaISO: "2026-07-02",
+        horario: "16:00",
+        estadio: "SoFi Stadium",
+        ciudad: "Inglewood",
+        local: {
+          nombre: "Espana",
+          bandera: "",
+          banderaImagen: "assets/flags/es.svg",
+          codigo: "ESP"
+        },
+        visitante: {
+          nombre: "Austria",
+          bandera: "",
+          banderaImagen: "assets/flags/aut.svg",
+          codigo: "AUT"
+        }
+      },
+      {
+        id: "por-cro-16avos",
+        grupo: "16avos",
+        dia: "Jueves 2 de julio",
+        fechaISO: "2026-07-02",
+        horario: "20:00",
+        estadio: "BMO Field",
+        ciudad: "Toronto",
+        local: {
+          nombre: "Portugal",
+          bandera: "",
+          banderaImagen: "assets/flags/pt.svg",
+          codigo: "POR"
+        },
+        visitante: {
+          nombre: "Croacia",
+          bandera: "",
+          banderaImagen: "assets/flags/cro.svg",
+          codigo: "CRO"
+        }
+      },
+      {
+        id: "sui-alg-16avos",
+        grupo: "16avos",
+        dia: "Viernes 3 de julio",
+        fechaISO: "2026-07-03",
+        horario: "00:00",
+        estadio: "BC Place",
+        ciudad: "Vancouver",
+        local: {
+          nombre: "Suiza",
+          bandera: "",
+          banderaImagen: "assets/flags/sui.svg",
+          codigo: "SUI"
+        },
+        visitante: {
+          nombre: "Argelia",
+          bandera: "",
+          banderaImagen: "assets/flags/alg.svg",
+          codigo: "ALG"
+        }
+      },
+      {
+        id: "aus-egy-16avos",
+        grupo: "16avos",
+        dia: "Viernes 3 de julio",
+        fechaISO: "2026-07-03",
+        horario: "15:00",
+        estadio: "AT&T Stadium",
+        ciudad: "Arlington",
+        local: {
+          nombre: "Australia",
+          bandera: "",
+          banderaImagen: "assets/flags/aus.svg",
+          codigo: "AUS"
+        },
+        visitante: {
+          nombre: "Egipto",
+          bandera: "",
+          banderaImagen: "assets/flags/egy.svg",
+          codigo: "EGY"
+        }
+      },
+      {
+        id: "arg-cpv-16avos",
+        grupo: "16avos",
+        dia: "Viernes 3 de julio",
+        fechaISO: "2026-07-03",
+        horario: "19:00",
+        estadio: "Hard Rock Stadium",
+        ciudad: "Miami Gardens",
+        local: {
+          nombre: "Argentina",
+          bandera: "",
+          banderaImagen: "assets/flags/ar.svg",
+          codigo: "ARG"
+        },
+        visitante: {
+          nombre: "Cabo Verde",
+          bandera: "",
+          banderaImagen: "assets/flags/cpv.svg",
+          codigo: "CPV"
+        }
+      },
+      {
+        id: "col-gha-16avos",
+        grupo: "16avos",
+        dia: "Viernes 3 de julio",
+        fechaISO: "2026-07-03",
+        horario: "22:30",
+        estadio: "Arrowhead Stadium",
+        ciudad: "Kansas City",
+        local: {
+          nombre: "Colombia",
+          bandera: "",
+          banderaImagen: "assets/flags/co.svg",
+          codigo: "COL"
+        },
+        visitante: {
+          nombre: "Ghana",
+          bandera: "",
+          banderaImagen: "assets/flags/gha.svg",
+          codigo: "GHA"
+        }
+      }
+    ]
   }
 ];
 
@@ -2044,6 +2389,70 @@ const RESULTADOS_OFICIALES = {
     golesVisitante: null
   },
   "jor-arg-fecha-3": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "rsa-can-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "bra-jpn-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "ger-par-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "ned-mar-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "civ-nor-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "fra-swe-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "mex-ecu-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "eng-cod-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "bel-sen-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "usa-bih-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "esp-aut-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "por-cro-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "sui-alg-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "aus-egy-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "arg-cpv-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "col-gha-16avos": {
     golesLocal: null,
     golesVisitante: null
   }

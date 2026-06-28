@@ -242,6 +242,21 @@ function obtenerFechaSeleccionada() {
   return FECHAS.find((fecha) => fecha.id === fechaId) || null;
 }
 
+function fechaPermiteGanadorPenales(fecha) {
+  if (!fecha) {
+    return false;
+  }
+
+  const fase = normalizarTexto(fecha.fase);
+  const nombre = normalizarTexto(fecha.nombre);
+  return fase.includes("eliminacion")
+    || nombre.includes("16avos")
+    || nombre.includes("octavos")
+    || nombre.includes("cuartos")
+    || nombre.includes("semifinal")
+    || nombre.includes("final");
+}
+
 function ordenarPartidosPorFechaYHora(partidos) {
   return [...partidos].sort((partidoA, partidoB) => {
     const fechaA = `${partidoA.fechaISO || ""} ${partidoA.horario || ""}`;
@@ -350,7 +365,42 @@ function crearMarcador(partido) {
   const inputVisitante = crearInputGol(partido, "visitante", partido.visitante.nombre);
 
   marcador.append(inputLocal, separador, inputVisitante);
+
+  if (fechaPermiteGanadorPenales(obtenerFechaSeleccionada())) {
+    marcador.classList.add("marcador-con-penales");
+    marcador.appendChild(crearControlGanadorPenales(partido));
+  }
+
   return marcador;
+}
+
+function crearControlGanadorPenales(partido) {
+  const control = document.createElement("div");
+  control.className = "penales-control";
+  control.setAttribute("aria-label", "Ganador por penales");
+
+  const etiqueta = document.createElement("span");
+  etiqueta.className = "penales-etiqueta";
+  etiqueta.textContent = "Penales";
+
+  const botonLocal = crearBotonGanadorPenales(partido, "local", partido.local.codigo, partido.local.nombre);
+  const botonVisitante = crearBotonGanadorPenales(partido, "visitante", partido.visitante.codigo, partido.visitante.nombre);
+
+  control.append(etiqueta, botonLocal, botonVisitante);
+  return control;
+}
+
+function crearBotonGanadorPenales(partido, ganador, texto, nombreEquipo) {
+  const boton = document.createElement("button");
+  boton.type = "button";
+  boton.className = "penales-boton";
+  boton.textContent = texto;
+  boton.dataset.partidoId = partido.id;
+  boton.dataset.ganador = ganador;
+  boton.setAttribute("aria-pressed", "false");
+  boton.setAttribute("aria-label", `Gana por penales ${nombreEquipo}`);
+  boton.addEventListener("click", manejarGanadorPenales);
+  return boton;
 }
 
 function crearInputGol(partido, equipo, nombreEquipo) {
@@ -391,6 +441,32 @@ function manejarInputGol(evento) {
   if (input.value !== "") {
     avanzarAlSiguienteInput(input);
   }
+}
+
+function manejarGanadorPenales(evento) {
+  const boton = evento.currentTarget;
+  const partidoId = boton.dataset.partidoId;
+  const ganadorActual = obtenerGanadorPenalesSeleccionado(partidoId);
+  const nuevoGanador = ganadorActual === boton.dataset.ganador ? "" : boton.dataset.ganador;
+
+  marcarGanadorPenales(partidoId, nuevoGanador);
+  guardarPronosticoActual();
+  actualizarResumenPronostico();
+  actualizarResumenSeleccion();
+  limpiarMensaje();
+}
+
+function marcarGanadorPenales(partidoId, ganador) {
+  document.querySelectorAll(`.penales-boton[data-partido-id="${partidoId}"]`).forEach((boton) => {
+    const activo = Boolean(ganador && boton.dataset.ganador === ganador);
+    boton.classList.toggle("activo", activo);
+    boton.setAttribute("aria-pressed", String(activo));
+  });
+}
+
+function obtenerGanadorPenalesSeleccionado(partidoId) {
+  const botonActivo = document.querySelector(`.penales-boton.activo[data-partido-id="${partidoId}"]`);
+  return botonActivo ? botonActivo.dataset.ganador : "";
 }
 
 function avanzarAlSiguienteInput(inputActual) {
@@ -580,7 +656,9 @@ function guardarPronosticoActual() {
 
   const pronosticos = obtenerPronosticosActuales();
   const hayAlgunValor = pronosticos.some((pronostico) => {
-    return pronostico.golesLocal !== "" || pronostico.golesVisitante !== "";
+    return pronostico.golesLocal !== ""
+      || pronostico.golesVisitante !== ""
+      || pronostico.ganadorPenales !== "";
   });
 
   if (!hayAlgunValor) {
@@ -594,7 +672,8 @@ function guardarPronosticoActual() {
   pronosticos.forEach((pronostico) => {
     estadoApp.pronosticos[clave][pronostico.partido.id] = {
       golesLocal: pronostico.golesLocal === "" ? "" : Number(pronostico.golesLocal),
-      golesVisitante: pronostico.golesVisitante === "" ? "" : Number(pronostico.golesVisitante)
+      golesVisitante: pronostico.golesVisitante === "" ? "" : Number(pronostico.golesVisitante),
+      ganadorPenales: pronostico.ganadorPenales || ""
     };
   });
 
@@ -604,6 +683,10 @@ function guardarPronosticoActual() {
 function cargarPronosticoActual() {
   document.querySelectorAll(".input-gol").forEach((input) => {
     input.value = "";
+  });
+  document.querySelectorAll(".penales-boton").forEach((boton) => {
+    boton.classList.remove("activo");
+    boton.setAttribute("aria-pressed", "false");
   });
 
   const clave = obtenerClavePronostico();
@@ -633,6 +716,8 @@ function cargarPronosticoActual() {
     if (inputVisitante) {
       inputVisitante.value = normalizarGolGuardado(pronosticoPartido.golesVisitante);
     }
+
+    marcarGanadorPenales(partido.id, normalizarGanadorPenales(pronosticoPartido.ganadorPenales));
   });
 
   actualizarResumenPronostico();
@@ -647,8 +732,13 @@ function normalizarGolGuardado(valor) {
   return /^[0-9]$/.test(texto) ? texto : "";
 }
 
+function normalizarGanadorPenales(valor) {
+  return valor === "local" || valor === "visitante" ? valor : "";
+}
+
 function hayValoresEnInputs() {
-  return Array.from(document.querySelectorAll(".input-gol")).some((input) => input.value.trim() !== "");
+  return Array.from(document.querySelectorAll(".input-gol")).some((input) => input.value.trim() !== "")
+    || Boolean(document.querySelector(".penales-boton.activo"));
 }
 
 function obtenerPronosticosActuales() {
@@ -665,7 +755,8 @@ function obtenerPronosticosActuales() {
     return {
       partido,
       golesLocal: inputLocal ? inputLocal.value.trim() : "",
-      golesVisitante: inputVisitante ? inputVisitante.value.trim() : ""
+      golesVisitante: inputVisitante ? inputVisitante.value.trim() : "",
+      ganadorPenales: obtenerGanadorPenalesSeleccionado(partido.id)
     };
   });
 }
@@ -718,6 +809,20 @@ function validarPronosticoCompleto() {
     };
   }
 
+  if (fechaPermiteGanadorPenales(fechaSeleccionada)) {
+    const partidoEmpatadoSinGanador = pronosticos.find((pronostico) => {
+      return Number(pronostico.golesLocal) === Number(pronostico.golesVisitante)
+        && !pronostico.ganadorPenales;
+    });
+
+    if (partidoEmpatadoSinGanador) {
+      return {
+        valido: false,
+        mensaje: `Elegi quien pasa por penales en ${partidoEmpatadoSinGanador.partido.local.nombre} vs ${partidoEmpatadoSinGanador.partido.visitante.nombre}.`
+      };
+    }
+  }
+
   return {
     valido: true,
     mensaje: "",
@@ -739,7 +844,9 @@ function generarMensajeWhatsApp() {
   }
 
   const lineasPartidos = validacion.pronosticos.map((pronostico) => {
-    return `${pronostico.partido.local.nombre} ${pronostico.golesLocal} - ${pronostico.golesVisitante} ${pronostico.partido.visitante.nombre}`;
+    const local = formatearEquipoMensajePronostico(pronostico, "local");
+    const visitante = formatearEquipoMensajePronostico(pronostico, "visitante");
+    return `${local} ${pronostico.golesLocal} - ${pronostico.golesVisitante} ${visitante}`;
   });
 
   return [
@@ -749,6 +856,12 @@ function generarMensajeWhatsApp() {
     "",
     ...lineasPartidos
   ].join("\n");
+}
+
+function formatearEquipoMensajePronostico(pronostico, lado) {
+  const equipo = lado === "local" ? pronostico.partido.local : pronostico.partido.visitante;
+  const seleccionado = pronostico.ganadorPenales === lado;
+  return `${seleccionado ? "*" : ""}${equipo.nombre}`;
 }
 
 function enviarPorWhatsApp() {
@@ -792,6 +905,10 @@ function limpiarPronosticoActual() {
 
   document.querySelectorAll(".input-gol").forEach((input) => {
     input.value = "";
+  });
+  document.querySelectorAll(".penales-boton").forEach((boton) => {
+    boton.classList.remove("activo");
+    boton.setAttribute("aria-pressed", "false");
   });
 
   if (clave) {
@@ -1876,7 +1993,7 @@ function crearInfoImagen(etiqueta, valor) {
 }
 
 function crearPartidoImagen(pronostico) {
-  const { partido, golesLocal, golesVisitante } = pronostico;
+  const { partido, golesLocal, golesVisitante, ganadorPenales } = pronostico;
   const contenedor = document.createElement("div");
   contenedor.className = "imagen-partido";
 
@@ -1884,24 +2001,24 @@ function crearPartidoImagen(pronostico) {
   meta.className = "imagen-meta-partido";
   meta.textContent = `${partido.grupo} · ${partido.dia} · ${partido.horario} hs · ${partido.estadio} · ${partido.ciudad}`;
 
-  const local = crearEquipoImagen(partido.local, "local");
+  const local = crearEquipoImagen(partido.local, "local", ganadorPenales === "local");
   const marcador = document.createElement("div");
   marcador.className = "imagen-marcador";
   marcador.append(crearGolImagen(golesLocal), document.createTextNode("-"), crearGolImagen(golesVisitante));
-  const visitante = crearEquipoImagen(partido.visitante, "visitante");
+  const visitante = crearEquipoImagen(partido.visitante, "visitante", ganadorPenales === "visitante");
 
   contenedor.append(meta, local, marcador, visitante);
   return contenedor;
 }
 
-function crearEquipoImagen(equipo, lado) {
+function crearEquipoImagen(equipo, lado, seleccionadoPenales = false) {
   const contenedor = document.createElement("div");
   contenedor.className = `imagen-equipo ${lado}`;
 
   const bandera = crearBanderaEquipo(equipo, "imagen-bandera", false);
 
   const nombre = document.createElement("span");
-  nombre.textContent = equipo.nombre;
+  nombre.textContent = `${seleccionadoPenales ? "*" : ""}${equipo.nombre}`;
 
   if (lado === "visitante") {
     contenedor.append(nombre, bandera);
@@ -2185,6 +2302,9 @@ function parsearMensajePronostico(texto, opciones = {}) {
 
     const golesLocal = busqueda.invertido ? partidoParseado.golesVisitante : partidoParseado.golesLocal;
     const golesVisitante = busqueda.invertido ? partidoParseado.golesLocal : partidoParseado.golesVisitante;
+    const pronosticoAvanza = busqueda.invertido
+      ? invertirGanadorMensaje(partidoParseado.pronosticoAvanza)
+      : partidoParseado.pronosticoAvanza;
 
     if (busqueda.invertido) {
       advertencias.push(`Se detectó el partido invertido en "${linea}" y se acomodó al orden oficial.`);
@@ -2194,7 +2314,7 @@ function parsearMensajePronostico(texto, opciones = {}) {
       partido: busqueda.partido,
       golesLocal,
       golesVisitante,
-      pronosticoAvanza: partidoParseado.pronosticoAvanza || null,
+      pronosticoAvanza: pronosticoAvanza || null,
       lineaOriginal: linea
     });
   });
@@ -2221,12 +2341,34 @@ function parsearLineaPartido(linea) {
     return null;
   }
 
+  const equipoLocal = coincidencia[1].trim();
+  const equipoVisitante = coincidencia[4].trim();
+
   return {
-    equipoLocal: coincidencia[1].trim(),
+    equipoLocal: limpiarMarcaGanadorMensaje(equipoLocal),
     golesLocal: Number(coincidencia[2]),
     golesVisitante: Number(coincidencia[3]),
-    equipoVisitante: coincidencia[4].trim()
+    equipoVisitante: limpiarMarcaGanadorMensaje(equipoVisitante),
+    pronosticoAvanza: equipoLocal.startsWith("*")
+      ? "local"
+      : (equipoVisitante.startsWith("*") ? "visitante" : "")
   };
+}
+
+function limpiarMarcaGanadorMensaje(texto) {
+  return String(texto || "").replace(/^\*\s*/, "").trim();
+}
+
+function invertirGanadorMensaje(ganador) {
+  if (ganador === "local") {
+    return "visitante";
+  }
+
+  if (ganador === "visitante") {
+    return "local";
+  }
+
+  return "";
 }
 
 function limpiarLineaPartido(linea) {
@@ -2610,7 +2752,7 @@ function actualizarResumenPronostico() {
   const pronosticos = obtenerPronosticosActuales();
   const totalPartidos = pronosticos.length;
   const partidosCompletos = pronosticos.filter((pronostico) => {
-    return esGolValido(pronostico.golesLocal) && esGolValido(pronostico.golesVisitante);
+    return pronosticoPartidoEstaCompleto(pronostico, fechaSeleccionada);
   }).length;
   const estaCompleto = Boolean(participante !== "Sin participante" && totalPartidos > 0 && partidosCompletos === totalPartidos);
 
@@ -2621,6 +2763,19 @@ function actualizarResumenPronostico() {
   const estado = document.getElementById("resumen-estado");
   estado.textContent = estaCompleto ? "Completo" : "Incompleto";
   estado.className = estaCompleto ? "completo" : "incompleto";
+}
+
+function pronosticoPartidoEstaCompleto(pronostico, fecha) {
+  if (!esGolValido(pronostico.golesLocal) || !esGolValido(pronostico.golesVisitante)) {
+    return false;
+  }
+
+  if (!fechaPermiteGanadorPenales(fecha)) {
+    return true;
+  }
+
+  return Number(pronostico.golesLocal) !== Number(pronostico.golesVisitante)
+    || Boolean(pronostico.ganadorPenales);
 }
 
 function mostrarMensaje(mensaje, tipo) {

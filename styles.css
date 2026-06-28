@@ -658,7 +658,7 @@ main {
 
 .partido-equipos {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 84px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(84px, auto) minmax(0, 1fr);
   align-items: center;
   gap: 4px;
   min-height: 38px;
@@ -732,6 +732,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 4px;
   min-width: 84px;
   padding: 4px 6px;
@@ -740,6 +741,11 @@ main {
   background: var(--verde-oscuro);
   align-self: center;
   box-shadow: none;
+}
+
+.marcador-con-penales {
+  min-width: 132px;
+  padding: 4px 5px 5px;
 }
 
 .input-gol {
@@ -760,6 +766,47 @@ main {
   color: #ffffff;
   font-size: 1rem;
   font-weight: 800;
+}
+
+.penales-control {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  align-items: center;
+  width: 100%;
+  margin-top: 0;
+  padding-top: 3px;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.penales-etiqueta {
+  grid-column: 1 / -1;
+  color: #f4edd7;
+  font-size: 0.56rem;
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.penales-boton {
+  min-height: 20px;
+  padding: 0 5px;
+  border: 1px solid #1d4a2c;
+  border-radius: 2px;
+  color: #122316;
+  background: #e7dfc8;
+  font-size: 0.66rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.penales-boton.activo {
+  color: #111111;
+  background: var(--dorado);
+  box-shadow: inset 0 0 0 1px #6a4b09;
 }
 
 .resumen-pronostico {
@@ -1799,7 +1846,7 @@ main {
   }
 
   .partido-equipos {
-    grid-template-columns: minmax(0, 1fr) 84px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(84px, auto) minmax(0, 1fr);
     gap: 3px;
     min-height: 46px;
     padding: 3px;
@@ -1839,6 +1886,21 @@ main {
     justify-content: center;
     min-width: 84px;
     padding: 4px 6px;
+  }
+
+  .marcador-con-penales {
+    min-width: 122px;
+    padding: 4px;
+  }
+
+  .penales-etiqueta {
+    font-size: 0.52rem;
+  }
+
+  .penales-boton {
+    min-height: 19px;
+    padding: 0 4px;
+    font-size: 0.62rem;
   }
 
   .input-gol {
