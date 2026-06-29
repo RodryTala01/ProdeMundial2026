@@ -32,7 +32,7 @@
             <span class="nav-texto-desktop">Puntos</span>
             <span class="nav-texto-mobile">Puntos</span>
           </button>
-          <button class="nav-boton nav-deshabilitado" type="button" data-seccion="tabla" aria-selected="false" aria-disabled="true" disabled title="Tabla deshabilitada por ahora">
+          <button class="nav-boton" type="button" data-seccion="tabla" aria-selected="false">
             <span class="nav-texto-desktop">Tabla</span>
             <span class="nav-texto-mobile">Tabla</span>
           </button>
@@ -217,25 +217,8 @@
           </div>
         </div>
 
-        <div class="panel-herramienta">
-          <label class="campo">
-            <span>Fecha</span>
-            <select id="selector-fecha-tabla"></select>
-          </label>
-
-          <label class="campo campo-textarea">
-            <span>Mensajes WhatsApp</span>
-            <textarea id="textarea-mensajes-tabla" rows="10" placeholder="Pegá mensajes"></textarea>
-          </label>
-
-          <div class="acciones-pronostico">
-            <button class="boton boton-primario" type="button" id="boton-generar-tabla">
-              Tabla
-            </button>
-          </div>
-        </div>
-
         <div class="tabla-posiciones-wrap" id="tabla-posiciones"></div>
+        <div class="detalle-tabla" id="detalle-tabla" hidden></div>
         <div class="advertencias" id="advertencias-tabla"></div>
       </section>
 
@@ -258,6 +241,7 @@
   </div>
 
   <script src="data.js"></script>
+  <script src="Resultados.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="script.js"></script>
 </body>

@@ -2,7 +2,7 @@ const CLAVE_ESTADO = "prodeTafa2026_state";
 const CLAVE_NOTIFICACIONES_VISTAS = "prodeTafa2026_notificaciones_vistas";
 const CLAVE_NOTIFICACIONES_INTERACCION = "prodeTafa2026_notificaciones_interaccion";
 const CLAVE_AVISOS_VISUALES_CERRADOS = "prodeTafa2026_avisos_visuales_cerrados";
-const SECCIONES_DESHABILITADAS = new Set(["calcular", "tabla"]);
+const SECCIONES_DESHABILITADAS = new Set(["calcular"]);
 
 let intervaloCuentaRegresiva = null;
 let modalGrupoActivo = {
@@ -17,6 +17,11 @@ let estadoApp = {
   pronosticosGrupos: {}
 };
 
+let cacheResultadosOficialesHardcodeados = null;
+let cacheGruposOficialesHardcodeados = null;
+let ultimoResultadoTabla = null;
+let participanteDetalleTabla = "";
+
 document.addEventListener("DOMContentLoaded", inicializarApp);
 
 function inicializarApp() {
@@ -29,6 +34,7 @@ function inicializarApp() {
   renderizarParticipantesGrupos();
   renderizarFechas();
   renderizarFechasHerramientas();
+  renderizarCargaTablaHardcodeada();
   restaurarSelectoresDesdeEstado();
   enlazarNavegacion();
   enlazarAcciones();
@@ -168,6 +174,61 @@ function renderizarFechasHerramientas() {
       selectorTabla.appendChild(opcion);
     });
   }
+}
+
+function obtenerCargaResultadosHardcodeados() {
+  if (typeof RESULTADOS_HARDCODEADOS === "undefined" || !RESULTADOS_HARDCODEADOS || typeof RESULTADOS_HARDCODEADOS !== "object") {
+    return {
+      oficiales: [],
+      pronosticos: []
+    };
+  }
+
+  return RESULTADOS_HARDCODEADOS;
+}
+
+function obtenerBloquesResultadosHardcodeados(tipo) {
+  const carga = obtenerCargaResultadosHardcodeados();
+  const aliasPorTipo = {
+    pronosticos: "mensajes",
+    pronosticosGrupos: "gruposPronosticos",
+    oficialesGrupos: "gruposOficiales"
+  };
+  const valor = carga[tipo] || carga[aliasPorTipo[tipo]] || [];
+  const items = Array.isArray(valor) ? valor : [valor];
+
+  return items
+    .map((item) => {
+      if (typeof item === "string") {
+        return item.trim();
+      }
+
+      if (item && typeof item.texto === "string") {
+        return item.texto.trim();
+      }
+
+      return "";
+    })
+    .filter(Boolean);
+}
+
+function obtenerTextoPronosticosHardcodeados() {
+  return obtenerBloquesResultadosHardcodeados("pronosticos").join("\n\n");
+}
+
+function obtenerTextoPronosticosGruposHardcodeados() {
+  return obtenerBloquesResultadosHardcodeados("pronosticosGrupos").join("\n\n");
+}
+
+function renderizarCargaTablaHardcodeada() {
+  const textarea = document.getElementById("textarea-mensajes-tabla");
+
+  if (!textarea) {
+    return;
+  }
+
+  textarea.value = obtenerTextoPronosticosHardcodeados();
+  textarea.readOnly = true;
 }
 
 function restaurarSelectoresDesdeEstado() {
@@ -523,6 +584,11 @@ function cambiarSeccion(seccionActiva) {
   if (seccionActiva === "grupos") {
     renderizarSeccionGrupos();
   }
+
+  if (seccionActiva === "tabla") {
+    renderizarCargaTablaHardcodeada();
+    renderizarTablaPosiciones(generarTablaPosiciones());
+  }
 }
 
 function enlazarAcciones() {
@@ -810,15 +876,14 @@ function validarPronosticoCompleto() {
   }
 
   if (fechaPermiteGanadorPenales(fechaSeleccionada)) {
-    const partidoEmpatadoSinGanador = pronosticos.find((pronostico) => {
-      return Number(pronostico.golesLocal) === Number(pronostico.golesVisitante)
-        && !pronostico.ganadorPenales;
+    const partidoSinGanadorPenales = pronosticos.find((pronostico) => {
+      return !pronostico.ganadorPenales;
     });
 
-    if (partidoEmpatadoSinGanador) {
+    if (partidoSinGanadorPenales) {
       return {
         valido: false,
-        mensaje: `Elegi quien pasa por penales en ${partidoEmpatadoSinGanador.partido.local.nombre} vs ${partidoEmpatadoSinGanador.partido.visitante.nombre}.`
+        mensaje: `Elegi quien pasa por penales en ${partidoSinGanadorPenales.partido.local.nombre} vs ${partidoSinGanadorPenales.partido.visitante.nombre}.`
       };
     }
   }
@@ -1813,6 +1878,248 @@ function normalizarPronosticoGrupo(registro, grupo) {
   });
 }
 
+function buscarGrupoPorNombre(nombreGrupo) {
+  const normalizado = normalizarTexto(nombreGrupo);
+
+  if (!normalizado) {
+    return null;
+  }
+
+  return obtenerGruposMundial().find((grupo) => {
+    const grupoNormalizado = normalizarTexto(grupo.nombre);
+    return grupoNormalizado === normalizado
+      || normalizado.includes(grupoNormalizado)
+      || grupoNormalizado.includes(normalizado);
+  }) || null;
+}
+
+function buscarEquipoGrupoPorNombre(grupo, nombreEquipo) {
+  const normalizado = normalizarNombreEquipo(nombreEquipo);
+
+  if (!grupo || !normalizado) {
+    return null;
+  }
+
+  return grupo.equipos.find((equipo) => {
+    return normalizarNombreEquipo(equipo.nombre) === normalizado
+      || normalizarNombreEquipo(equipo.codigo) === normalizado;
+  }) || null;
+}
+
+function parsearMensajeGrupos(texto, opciones = {}) {
+  const lineas = String(texto || "")
+    .replace(/\r/g, "")
+    .split("\n")
+    .map((linea) => linea.trim())
+    .filter(Boolean);
+  const errores = [];
+  const advertencias = [];
+  const grupos = {};
+  const requiereParticipante = opciones.requiereParticipante !== false;
+  let participante = "";
+  let grupoActual = null;
+
+  lineas.forEach((linea) => {
+    const lineaNormalizada = normalizarTexto(linea);
+
+    if (lineaNormalizada.startsWith("participante:") || lineaNormalizada.includes(" participante:")) {
+      participante = limpiarValorEncabezado(linea, "participante");
+      return;
+    }
+
+    const grupoDetectado = buscarGrupoPorNombre(linea);
+
+    if (grupoDetectado) {
+      grupoActual = grupoDetectado;
+
+      if (!grupos[grupoActual.id]) {
+        grupos[grupoActual.id] = ["", "", "", ""];
+      }
+
+      return;
+    }
+
+    const posicion = linea.match(/^([1-4])\s*[\.)-]\s*(.+)$/);
+
+    if (!posicion) {
+      return;
+    }
+
+    if (!grupoActual) {
+      advertencias.push(`Grupo sin encabezado para la linea "${linea}".`);
+      return;
+    }
+
+    const indice = Number(posicion[1]) - 1;
+    const nombreEquipo = posicion[2].trim();
+    const equipo = buscarEquipoGrupoPorNombre(grupoActual, nombreEquipo);
+
+    if (!equipo) {
+      errores.push(`No se pudo reconocer "${nombreEquipo}" en ${grupoActual.nombre}.`);
+      return;
+    }
+
+    grupos[grupoActual.id][indice] = equipo.codigo;
+  });
+
+  if (requiereParticipante && !participante) {
+    errores.push("El mensaje de grupos no tiene participante.");
+  }
+
+  if (!Object.keys(grupos).length && texto.trim()) {
+    errores.push("No se detectaron grupos en el mensaje.");
+  }
+
+  return {
+    participante,
+    grupos,
+    errores,
+    advertencias
+  };
+}
+
+function parsearMultiplesMensajesGrupos(texto, opciones = {}) {
+  const bloques = separarBloquesMensajesGrupos(texto);
+  const advertencias = [];
+  const mensajes = bloques.map((bloque, indice) => {
+    const mensaje = parsearMensajeGrupos(bloque, opciones);
+    mensaje.indice = indice;
+    mensaje.textoOriginal = bloque;
+    return mensaje;
+  });
+
+  if (!bloques.length && String(texto || "").trim()) {
+    advertencias.push("No se pudo separar ningun mensaje de grupos.");
+  }
+
+  return {
+    mensajes,
+    advertencias
+  };
+}
+
+function separarBloquesMensajesGrupos(texto) {
+  const lineas = String(texto || "").replace(/\r/g, "").split("\n");
+  const bloques = [];
+  let actual = [];
+  let actualTieneParticipante = false;
+  let actualTieneGrupo = false;
+  const nombreProdeNormalizado = normalizarTexto(CONFIG.nombreProde);
+
+  lineas.forEach((linea) => {
+    const normalizada = normalizarTexto(linea);
+    const esTitulo = normalizada && normalizada.includes(nombreProdeNormalizado);
+    const esParticipante = normalizada.startsWith("participante:") || normalizada.includes(" participante:");
+    const esGrupo = Boolean(buscarGrupoPorNombre(linea));
+    const empiezaNuevoMensaje = actual.length > 0 && (
+      esTitulo
+      || (esParticipante && actualTieneParticipante && actualTieneGrupo)
+    );
+
+    if (empiezaNuevoMensaje) {
+      bloques.push(actual.join("\n").trim());
+      actual = [];
+      actualTieneParticipante = false;
+      actualTieneGrupo = false;
+    }
+
+    actual.push(linea);
+    actualTieneParticipante = actualTieneParticipante || esParticipante;
+    actualTieneGrupo = actualTieneGrupo || esGrupo;
+  });
+
+  if (actual.join("").trim()) {
+    bloques.push(actual.join("\n").trim());
+  }
+
+  return bloques.filter(Boolean);
+}
+
+function obtenerCargaGruposOficialesHardcodeados() {
+  if (cacheGruposOficialesHardcodeados) {
+    return cacheGruposOficialesHardcodeados;
+  }
+
+  const grupos = {};
+  const advertencias = [];
+
+  obtenerBloquesResultadosHardcodeados("oficialesGrupos").forEach((bloque, indice) => {
+    const parseo = parsearMensajeGrupos(bloque, { requiereParticipante: false });
+    advertencias.push(...parseo.errores, ...parseo.advertencias);
+
+    Object.entries(parseo.grupos).forEach(([grupoId, posiciones]) => {
+      if (grupos[grupoId]) {
+        advertencias.push(`Grupo oficial repetido para ${grupoId}. Se uso el ultimo cargado.`);
+      }
+
+      grupos[grupoId] = posiciones;
+    });
+
+    if (!Object.keys(parseo.grupos).length) {
+      advertencias.push(`Bloque oficial de grupos ${indice + 1}: no se detectaron posiciones.`);
+    }
+  });
+
+  cacheGruposOficialesHardcodeados = {
+    grupos,
+    advertencias
+  };
+
+  return cacheGruposOficialesHardcodeados;
+}
+
+function calcularPronosticoGruposHardcodeado(mensajeParseado, oficiales) {
+  const detalle = [];
+  let puntos = 0;
+  let aciertos = 0;
+  let errores = 0;
+  let pendientes = 0;
+
+  obtenerGruposMundial().forEach((grupo) => {
+    const pronostico = normalizarPronosticoGrupo(mensajeParseado.grupos[grupo.id], grupo);
+    const oficial = normalizarPronosticoGrupo(oficiales[grupo.id], grupo);
+    const tieneOficial = oficial.every(Boolean);
+    const posiciones = pronostico.map((codigo, indice) => {
+      const equipoPronostico = obtenerEquipoGrupo(grupo, codigo);
+      const equipoOficial = obtenerEquipoGrupo(grupo, oficial[indice]);
+      const pendiente = !tieneOficial;
+      const acertado = Boolean(!pendiente && codigo && codigo === oficial[indice]);
+
+      if (pendiente) {
+        pendientes += 1;
+      } else if (acertado) {
+        puntos += 1;
+        aciertos += 1;
+      } else {
+        errores += 1;
+      }
+
+      return {
+        posicion: indice + 1,
+        pronostico: equipoPronostico,
+        oficial: equipoOficial,
+        estado: pendiente ? "pendiente" : (acertado ? "pleno" : "error"),
+        puntos: acertado ? 1 : 0
+      };
+    });
+
+    detalle.push({
+      grupo,
+      puntos: posiciones.reduce((total, item) => total + item.puntos, 0),
+      posiciones
+    });
+  });
+
+  return {
+    participante: mensajeParseado.participante,
+    puntos,
+    aciertos,
+    errores,
+    pendientes,
+    detalle
+  };
+}
+
 function crearEquipoResumenGrupo(equipo) {
   return crearEquipoResumenGrupoConOpciones(equipo, true, "bandera grupo-bandera");
 }
@@ -2036,6 +2343,109 @@ function crearGolImagen(gol) {
   return elemento;
 }
 
+function obtenerResultadoOficial(partidoId) {
+  const cargaHardcodeada = obtenerCargaResultadosOficialesHardcodeados();
+  return cargaHardcodeada.resultados[partidoId]
+    || RESULTADOS_OFICIALES[partidoId]
+    || null;
+}
+
+function obtenerCargaResultadosOficialesHardcodeados() {
+  if (cacheResultadosOficialesHardcodeados) {
+    return cacheResultadosOficialesHardcodeados;
+  }
+
+  const resultados = {};
+  const advertencias = [];
+
+  obtenerBloquesResultadosHardcodeados("oficiales").forEach((bloque, indice) => {
+    const parseo = parsearBloqueResultadosOficiales(bloque, indice);
+    advertencias.push(...parseo.advertencias);
+
+    Object.entries(parseo.resultados).forEach(([partidoId, resultado]) => {
+      if (resultados[partidoId]) {
+        advertencias.push(`Resultado oficial repetido para ${partidoId}. Se uso el ultimo cargado.`);
+      }
+
+      resultados[partidoId] = resultado;
+    });
+  });
+
+  cacheResultadosOficialesHardcodeados = {
+    resultados,
+    advertencias
+  };
+
+  return cacheResultadosOficialesHardcodeados;
+}
+
+function parsearBloqueResultadosOficiales(bloque, indiceBloque) {
+  const lineas = String(bloque || "")
+    .replace(/\r/g, "")
+    .split("\n")
+    .map((linea) => linea.trim())
+    .filter(Boolean);
+  const resultados = {};
+  const advertencias = [];
+  let nombreFecha = "";
+
+  lineas.forEach((linea) => {
+    const lineaNormalizada = normalizarTexto(linea);
+
+    if (lineaNormalizada.startsWith("fecha:") || lineaNormalizada.includes(" fecha:")) {
+      nombreFecha = limpiarValorEncabezado(linea, "fecha");
+    }
+  });
+
+  let fecha = buscarFechaPorNombre(nombreFecha);
+
+  if (!fecha && !nombreFecha) {
+    fecha = lineas.map((linea) => buscarFechaPorNombre(linea)).find(Boolean) || null;
+  }
+
+  if (!fecha) {
+    advertencias.push(`Resultado oficial ${indiceBloque + 1}: no se pudo detectar la fecha.`);
+    return {
+      resultados,
+      advertencias
+    };
+  }
+
+  lineas.forEach((linea) => {
+    const partidoParseado = parsearLineaPartido(linea);
+
+    if (!partidoParseado) {
+      return;
+    }
+
+    const busqueda = buscarPartidoPorEquipos(fecha, partidoParseado.equipoLocal, partidoParseado.equipoVisitante);
+
+    if (!busqueda) {
+      advertencias.push(`Resultado oficial no reconocido en ${fecha.nombre}: "${linea}".`);
+      return;
+    }
+
+    const ganadorPenales = busqueda.invertido
+      ? invertirGanadorMensaje(partidoParseado.pronosticoAvanza)
+      : partidoParseado.pronosticoAvanza;
+
+    resultados[busqueda.partido.id] = {
+      golesLocal: busqueda.invertido ? partidoParseado.golesVisitante : partidoParseado.golesLocal,
+      golesVisitante: busqueda.invertido ? partidoParseado.golesLocal : partidoParseado.golesVisitante,
+      ganadorPenales: ganadorPenales || ""
+    };
+  });
+
+  if (!Object.keys(resultados).length) {
+    advertencias.push(`Resultado oficial ${fecha.nombre}: no se detectaron partidos.`);
+  }
+
+  return {
+    resultados,
+    advertencias
+  };
+}
+
 function calcularPuntosPartido(pronostico, oficial) {
   const oficialPendiente = !oficial
     || oficial.golesLocal === null
@@ -2047,6 +2457,7 @@ function calcularPuntosPartido(pronostico, oficial) {
     return {
       estado: "pendiente",
       puntos: 0,
+      extra: 0,
       descripcion: "Pendiente"
     };
   }
@@ -2055,11 +2466,13 @@ function calcularPuntosPartido(pronostico, oficial) {
   const golesPronosticoVisitante = Number(pronostico.golesVisitante);
   const golesOficialLocal = Number(oficial.golesLocal);
   const golesOficialVisitante = Number(oficial.golesVisitante);
+  const extra = calcularExtraPenales(pronostico, oficial);
 
   if (golesPronosticoLocal === golesOficialLocal && golesPronosticoVisitante === golesOficialVisitante) {
     return {
       estado: "pleno",
       puntos: CONFIG.puntos.pleno,
+      extra,
       descripcion: "Pleno"
     };
   }
@@ -2071,6 +2484,7 @@ function calcularPuntosPartido(pronostico, oficial) {
     return {
       estado: "parcial",
       puntos: CONFIG.puntos.parcial,
+      extra,
       descripcion: "Parcial"
     };
   }
@@ -2078,8 +2492,25 @@ function calcularPuntosPartido(pronostico, oficial) {
   return {
     estado: "error",
     puntos: CONFIG.puntos.error,
+    extra,
     descripcion: "Error"
   };
+}
+
+function calcularExtraPenales(pronostico, oficial) {
+  const golesOficialLocal = Number(oficial.golesLocal);
+  const golesOficialVisitante = Number(oficial.golesVisitante);
+  const ganadorOficial = obtenerGanadorPenalesResultado(oficial);
+
+  if (golesOficialLocal !== golesOficialVisitante || !ganadorOficial) {
+    return 0;
+  }
+
+  return obtenerGanadorPenalesResultado(pronostico) === ganadorOficial ? 1 : 0;
+}
+
+function obtenerGanadorPenalesResultado(resultado) {
+  return resultado.pronosticoAvanza || resultado.ganadorPenales || "";
 }
 
 function obtenerSignoResultado(golesLocal, golesVisitante) {
@@ -2182,7 +2613,7 @@ function crearCeldaEstado(fila) {
   badge.className = "badge-estado";
   badge.textContent = fila.descripcion;
   puntos.className = "puntos-mini";
-  puntos.textContent = `+${fila.puntos}`;
+  puntos.textContent = fila.extra ? `+${fila.puntos} · Extra +${fila.extra}` : `+${fila.puntos}`;
 
   celda.append(badge, puntos);
   return celda;
@@ -2193,7 +2624,7 @@ function calcularPronosticoCompleto(mensajeParseado) {
   const advertencias = [];
 
   mensajeParseado.pronosticos.forEach((pronostico) => {
-    const oficial = RESULTADOS_OFICIALES[pronostico.partido.id] || null;
+    const oficial = obtenerResultadoOficial(pronostico.partido.id);
     const puntaje = calcularPuntosPartido(pronostico, oficial);
 
     if (puntaje.estado === "pendiente") {
@@ -2208,6 +2639,7 @@ function calcularPronosticoCompleto(mensajeParseado) {
       oficial,
       estado: puntaje.estado,
       puntos: puntaje.puntos,
+      extra: puntaje.extra || 0,
       descripcion: puntaje.descripcion,
       resultadoOficialTexto: formatearResultadoOficial(pronostico.partido, oficial)
     });
@@ -2217,7 +2649,9 @@ function calcularPronosticoCompleto(mensajeParseado) {
     fecha: mensajeParseado.fecha,
     participante: mensajeParseado.participante,
     filas,
-    total: filas.reduce((acumulado, fila) => acumulado + fila.puntos, 0),
+    total: filas.reduce((acumulado, fila) => acumulado + fila.puntos + fila.extra, 0),
+    puntosPartidos: filas.reduce((acumulado, fila) => acumulado + fila.puntos, 0),
+    extrasPenales: filas.reduce((acumulado, fila) => acumulado + fila.extra, 0),
     plenos: filas.filter((fila) => fila.estado === "pleno").length,
     parciales: filas.filter((fila) => fila.estado === "parcial").length,
     errores: filas.filter((fila) => fila.estado === "error").length,
@@ -2532,20 +2966,35 @@ function separarBloquesMensajes(texto) {
 function generarTablaPosiciones() {
   const textarea = document.getElementById("textarea-mensajes-tabla");
   const selectorFecha = document.getElementById("selector-fecha-tabla");
-  const texto = textarea ? textarea.value : "";
+  const textoPartidos = obtenerTextoPronosticosHardcodeados() || (textarea ? textarea.value : "");
+  const textoGrupos = obtenerTextoPronosticosGruposHardcodeados();
   const filtroFecha = selectorFecha ? selectorFecha.value : "__todas__";
   const advertencias = [];
+  const cargaOficial = obtenerCargaResultadosOficialesHardcodeados();
+  const cargaGruposOficiales = obtenerCargaGruposOficialesHardcodeados();
 
-  if (!texto.trim()) {
+  if (!textoPartidos.trim() && !textoGrupos.trim()) {
     return {
       filas: [],
-      advertencias: ["Pegá uno o más mensajes antes de generar la tabla."]
+      advertencias: ["Carga uno o mas mensajes en Resultados.js antes de generar la tabla."]
     };
   }
 
-  const parseoMultiple = parsearMultiplesMensajes(texto, {
-    fechaFallbackId: filtroFecha !== "__todas__" ? filtroFecha : ""
-  });
+  advertencias.push(...cargaOficial.advertencias);
+  advertencias.push(...cargaGruposOficiales.advertencias);
+
+  if (textoPartidos.trim() && !Object.keys(cargaOficial.resultados).length) {
+    advertencias.push("No hay resultados oficiales cargados en Resultados.js. Los partidos sin resultado quedan pendientes.");
+  }
+
+  if (textoGrupos.trim() && !Object.keys(cargaGruposOficiales.grupos).length) {
+    advertencias.push("No hay posiciones oficiales de grupos cargadas en Resultados.js. Los grupos quedan pendientes.");
+  }
+
+  const parseoMultiple = parsearMultiplesMensajes(
+    textoPartidos,
+    { fechaFallbackId: filtroFecha !== "__todas__" ? filtroFecha : "" }
+  );
   const mensajesPorClave = new Map();
 
   advertencias.push(...parseoMultiple.advertencias);
@@ -2578,21 +3027,10 @@ function generarTablaPosiciones() {
 
     advertencias.push(...calculo.advertencias);
 
-    if (!acumulados.has(claveParticipante)) {
-      acumulados.set(claveParticipante, {
-        participante: mensaje.participante,
-        puntos: 0,
-        plenos: 0,
-        parciales: 0,
-        errores: 0,
-        pendientes: 0,
-        fechas: new Set(),
-        detalles: []
-      });
-    }
-
-    const acumulado = acumulados.get(claveParticipante);
+    const acumulado = obtenerAcumuladoTabla(acumulados, mensaje.participante);
     acumulado.puntos += calculo.total;
+    acumulado.puntosPartidos += calculo.puntosPartidos;
+    acumulado.puntosPenales += calculo.extrasPenales;
     acumulado.plenos += calculo.plenos;
     acumulado.parciales += calculo.parciales;
     acumulado.errores += calculo.errores;
@@ -2601,10 +3039,43 @@ function generarTablaPosiciones() {
     acumulado.detalles.push(...calculo.filas);
   });
 
+  const parseoGrupos = parsearMultiplesMensajesGrupos(textoGrupos, { requiereParticipante: true });
+  const gruposPorParticipante = new Map();
+
+  advertencias.push(...parseoGrupos.advertencias);
+
+  parseoGrupos.mensajes.forEach((mensaje) => {
+    advertencias.push(...mensaje.errores, ...mensaje.advertencias);
+
+    if (!mensaje.participante || !Object.keys(mensaje.grupos).length) {
+      return;
+    }
+
+    const claveParticipante = normalizarTexto(mensaje.participante);
+
+    if (gruposPorParticipante.has(claveParticipante)) {
+      advertencias.push(`Se detecto mas de un pronostico de grupos para ${mensaje.participante}. Se uso el ultimo.`);
+    }
+
+    gruposPorParticipante.set(claveParticipante, mensaje);
+  });
+
+  gruposPorParticipante.forEach((mensaje) => {
+    const calculo = calcularPronosticoGruposHardcodeado(mensaje, cargaGruposOficiales.grupos);
+    const acumulado = obtenerAcumuladoTabla(acumulados, mensaje.participante);
+
+    acumulado.puntos += calculo.puntos;
+    acumulado.puntosGrupos += calculo.puntos;
+    acumulado.gruposAciertos += calculo.aciertos;
+    acumulado.gruposErrores += calculo.errores;
+    acumulado.gruposPendientes += calculo.pendientes;
+    acumulado.detalleGrupos = calculo.detalle;
+  });
+
   const filas = Array.from(acumulados.values())
     .map((fila) => ({
       ...fila,
-      fechasTexto: Array.from(fila.fechas).join(", ")
+      fechasTexto: Array.from(fila.fechas).join(", ") || "Sin fechas"
     }))
     .sort(ordenarTablaPosiciones)
     .map((fila, indice) => ({
@@ -2616,6 +3087,33 @@ function generarTablaPosiciones() {
     filas,
     advertencias
   };
+}
+
+function obtenerAcumuladoTabla(acumulados, participante) {
+  const claveParticipante = normalizarTexto(participante);
+
+  if (!acumulados.has(claveParticipante)) {
+    acumulados.set(claveParticipante, {
+      clave: claveParticipante,
+      participante,
+      puntos: 0,
+      puntosPartidos: 0,
+      puntosPenales: 0,
+      puntosGrupos: 0,
+      plenos: 0,
+      parciales: 0,
+      errores: 0,
+      pendientes: 0,
+      gruposAciertos: 0,
+      gruposErrores: 0,
+      gruposPendientes: 0,
+      fechas: new Set(),
+      detalles: [],
+      detalleGrupos: []
+    });
+  }
+
+  return acumulados.get(claveParticipante);
 }
 
 function ordenarTablaPosiciones(a, b) {
@@ -2631,6 +3129,10 @@ function ordenarTablaPosiciones(a, b) {
     return b.parciales - a.parciales;
   }
 
+  if (b.gruposAciertos !== a.gruposAciertos) {
+    return b.gruposAciertos - a.gruposAciertos;
+  }
+
   if (a.errores !== b.errores) {
     return a.errores - b.errores;
   }
@@ -2638,7 +3140,7 @@ function ordenarTablaPosiciones(a, b) {
   return a.participante.localeCompare(b.participante, "es");
 }
 
-function renderizarTablaPosiciones(resultado) {
+function renderizarTablaPosicionesAnterior(resultado) {
   const contenedor = document.getElementById("tabla-posiciones");
   const contenedorAdvertencias = document.getElementById("advertencias-tabla");
   contenedor.innerHTML = "";
@@ -2685,7 +3187,7 @@ function renderizarTablaPosiciones(resultado) {
       <td>${fila.fechasTexto}</td>
     `;
 
-    tr.children[1].appendChild(crearDetalleParticipante(fila));
+    tr.children[1].appendChild(crearDetalleParticipanteAnterior(fila));
     cuerpo.appendChild(tr);
   });
 
@@ -2693,7 +3195,7 @@ function renderizarTablaPosiciones(resultado) {
   renderizarAdvertencias(contenedorAdvertencias, resultado.advertencias);
 }
 
-function crearDetalleParticipante(fila) {
+function crearDetalleParticipanteAnterior(fila) {
   const contenedor = document.createElement("div");
   const nombre = document.createElement("strong");
   const detalle = document.createElement("details");
@@ -2720,6 +3222,242 @@ function crearDetalleParticipante(fila) {
   detalle.append(resumen, lista);
   contenedor.append(nombre, detalle);
   return contenedor;
+}
+
+function renderizarTablaPosiciones(resultado) {
+  const contenedor = document.getElementById("tabla-posiciones");
+  const contenedorAdvertencias = document.getElementById("advertencias-tabla");
+  const contenedorDetalle = document.getElementById("detalle-tabla");
+
+  ultimoResultadoTabla = resultado;
+  contenedor.innerHTML = "";
+
+  if (!resultado.filas.length) {
+    const vacio = document.createElement("p");
+    vacio.className = "mensaje-estado info";
+    vacio.textContent = "No hay pronosticos validos para generar la tabla.";
+    contenedor.appendChild(vacio);
+    participanteDetalleTabla = "";
+
+    if (contenedorDetalle) {
+      contenedorDetalle.hidden = true;
+      contenedorDetalle.innerHTML = "";
+    }
+
+    renderizarAdvertencias(contenedorAdvertencias, resultado.advertencias);
+    return;
+  }
+
+  const tabla = document.createElement("table");
+  tabla.className = "tabla-posiciones";
+  tabla.innerHTML = `
+    <thead>
+      <tr>
+        <th>Pos</th>
+        <th>Participante</th>
+        <th>PTS</th>
+        <th>PLENOS</th>
+        <th>PAR</th>
+        <th>ERR</th>
+        <th>EXT</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  `;
+
+  const cuerpo = tabla.querySelector("tbody");
+
+  resultado.filas.forEach((fila) => {
+    const tr = document.createElement("tr");
+    tr.className = fila.clave === participanteDetalleTabla ? "fila-seleccionada" : "";
+    tr.innerHTML = `
+      <td>${fila.posicion}</td>
+      <td></td>
+      <td>${fila.puntos}</td>
+      <td>${fila.plenos}</td>
+      <td>${fila.parciales}</td>
+      <td>${fila.errores + fila.gruposErrores}</td>
+      <td>${fila.puntosGrupos + fila.puntosPenales}</td>
+    `;
+
+    tr.children[1].appendChild(crearBotonParticipanteTabla(fila));
+    cuerpo.appendChild(tr);
+  });
+
+  contenedor.appendChild(tabla);
+  renderizarDetalleTablaSeleccionado();
+  renderizarAdvertencias(contenedorAdvertencias, resultado.advertencias);
+}
+
+function crearBotonParticipanteTabla(fila) {
+  const boton = document.createElement("button");
+  boton.type = "button";
+  boton.className = "participante-tabla-boton";
+  boton.textContent = fila.participante;
+  boton.setAttribute("aria-label", `Ver detalle de ${fila.participante}`);
+  boton.addEventListener("click", () => {
+    participanteDetalleTabla = fila.clave;
+    renderizarTablaPosiciones(ultimoResultadoTabla);
+  });
+  return boton;
+}
+
+function renderizarDetalleTablaSeleccionado() {
+  const contenedor = document.getElementById("detalle-tabla");
+
+  if (!contenedor || !ultimoResultadoTabla || !ultimoResultadoTabla.filas.length) {
+    return;
+  }
+
+  const fila = ultimoResultadoTabla.filas.find((item) => item.clave === participanteDetalleTabla);
+
+  if (!fila) {
+    contenedor.hidden = true;
+    contenedor.innerHTML = "";
+    return;
+  }
+
+  contenedor.hidden = false;
+  contenedor.innerHTML = "";
+  contenedor.appendChild(crearDetalleTablaParticipante(fila));
+}
+
+function crearDetalleTablaParticipante(fila) {
+  const contenedor = document.createElement("article");
+  contenedor.className = "detalle-tabla-panel";
+
+  const encabezado = document.createElement("div");
+  encabezado.className = "detalle-tabla-encabezado";
+
+  const titulo = document.createElement("h3");
+  titulo.textContent = fila.participante;
+
+  const total = document.createElement("strong");
+  total.textContent = `${fila.puntos} pts`;
+
+  encabezado.append(titulo, total);
+
+  const resumen = document.createElement("div");
+  resumen.className = "detalle-tabla-resumen";
+  resumen.append(
+    crearDatoDetalleTabla("Partidos", `${fila.puntosPartidos} pts`),
+    crearDatoDetalleTabla("Extra", `${fila.puntosGrupos + fila.puntosPenales} pts`),
+    crearDatoDetalleTabla("Plenos", fila.plenos),
+    crearDatoDetalleTabla("Puestos acertados", fila.gruposAciertos)
+  );
+
+  const secciones = document.createElement("div");
+  secciones.className = "detalle-tabla-secciones";
+  secciones.append(
+    crearDetallePartidosTabla(fila),
+    crearDetalleGruposTabla(fila)
+  );
+
+  contenedor.append(encabezado, resumen, secciones);
+  return contenedor;
+}
+
+function crearDatoDetalleTabla(etiqueta, valor) {
+  const item = document.createElement("div");
+  const label = document.createElement("span");
+  const dato = document.createElement("strong");
+
+  label.textContent = etiqueta;
+  dato.textContent = valor;
+  item.append(label, dato);
+  return item;
+}
+
+function crearDetallePartidosTabla(fila) {
+  const bloque = document.createElement("section");
+  bloque.className = "detalle-bloque";
+
+  const titulo = document.createElement("h4");
+  titulo.textContent = "Partidos";
+  bloque.appendChild(titulo);
+
+  if (!fila.detalles.length) {
+    const vacio = document.createElement("p");
+    vacio.className = "detalle-vacio";
+    vacio.textContent = "Sin pronosticos de partidos cargados.";
+    bloque.appendChild(vacio);
+    return bloque;
+  }
+
+  const lista = document.createElement("div");
+  lista.className = "detalle-lista";
+
+  fila.detalles.forEach((item) => {
+    const detalleItem = document.createElement("div");
+    detalleItem.className = `detalle-item estado-${item.estado}`;
+    detalleItem.innerHTML = `
+      <strong>${item.fecha.nombre} · ${item.partido.local.nombre} vs ${item.partido.visitante.nombre}</strong>
+      <span>Pronostico: ${item.pronostico.golesLocal} - ${item.pronostico.golesVisitante}</span>
+      <span>Oficial: ${item.resultadoOficialTexto}</span>
+      <span>${item.descripcion} · +${item.puntos}${item.extra ? ` · Extra penales +${item.extra}` : ""}</span>
+    `;
+    lista.appendChild(detalleItem);
+  });
+
+  bloque.appendChild(lista);
+  return bloque;
+}
+
+function crearDetalleGruposTabla(fila) {
+  const bloque = document.createElement("section");
+  bloque.className = "detalle-bloque detalle-bloque-grupos";
+
+  const titulo = document.createElement("h4");
+  titulo.textContent = "Grupos";
+  bloque.appendChild(titulo);
+
+  if (!fila.detalleGrupos.length) {
+    const vacio = document.createElement("p");
+    vacio.className = "detalle-vacio";
+    vacio.textContent = "Sin pronostico de grupos cargado.";
+    bloque.appendChild(vacio);
+    return bloque;
+  }
+
+  const grilla = document.createElement("div");
+  grilla.className = "detalle-grupos-grid";
+
+  fila.detalleGrupos.forEach((grupoDetalle) => {
+    grilla.appendChild(crearDetalleGrupoTabla(grupoDetalle));
+  });
+
+  bloque.appendChild(grilla);
+  return bloque;
+}
+
+function crearDetalleGrupoTabla(grupoDetalle) {
+  const tarjeta = document.createElement("article");
+  tarjeta.className = "detalle-grupo-card";
+
+  const titulo = document.createElement("h5");
+  titulo.textContent = `${grupoDetalle.grupo.nombre} · ${grupoDetalle.puntos}/4`;
+  tarjeta.appendChild(titulo);
+
+  grupoDetalle.posiciones.forEach((posicion) => {
+    const fila = document.createElement("div");
+    fila.className = `detalle-grupo-posicion estado-${posicion.estado}`;
+
+    const pronostico = posicion.pronostico ? posicion.pronostico.nombre : "Sin cargar";
+    const oficial = posicion.oficial ? posicion.oficial.nombre : "Pendiente";
+    const estado = posicion.estado === "pleno"
+      ? "+1"
+      : (posicion.estado === "pendiente" ? "Pend." : "0");
+
+    fila.innerHTML = `
+      <span>${posicion.posicion}.</span>
+      <strong>${pronostico}</strong>
+      <small>Oficial: ${oficial}</small>
+      <em>${estado}</em>
+    `;
+    tarjeta.appendChild(fila);
+  });
+
+  return tarjeta;
 }
 
 function renderizarAdvertencias(contenedor, advertencias) {
@@ -2774,8 +3512,7 @@ function pronosticoPartidoEstaCompleto(pronostico, fecha) {
     return true;
   }
 
-  return Number(pronostico.golesLocal) !== Number(pronostico.golesVisitante)
-    || Boolean(pronostico.ganadorPenales);
+  return Boolean(pronostico.ganadorPenales);
 }
 
 function mostrarMensaje(mensaje, tipo) {
