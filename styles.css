@@ -1083,7 +1083,7 @@ main {
 
 .tabla-posiciones {
   width: 100%;
-  min-width: 560px;
+  min-width: 620px;
   border-collapse: collapse;
   border: 0;
   font-size: 0.86rem;
@@ -1103,6 +1103,7 @@ main {
   background: #123763;
   font-size: 0.72rem;
   letter-spacing: 0;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -1127,7 +1128,8 @@ main {
 .tabla-posiciones td:nth-child(4),
 .tabla-posiciones td:nth-child(5),
 .tabla-posiciones td:nth-child(6),
-.tabla-posiciones td:nth-child(7) {
+.tabla-posiciones td:nth-child(7),
+.tabla-posiciones td:nth-child(8) {
   font-weight: 700;
   text-align: center;
 }
@@ -1154,12 +1156,7 @@ main {
 }
 
 .participante-tabla-boton::after {
-  margin-left: 5px;
-  color: var(--verde);
-  content: "ver";
-  font-size: 0.64rem;
-  font-weight: 800;
-  text-transform: uppercase;
+  content: none;
 }
 
 .detalle-participante {
@@ -1175,12 +1172,33 @@ main {
 
 .detalle-lista {
   display: grid;
-  gap: 4px;
-  margin-top: 5px;
+  gap: 5px;
+  margin: 0;
+  padding: 6px;
+}
+
+.detalle-fecha-titulo {
+  margin: 3px 0 0;
+  padding: 4px 7px;
+  border: 1px solid #0d2b4b;
+  color: #ffffff;
+  background: #123763;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.detalle-fecha-titulo:first-child {
+  margin-top: 0;
 }
 
 .detalle-item {
-  padding: 6px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  align-items: stretch;
+  padding: 7px 8px;
   border: 1px solid var(--borde);
   border-left-width: 4px;
   border-radius: 0;
@@ -1188,9 +1206,98 @@ main {
   font-size: 0.78rem;
 }
 
-.detalle-item span {
+.detalle-partido-texto {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.detalle-partido-texto strong {
+  color: #101010;
+  font-size: 0.84rem;
+  line-height: 1.2;
+}
+
+.detalle-partido-texto span {
   display: block;
   color: var(--texto-suave);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.detalle-partido-puntos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding-top: 5px;
+  border-top: 1px solid rgba(0, 0, 0, 0.16);
+}
+
+.detalle-partido-puntos strong {
+  color: #111111;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.detalle-partido-puntos span {
+  padding: 2px 5px;
+  border: 1px solid var(--borde);
+  color: #111111;
+  background: #e3e3e3;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.detalle-item.estado-pleno {
+  border-color: #5d8b54;
+  border-left-color: #277142;
+  background: #dfe8d8;
+}
+
+.detalle-item.estado-pleno .detalle-partido-puntos span {
+  border-color: #6ca160;
+  color: #123d1f;
+  background: #c8ddb8;
+}
+
+.detalle-item.estado-parcial {
+  border-color: #c1a24a;
+  border-left-color: var(--dorado);
+  background: #f0e4bd;
+}
+
+.detalle-item.estado-parcial .detalle-partido-puntos span {
+  border-color: #b79128;
+  color: #604700;
+  background: #ead282;
+}
+
+.detalle-item.estado-error {
+  border-color: #bb8079;
+  border-left-color: var(--rojo);
+  background: #ead1c9;
+}
+
+.detalle-item.estado-error .detalle-partido-puntos span {
+  border-color: #b76c66;
+  color: #6f1e19;
+  background: #e3b7ae;
+}
+
+.detalle-item.estado-pendiente {
+  border-color: #9aa0a6;
+  border-left-color: #68727c;
+  background: #dddddd;
+}
+
+.detalle-item.estado-pendiente .detalle-partido-puntos span {
+  border-color: #9aa0a6;
+  color: #394452;
+  background: #cfcfcf;
 }
 
 .detalle-tabla {
@@ -1229,7 +1336,7 @@ main {
 
 .detalle-tabla-resumen {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   border-bottom: 1px solid var(--borde);
   background: #dce7d6;
 }
@@ -2272,6 +2379,9 @@ main {
   .tabla-posiciones th:nth-child(2),
   .tabla-posiciones td:nth-child(2) {
     width: 31%;
+  }
+
+  .tabla-posiciones td:nth-child(2) {
     text-align: left;
   }
 
@@ -2281,6 +2391,7 @@ main {
   }
 
   .participante-tabla-boton::after {
+    content: none;
     display: none;
   }
 
@@ -2290,6 +2401,18 @@ main {
 
   .detalle-tabla-secciones {
     grid-template-columns: 1fr;
+  }
+
+  .detalle-item {
+    padding: 6px;
+  }
+
+  .detalle-partido-puntos strong {
+    font-size: 1.1rem;
+  }
+
+  .detalle-partido-puntos span {
+    font-size: 0.66rem;
   }
 
   .detalle-grupos-grid {

@@ -23,7 +23,49 @@
   pronosticosGrupos:
   - Pega aca los mensajes completos de "Pronostico de grupos".
   - Cada puesto acertado suma 1 punto.
+
+  Forma recomendada para cargar por codigo:
+  - Al final de este archivo, pega:
+
+    agregarPronosticoFecha(`
+    Prode TAFA Copa del Mundo 2026
+    Fecha: Fecha 1
+    Participante: Nombre
+
+    Mexico 1 - 0 Sudafrica
+    `);
+
+  - Para grupos:
+
+    agregarPronosticoGrupos(`
+    Prode TAFA Copa del Mundo 2026
+    Pronostico de grupos
+    Participante: Nombre
+
+    Grupo A
+
+    1. Mexico
+    2. Sudafrica
+    3. Corea del Sur
+    4. Chequia
+    `);
 */
+
+function agregarPronosticoFecha(mensaje) {
+  const texto = String(mensaje || "").trim();
+
+  if (texto) {
+    RESULTADOS_HARDCODEADOS.pronosticos.push(texto);
+  }
+}
+
+function agregarPronosticoGrupos(mensaje) {
+  const texto = String(mensaje || "").trim();
+
+  if (texto) {
+    RESULTADOS_HARDCODEADOS.pronosticosGrupos.push(texto);
+  }
+}
 
 const RESULTADOS_HARDCODEADOS = {
   oficiales: [
@@ -200,7 +242,7 @@ Grupo L
 Fecha: Fecha 1
 Participante: Lucas Aguilera
 
-México 1 - 0 Sudáfrica
+
 Corea del Sur 2 - 0 Chequia
 Canadá 1 - 0 Bosnia y Herzegovina
 Estados Unidos 1 - 1 Paraguay
@@ -316,3 +358,33 @@ Grupo L
 4. Panamá`
   ]
 };
+
+/*
+  ============================================================
+  PEGAR NUEVOS PRONOSTICOS ACA
+  ============================================================
+
+  Ejemplo:
+
+  agregarPronosticoFecha(`
+  Prode TAFA Copa del Mundo 2026
+  Fecha: Fecha 2
+  Participante: Nombre Apellido
+
+  Mexico 1 - 0 Corea del Sur
+  Estados Unidos 2 - 1 Australia
+  `);
+
+  agregarPronosticoGrupos(`
+  Prode TAFA Copa del Mundo 2026
+  Pronostico de grupos
+  Participante: Nombre Apellido
+
+  Grupo A
+
+  1. Mexico
+  2. Sudafrica
+  3. Corea del Sur
+  4. Chequia
+  `);
+*/
