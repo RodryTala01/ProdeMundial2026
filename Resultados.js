@@ -223,6 +223,35 @@ Austria 0 - 0 Jordania
 Portugal 2 - 0 RD Congo
 Inglaterra 2 - 1 Croacia
 Ghana 1 - 0 Panamá
+Uzbekistán 0 - 1 Colombia
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Fecha 1
+Participante: Gabriel Talarico
+
+México 1 - 1 Sudáfrica
+Corea del Sur 1 - 0 Chequia
+Canadá 1 - 0 Bosnia y Herzegovina
+Estados Unidos 1 - 1 Paraguay
+Qatar 0 - 1 Suiza
+Brasil 2 - 0 Marruecos
+Haití 0 - 2 Escocia
+Australia 1 - 0 Turquía
+Alemania 3 - 0 Curazao
+Países Bajos 1 - 2 Japón
+Costa de Marfil 1 - 1 Ecuador
+Suecia 1 - 0 Túnez
+España 4 - 0 Cabo Verde
+Bélgica 1 - 1 Egipto
+Arabia Saudita 0 - 1 Uruguay
+Irán 0 - 0 Nueva Zelanda
+Francia 2 - 0 Senegal
+Irak 0 - 1 Noruega
+Argentina 1 - 0 Argelia
+Austria 2 - 0 Jordania
+Portugal 4 - 0 RD Congo
+Inglaterra 1 - 0 Croacia
+Ghana 2 - 0 Panamá
 Uzbekistán 0 - 1 Colombia`
   ],
 
