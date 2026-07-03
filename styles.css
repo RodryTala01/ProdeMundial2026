@@ -1075,9 +1075,9 @@ main {
 
 .cruces-tabla {
   display: grid;
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 10px;
-  border: 1px solid var(--borde-oscuro);
+  border: 2px solid var(--borde-oscuro);
   background: #d6d6d6;
 }
 
@@ -1128,74 +1128,41 @@ main {
 }
 
 .ronda-cruces-titulo.sub {
-  padding: 5px 7px;
-  border-top: 1px solid var(--borde);
-  background: #dce7d6;
+  padding: 6px 8px;
+  border-bottom: 1px solid #0d2b4b;
+  color: #ffffff;
+  background: var(--azul);
 }
 
 .ronda-cruces-titulo.sub h5 {
   font-size: 0.82rem;
 }
 
-.tabla-cruces-participantes,
+.ronda-cruces-titulo.sub span {
+  color: #e8eef7;
+}
+
 .copa-cruces {
   margin: 0 7px 7px;
-  border: 1px solid var(--borde);
+  border: 2px solid var(--borde-oscuro);
   background: var(--crema);
-}
-
-.tabla-cruces-scroll {
-  overflow-x: auto;
-}
-
-.tabla-cruces-posiciones {
-  width: 100%;
-  min-width: 620px;
-  border-collapse: collapse;
-  background: #e7dfc8;
-  font-size: 0.78rem;
-}
-
-.tabla-cruces-posiciones th,
-.tabla-cruces-posiciones td {
-  padding: 5px 7px;
-  border: 1px solid var(--borde);
-  text-align: center;
-}
-
-.tabla-cruces-posiciones th {
-  color: #ffffff;
-  background: var(--azul);
-  font-size: 0.68rem;
-  text-transform: uppercase;
-}
-
-.tabla-cruces-posiciones td {
-  font-weight: 700;
-}
-
-.tabla-cruces-posiciones td:nth-child(2) {
-  text-align: left;
-  white-space: nowrap;
-}
-
-.tabla-cruces-posiciones tbody tr:nth-child(even) td {
-  background: #dce7d6;
 }
 
 .copas-cruces {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 8px;
+  gap: 14px;
 }
 
 .copa-cruces.copa-oro > .ronda-cruces-titulo {
   color: #ffffff;
+  border-bottom: 4px solid var(--dorado);
   background: var(--verde-oscuro);
 }
 
 .copa-cruces.copa-plata > .ronda-cruces-titulo {
   color: #ffffff;
+  border-bottom: 4px solid var(--dorado);
   background: #4b4f54;
 }
 
@@ -1204,8 +1171,18 @@ main {
 }
 
 .ronda-cruces {
-  border-top: 1px solid var(--borde);
+  margin: 8px;
+  border: 1px solid var(--borde);
+  border-top: 4px solid var(--verde);
   background: #d7d7d7;
+}
+
+.copa-plata .ronda-cruces {
+  border-top-color: #4b4f54;
+}
+
+.ronda-cruces + .ronda-cruces {
+  margin-top: 12px;
 }
 
 .cruces-grid {
@@ -1245,10 +1222,10 @@ main {
 
 .cruce-equipo {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 44px;
-  gap: 5px;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 7px;
   align-items: center;
-  min-height: 36px;
+  min-height: 42px;
   padding: 5px 6px;
   border-bottom: 1px solid var(--borde);
   background: #e7dfc8;
@@ -1256,11 +1233,6 @@ main {
 
 .cruce-equipo:nth-child(3) {
   background: #dce7d6;
-}
-
-.cruce-equipo.ganador {
-  border-left: 5px solid var(--verde);
-  background: #dcebd4;
 }
 
 .cruce-equipo.pendiente {
@@ -1275,58 +1247,31 @@ main {
 }
 
 .cruce-equipo-nombre strong {
-  overflow: hidden;
   font-size: 0.86rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.2;
 }
 
-.cruce-equipo-nombre span {
-  color: var(--texto-suave);
-  font-size: 0.68rem;
-  font-weight: 800;
-}
-
-.cruce-score {
-  width: 44px;
-  height: 28px;
-  border: 1px solid var(--verde-oscuro);
-  border-radius: 0;
-  color: #111111;
-  background: #fffaf0;
-  font-weight: 800;
-  text-align: center;
-}
-
-.cruce-acciones {
-  display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  gap: 5px;
+.cruce-escudo-marco {
+  display: inline-flex;
   align-items: center;
-  padding: 5px 6px;
-  background: #d7d7d7;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
 }
 
-.cruce-acciones label {
-  color: #333333;
-  font-size: 0.68rem;
-  font-weight: 800;
-  text-transform: uppercase;
+.cruce-escudo {
+  width: auto;
+  height: auto;
+  max-width: 32px;
+  max-height: 32px;
 }
 
-.cruce-acciones select {
-  min-width: 0;
-  height: 28px;
+.cruce-escudo-placeholder {
   border: 1px solid var(--borde);
-  border-radius: 0;
-  background: #fffaf0;
+  color: #444444;
+  background: #cfcfcf;
   font-size: 0.78rem;
-  font-weight: 700;
-}
-
-.cruce-acciones select:disabled {
-  color: #555555;
-  background: #d1d1d1;
+  font-weight: 800;
 }
 
 .controles-tabla {
@@ -2798,7 +2743,6 @@ main {
     gap: 3px;
   }
 
-  .tabla-cruces-participantes,
   .copa-cruces {
     margin-right: 6px;
     margin-left: 6px;
@@ -2810,16 +2754,19 @@ main {
   }
 
   .cruce-equipo {
-    grid-template-columns: minmax(0, 1fr) 42px;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 6px;
     min-height: 38px;
   }
 
-  .cruce-score {
-    width: 42px;
+  .cruce-escudo-marco {
+    width: 28px;
+    height: 28px;
   }
 
-  .cruce-acciones {
-    grid-template-columns: 1fr;
+  .cruce-escudo {
+    max-width: 28px;
+    max-height: 28px;
   }
 
   .controles-tabla {

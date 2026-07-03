@@ -25,75 +25,45 @@ let ultimaVistaTabla = "general";
 
 /*
   CRUCES FASE FINAL
-  Edita estos arrays para actualizar posiciones, puntos, marcadores y ganadores.
-  - golesLocal / golesVisitante aceptan numeros o texto vacio.
-  - ganador debe coincidir exactamente con el nombre de uno de los dos participantes del cruce.
-  - Los cruces con origenGanador/origenPerdedor se completan al marcar ganador en el cruce origen.
+  Bloque informativo. Edita estos arrays solo si cambia algun cruce.
+  No carga resultados ni ganadores; la pagina solo muestra las llaves.
 */
-const PARTICIPANTES_CRUCES = [
-  { posicion: 1, nombre: "Gabriel Talarico", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 2, nombre: "Eze", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 3, nombre: "Benja", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 4, nombre: "Yago", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 5, nombre: "Verónica Lucchesi", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 6, nombre: "Renzo Badano", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 7, nombre: "Rodrigo Soca", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 8, nombre: "Kevin Sívori", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 9, nombre: "Lucas Insua", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 10, nombre: "Pancho Muzzio", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 11, nombre: "Ignacio Cejas", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 12, nombre: "Santi", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 13, nombre: "Nahuel González", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 14, nombre: "Luciano Hufschmid", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 15, nombre: "Lucas Aguilera", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 16, nombre: "Rodrigo Talarico", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 17, nombre: "Cami", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 18, nombre: "Bruno Alonso", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 19, nombre: "Kraiizer", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 20, nombre: "Nico Avalos", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 21, nombre: "Jhose", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 22, nombre: "Cundo", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 23, nombre: "Felipe Galante", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 24, nombre: "Cristian Serpico", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 25, nombre: "Fabrizio Escolano", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 26, nombre: "Mario Talarico", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 27, nombre: "Cristian Hantis", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 },
-  { posicion: 28, nombre: "Moreno Pérez", puntos: 0, plenos: 0, parciales: 0, errores: 0, extras: 0 }
-];
-
 const CRUCES_ORO_16AVOS = [
-  { id: "oro-16-1", numero: 1, local: "Lucas Insua", visitante: "Cristian Serpico", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-16-2", numero: 2, local: "Pancho Muzzio", visitante: "Felipe Galante", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-16-3", numero: 3, local: "Ignacio Cejas", visitante: "Cundo", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-16-4", numero: 4, local: "Santi", visitante: "Jhose", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-16-5", numero: 5, local: "Nahuel González", visitante: "Nico Avalos", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-16-6", numero: 6, local: "Luciano Hufschmid", visitante: "Kraiizer", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-16-7", numero: 7, local: "Lucas Aguilera", visitante: "Bruno Alonso", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-16-8", numero: 8, local: "Rodrigo Talarico", visitante: "Cami", golesLocal: "", golesVisitante: "", ganador: "" }
+  { numero: 1, local: "Lucas Insua", visitante: "Cristian Serpico" },
+  { numero: 2, local: "Pancho Muzzio", visitante: "Felipe Galante" },
+  { numero: 3, local: "Ignacio Cejas", visitante: "Cundo" },
+  { numero: 4, local: "Santi", visitante: "Jhose" },
+  { numero: 5, local: "Nahuel González", visitante: "Nico Avalos" },
+  { numero: 6, local: "Luciano Hufschmid", visitante: "Kraiizer" },
+  { numero: 7, local: "Lucas Aguilera", visitante: "Bruno Alonso" },
+  { numero: 8, local: "Rodrigo Talarico", visitante: "Cami" }
 ];
 
 const CRUCES_ORO_OCTAVOS = [
-  { id: "oro-8-1", numero: 1, local: "Gabriel Talarico", origenVisitanteGanador: "oro-16-8", visitantePendiente: "Ganador Rodrigo Talarico / Cami", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-8-2", numero: 2, local: "Eze", origenVisitanteGanador: "oro-16-7", visitantePendiente: "Ganador Lucas Aguilera / Bruno Alonso", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-8-3", numero: 3, local: "Benja", origenVisitanteGanador: "oro-16-6", visitantePendiente: "Ganador Luciano Hufschmid / Kraiizer", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-8-4", numero: 4, local: "Yago", origenVisitanteGanador: "oro-16-5", visitantePendiente: "Ganador Nahuel González / Nico Avalos", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-8-5", numero: 5, local: "Verónica Lucchesi", origenVisitanteGanador: "oro-16-4", visitantePendiente: "Ganador Santi / Jhose", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-8-6", numero: 6, local: "Renzo Badano", origenVisitanteGanador: "oro-16-3", visitantePendiente: "Ganador Ignacio Cejas / Cundo", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-8-7", numero: 7, local: "Rodrigo Soca", origenVisitanteGanador: "oro-16-2", visitantePendiente: "Ganador Pancho Muzzio / Felipe Galante", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "oro-8-8", numero: 8, local: "Kevin Sívori", origenVisitanteGanador: "oro-16-1", visitantePendiente: "Ganador Lucas Insua / Cristian Serpico", golesLocal: "", golesVisitante: "", ganador: "" }
+  { numero: 1, local: "Gabriel Talarico", visitante: "Ganador Rodrigo Talarico / Cami" },
+  { numero: 2, local: "Eze", visitante: "Ganador Lucas Aguilera / Bruno Alonso" },
+  { numero: 3, local: "Benja", visitante: "Ganador Luciano Hufschmid / Kraiizer" },
+  { numero: 4, local: "Yago", visitante: "Ganador Nahuel González / Nico Avalos" },
+  { numero: 5, local: "Verónica Lucchesi", visitante: "Ganador Santi / Jhose" },
+  { numero: 6, local: "Renzo Badano", visitante: "Ganador Ignacio Cejas / Cundo" },
+  { numero: 7, local: "Rodrigo Soca", visitante: "Ganador Pancho Muzzio / Felipe Galante" },
+  { numero: 8, local: "Kevin Sívori", visitante: "Ganador Lucas Insua / Cristian Serpico" }
 ];
 
 const CRUCES_PLATA_16AVOS = [
-  { id: "plata-16-1", numero: 1, local: "Fabrizio Escolano", visitante: "Moreno Pérez", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "plata-16-2", numero: 2, local: "Mario Talarico", visitante: "Cristian Hantis", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "plata-16-3", numero: 3, origenLocalPerdedor: "oro-16-1", localPendiente: "Perdedor Lucas Insua / Cristian Serpico", visitantePendiente: "Por definir", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "plata-16-4", numero: 4, origenLocalPerdedor: "oro-16-2", localPendiente: "Perdedor Pancho Muzzio / Felipe Galante", visitantePendiente: "Por definir", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "plata-16-5", numero: 5, origenLocalPerdedor: "oro-16-3", localPendiente: "Perdedor Ignacio Cejas / Cundo", visitantePendiente: "Por definir", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "plata-16-6", numero: 6, origenLocalPerdedor: "oro-16-4", localPendiente: "Perdedor Santi / Jhose", visitantePendiente: "Por definir", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "plata-16-7", numero: 7, origenLocalPerdedor: "oro-16-5", localPendiente: "Perdedor Nahuel González / Nico Avalos", visitantePendiente: "Por definir", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "plata-16-8", numero: 8, origenLocalPerdedor: "oro-16-6", localPendiente: "Perdedor Luciano Hufschmid / Kraiizer", visitantePendiente: "Por definir", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "plata-16-9", numero: 9, origenLocalPerdedor: "oro-16-7", localPendiente: "Perdedor Lucas Aguilera / Bruno Alonso", visitantePendiente: "Por definir", golesLocal: "", golesVisitante: "", ganador: "" },
-  { id: "plata-16-10", numero: 10, origenLocalPerdedor: "oro-16-8", localPendiente: "Perdedor Rodrigo Talarico / Cami", visitantePendiente: "Por definir", golesLocal: "", golesVisitante: "", ganador: "" }
+  { numero: 1, local: "Fabrizio Escolano", visitante: "Moreno Pérez" },
+  { numero: 2, local: "Mario Talarico", visitante: "Cristian Hantis" }
+];
+
+const CRUCES_PLATA_OCTAVOS = [
+  { numero: 1, local: "Ganador Fabrizio Escolano / Moreno Pérez", visitante: "Perdedor Rodrigo Talarico / Cami" },
+  { numero: 2, local: "Ganador Mario Talarico / Cristian Hantis", visitante: "Perdedor Lucas Aguilera / Bruno Alonso" },
+  { numero: 3, local: "Perdedor Luciano Hufschmid / Kraiizer", visitante: "Por definir" },
+  { numero: 4, local: "Perdedor Nahuel González / Nico Avalos", visitante: "Por definir" },
+  { numero: 5, local: "Perdedor Santi / Jhose", visitante: "Por definir" },
+  { numero: 6, local: "Perdedor Ignacio Cejas / Cundo", visitante: "Por definir" },
+  { numero: 7, local: "Perdedor Pancho Muzzio / Felipe Galante", visitante: "Por definir" },
+  { numero: 8, local: "Perdedor Lucas Insua / Cristian Serpico", visitante: "Por definir" }
 ];
 
 document.addEventListener("DOMContentLoaded", inicializarApp);
@@ -3050,37 +3020,10 @@ function separarBloquesMensajes(texto) {
 }
 
 function renderizarCrucesTabla() {
-  renderizarTablaCrucesParticipantes();
   renderizarListaCruces("cruces-oro-16avos", CRUCES_ORO_16AVOS, "16avos");
   renderizarListaCruces("cruces-oro-octavos", CRUCES_ORO_OCTAVOS, "Octavos");
   renderizarListaCruces("cruces-plata-16avos", CRUCES_PLATA_16AVOS, "16avos");
-}
-
-function renderizarTablaCrucesParticipantes() {
-  const cuerpo = document.querySelector("#tabla-cruces-participantes tbody");
-
-  if (!cuerpo) {
-    return;
-  }
-
-  cuerpo.innerHTML = "";
-
-  PARTICIPANTES_CRUCES
-    .slice()
-    .sort((a, b) => a.posicion - b.posicion)
-    .forEach((participante) => {
-      const fila = document.createElement("tr");
-      fila.innerHTML = `
-        <td>${participante.posicion}</td>
-        <td>${participante.nombre}</td>
-        <td>${participante.puntos}</td>
-        <td>${participante.plenos}</td>
-        <td>${participante.parciales}</td>
-        <td>${participante.errores}</td>
-        <td>${participante.extras}</td>
-      `;
-      cuerpo.appendChild(fila);
-    });
+  renderizarListaCruces("cruces-plata-octavos", CRUCES_PLATA_OCTAVOS, "Octavos");
 }
 
 function renderizarListaCruces(contenedorId, cruces, ronda) {
@@ -3097,173 +3040,61 @@ function renderizarListaCruces(contenedorId, cruces, ronda) {
 }
 
 function crearTarjetaCruce(cruce, ronda) {
-  const local = resolverSlotCruce(cruce, "local");
-  const visitante = resolverSlotCruce(cruce, "visitante");
   const tarjeta = document.createElement("article");
   const encabezado = document.createElement("div");
+  const crucePendiente = esTextoCrucePendiente(cruce.local) || esTextoCrucePendiente(cruce.visitante);
 
   tarjeta.className = "cruce-card";
   encabezado.className = "cruce-card-top";
   encabezado.innerHTML = `
     <span>${ronda} · Cruce ${cruce.numero}</span>
-    <small>${obtenerEstadoCruce(cruce, local, visitante)}</small>
+    <small>${crucePendiente ? "Por definir" : "Cruce definido"}</small>
   `;
 
   tarjeta.append(
     encabezado,
-    crearFilaCruce(cruce, "local", local),
-    crearFilaCruce(cruce, "visitante", visitante),
-    crearAccionesCruce(cruce, local, visitante)
+    crearFilaCruceInformativa(cruce.local),
+    crearFilaCruceInformativa(cruce.visitante)
   );
 
   return tarjeta;
 }
 
-function crearFilaCruce(cruce, lado, slot) {
+function crearFilaCruceInformativa(nombre) {
   const fila = document.createElement("div");
-  const nombre = document.createElement("div");
-  const input = document.createElement("input");
-  const esGanador = slot.definido && cruce.ganador === slot.nombre;
+  const texto = String(nombre || "Por definir");
+  const esPendiente = esTextoCrucePendiente(texto);
+  const contenido = document.createElement("div");
+  const escudoMarco = document.createElement("span");
 
-  fila.className = `cruce-equipo${slot.definido ? "" : " pendiente"}${esGanador ? " ganador" : ""}`;
-  nombre.className = "cruce-equipo-nombre";
-  nombre.innerHTML = `
-    <strong>${slot.definido ? slot.nombre : "Por definir"}</strong>
-    <span>${slot.detalle}</span>
-  `;
+  fila.className = `cruce-equipo${esPendiente ? " pendiente" : ""}`;
+  escudoMarco.className = "cruce-escudo-marco";
 
-  input.className = "cruce-score";
-  input.type = "number";
-  input.min = "0";
-  input.inputMode = "numeric";
-  input.placeholder = "-";
-  input.value = lado === "local" ? cruce.golesLocal : cruce.golesVisitante;
-  input.setAttribute("aria-label", `Goles ${slot.definido ? slot.nombre : "por definir"}`);
-  input.addEventListener("input", () => {
-    if (lado === "local") {
-      cruce.golesLocal = input.value;
-    } else {
-      cruce.golesVisitante = input.value;
-    }
-  });
+  if (esPendiente) {
+    escudoMarco.classList.add("cruce-escudo-placeholder");
+    escudoMarco.textContent = "?";
+  } else {
+    const escudo = document.createElement("img");
+    escudo.className = "cruce-escudo";
+    escudo.alt = "";
+    escudo.src = obtenerRutaEscudoParticipante(texto);
+    escudo.onerror = () => {
+      escudoMarco.classList.add("cruce-escudo-placeholder");
+      escudoMarco.textContent = "?";
+      escudo.remove();
+    };
+    escudoMarco.appendChild(escudo);
+  }
 
-  fila.append(nombre, input);
+  contenido.className = "cruce-equipo-nombre";
+  contenido.innerHTML = `<strong>${texto}</strong>`;
+  fila.append(escudoMarco, contenido);
   return fila;
 }
 
-function crearAccionesCruce(cruce, local, visitante) {
-  const contenedor = document.createElement("div");
-  const etiqueta = document.createElement("label");
-  const selector = document.createElement("select");
-  const opciones = [local, visitante].filter((slot) => slot.definido);
-  const cruceCompleto = local.definido && visitante.definido;
-
-  contenedor.className = "cruce-acciones";
-  etiqueta.textContent = "Ganador";
-  etiqueta.setAttribute("for", `ganador-${cruce.id}`);
-  selector.id = `ganador-${cruce.id}`;
-  selector.innerHTML = '<option value="">Por definir</option>';
-
-  opciones.forEach((slot) => {
-    const opcion = document.createElement("option");
-    opcion.value = slot.nombre;
-    opcion.textContent = slot.nombre;
-    selector.appendChild(opcion);
-  });
-
-  if (cruce.ganador && !opciones.some((slot) => slot.nombre === cruce.ganador)) {
-    cruce.ganador = "";
-  }
-
-  selector.value = cruce.ganador;
-  selector.disabled = !cruceCompleto;
-  selector.addEventListener("change", () => {
-    cruce.ganador = selector.value;
-    renderizarCrucesTabla();
-  });
-
-  contenedor.append(etiqueta, selector);
-  return contenedor;
-}
-
-function resolverSlotCruce(cruce, lado) {
-  const nombreDirecto = cruce[lado];
-
-  if (nombreDirecto) {
-    return crearSlotCruceDefinido(nombreDirecto);
-  }
-
-  const prefijo = lado === "local" ? "Local" : "Visitante";
-  const origenGanador = cruce[`origen${prefijo}Ganador`];
-  const origenPerdedor = cruce[`origen${prefijo}Perdedor`];
-  const textoPendiente = cruce[`${lado}Pendiente`] || "Por definir";
-
-  if (origenGanador) {
-    const origen = obtenerCrucePorId(origenGanador);
-
-    if (origen && origen.ganador) {
-      return crearSlotCruceDefinido(origen.ganador);
-    }
-
-    return crearSlotCrucePendiente(textoPendiente);
-  }
-
-  if (origenPerdedor) {
-    const origen = obtenerCrucePorId(origenPerdedor);
-    const perdedor = obtenerPerdedorCruce(origen);
-
-    if (perdedor) {
-      return crearSlotCruceDefinido(perdedor);
-    }
-
-    return crearSlotCrucePendiente(textoPendiente);
-  }
-
-  return crearSlotCrucePendiente(textoPendiente);
-}
-
-function crearSlotCruceDefinido(nombre) {
-  const participante = PARTICIPANTES_CRUCES.find((item) => item.nombre === nombre);
-  const detalle = participante ? `Pos ${participante.posicion} · ${participante.puntos} pts` : "Participante";
-
-  return {
-    definido: true,
-    nombre,
-    detalle
-  };
-}
-
-function crearSlotCrucePendiente(detalle) {
-  return {
-    definido: false,
-    nombre: "Por definir",
-    detalle
-  };
-}
-
-function obtenerCrucePorId(id) {
-  return [...CRUCES_ORO_16AVOS, ...CRUCES_ORO_OCTAVOS, ...CRUCES_PLATA_16AVOS]
-    .find((cruce) => cruce.id === id);
-}
-
-function obtenerPerdedorCruce(cruce) {
-  if (!cruce || !cruce.ganador || !cruce.local || !cruce.visitante) {
-    return "";
-  }
-
-  return cruce.ganador === cruce.local ? cruce.visitante : cruce.local;
-}
-
-function obtenerEstadoCruce(cruce, local, visitante) {
-  if (cruce.ganador) {
-    return `Ganador: ${cruce.ganador}`;
-  }
-
-  if (!local.definido || !visitante.definido) {
-    return "Por definir";
-  }
-
-  return "Pendiente";
+function esTextoCrucePendiente(texto) {
+  const valor = String(texto || "Por definir");
+  return valor === "Por definir" || valor.startsWith("Ganador ") || valor.startsWith("Perdedor ");
 }
 
 function generarTablaPosiciones(vistaTabla = obtenerVistaTablaSeleccionada()) {
@@ -3795,7 +3626,11 @@ function crearBotonParticipanteTabla(fila) {
 }
 
 function obtenerRutaEscudoParticipante(participante) {
-  return `assets/escudos/${encodeURIComponent(participante)}.png`;
+  const nombresEscudos = {
+    "Nico Avalos": "Nico avalos"
+  };
+  const nombreArchivo = nombresEscudos[participante] || participante;
+  return `assets/escudos/${encodeURIComponent(nombreArchivo)}.png`;
 }
 
 function renderizarDetalleTablaSeleccionado() {
