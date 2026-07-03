@@ -1073,8 +1073,70 @@ main {
   font-weight: 700;
 }
 
+.controles-tabla {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) auto;
+  justify-content: start;
+  gap: 8px;
+  align-items: end;
+  margin-bottom: 8px;
+  padding: 7px 8px;
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--azul);
+  background: #dce7d6;
+}
+
+.campo-vista-tabla {
+  gap: 3px;
+}
+
+.tabla-exportable-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tabla-exportable-scroll.exportando-tabla {
+  max-width: none;
+  overflow: visible;
+}
+
+.tabla-exportable {
+  display: block;
+  width: max-content;
+  max-width: none;
+  margin: 0 auto;
+  padding: 8px;
+  border: 1px solid var(--borde-oscuro);
+  background: #e7dfc8;
+}
+
+.tabla-exportable-encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid #0d2b4b;
+  border-bottom: 0;
+  color: #ffffff;
+  background: #123763;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.tabla-exportable-encabezado span {
+  color: #111111;
+  background: var(--dorado);
+  padding: 2px 6px;
+  border: 1px solid #8a681b;
+}
+
 .tabla-posiciones-wrap {
-  margin-top: 10px;
+  width: max-content;
+  max-width: 100%;
+  margin-top: 0;
   border: 1px solid var(--borde-oscuro);
   border-top: 3px solid var(--verde);
   background: #c7c7c7;
@@ -1082,11 +1144,32 @@ main {
 }
 
 .tabla-posiciones {
-  width: 100%;
-  min-width: 620px;
+  width: max-content;
+  min-width: 0;
+  table-layout: auto;
   border-collapse: collapse;
   border: 0;
   font-size: 0.86rem;
+}
+
+.tabla-posiciones .col-pos {
+  width: 42px;
+}
+
+.tabla-posiciones .col-participante {
+  width: auto;
+}
+
+.tabla-posiciones .col-puntos,
+.tabla-posiciones .col-plenos {
+  width: 66px;
+}
+
+.tabla-posiciones .col-par,
+.tabla-posiciones .col-err,
+.tabla-posiciones .col-nc,
+.tabla-posiciones .col-ext {
+  width: 52px;
 }
 
 .tabla-posiciones th,
@@ -1123,6 +1206,30 @@ main {
   background: #e7eddf;
 }
 
+.tabla-posiciones tbody tr.zona-octavos td {
+  background: #dcebd4;
+}
+
+.tabla-posiciones tbody tr.zona-octavos:hover td {
+  background: #cfe5c6;
+}
+
+.tabla-posiciones tbody tr.zona-dieciseisavos td {
+  background: #f0dfbd;
+}
+
+.tabla-posiciones tbody tr.zona-dieciseisavos:hover td {
+  background: #ead4aa;
+}
+
+.tabla-posiciones tbody tr.zona-plata td {
+  background: #d7d7d7;
+}
+
+.tabla-posiciones tbody tr.zona-plata:hover td {
+  background: #cccccc;
+}
+
 .tabla-posiciones td:nth-child(1),
 .tabla-posiciones td:nth-child(3),
 .tabla-posiciones td:nth-child(4),
@@ -1130,20 +1237,32 @@ main {
 .tabla-posiciones td:nth-child(6),
 .tabla-posiciones td:nth-child(7),
 .tabla-posiciones td:nth-child(8) {
+  width: 1%;
+  white-space: nowrap;
   font-weight: 700;
   text-align: center;
+}
+
+.tabla-posiciones th:nth-child(2),
+.tabla-posiciones td:nth-child(2) {
+  width: auto;
+  white-space: nowrap;
 }
 
 .tabla-posiciones tbody tr.fila-seleccionada td {
   border-top-color: #9f7a1d;
   border-bottom-color: #9f7a1d;
-  background: #f0dfaa;
+  box-shadow: inset 0 1px 0 #9f7a1d, inset 0 -1px 0 #9f7a1d;
 }
 
 .participante-tabla-boton {
   display: inline-flex;
-  max-width: 100%;
-  padding: 2px 0;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: none;
+  min-height: 34px;
+  padding: 0;
   border: 0;
   color: #0f3158;
   background: transparent;
@@ -1155,8 +1274,68 @@ main {
   cursor: pointer;
 }
 
+.participante-tabla-boton span:last-child {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.escudo-participante-marco {
+  display: inline-flex;
+  flex: 0 0 36px;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.escudo-participante {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  max-width: 36px;
+  max-height: 36px;
+}
+
 .participante-tabla-boton::after {
   content: none;
+}
+
+.leyenda-tabla {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 7px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.leyenda-tabla span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border: 1px solid var(--borde);
+  background: #f0ead8;
+}
+
+.leyenda-color {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.24);
+}
+
+.leyenda-octavos {
+  background: #dcebd4;
+}
+
+.leyenda-dieciseisavos {
+  background: #f0dfbd;
+}
+
+.leyenda-plata {
+  background: #d7d7d7;
 }
 
 .detalle-participante {
@@ -1341,6 +1520,10 @@ main {
   background: #dce7d6;
 }
 
+.detalle-tabla-resumen.solo-grupos {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .detalle-tabla-resumen div {
   display: grid;
   gap: 2px;
@@ -1369,6 +1552,10 @@ main {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
   gap: 8px;
   padding: 8px;
+}
+
+.detalle-tabla-secciones.solo-grupos {
+  grid-template-columns: 1fr;
 }
 
 .detalle-bloque {
@@ -2348,17 +2535,33 @@ main {
     text-align: left;
   }
 
-  .tabla-posiciones-wrap {
-    margin-right: -7px;
-    margin-left: -7px;
+  .controles-tabla {
+    grid-template-columns: 1fr;
+    padding: 7px;
+  }
+
+  .tabla-exportable {
+    width: max-content;
+    max-width: none;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 6px;
     border-right: 0;
     border-left: 0;
-    overflow-x: visible;
+  }
+
+  .tabla-posiciones-wrap {
+    width: max-content;
+    max-width: 100%;
+    border-right: 0;
+    border-left: 0;
+    overflow-x: auto;
   }
 
   .tabla-posiciones {
+    width: max-content;
     min-width: 0;
-    table-layout: fixed;
+    table-layout: auto;
     font-size: 0.7rem;
   }
 
@@ -2378,7 +2581,8 @@ main {
 
   .tabla-posiciones th:nth-child(2),
   .tabla-posiciones td:nth-child(2) {
-    width: 31%;
+    width: auto;
+    white-space: nowrap;
   }
 
   .tabla-posiciones td:nth-child(2) {
@@ -2386,8 +2590,27 @@ main {
   }
 
   .participante-tabla-boton {
-    font-size: 0.7rem;
+    font-size: 0.66rem;
     line-height: 1.05;
+    gap: 4px;
+    min-height: 26px;
+    width: max-content;
+    max-width: none;
+  }
+
+  .participante-tabla-boton span:last-child {
+    white-space: nowrap;
+  }
+
+  .escudo-participante-marco {
+    flex-basis: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .escudo-participante {
+    max-width: 24px;
+    max-height: 24px;
   }
 
   .participante-tabla-boton::after {

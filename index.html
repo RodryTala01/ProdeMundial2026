@@ -217,7 +217,36 @@
           </div>
         </div>
 
-        <div class="tabla-posiciones-wrap" id="tabla-posiciones"></div>
+        <div class="controles-tabla">
+          <label class="campo campo-vista-tabla">
+            <span>Vista</span>
+            <select id="selector-vista-tabla">
+              <option value="general">General</option>
+              <option value="fecha-1">Fecha 1</option>
+              <option value="fecha-2">Fecha 2</option>
+              <option value="fecha-3">Fecha 3</option>
+              <option value="grupos" selected>Solo grupos</option>
+            </select>
+          </label>
+          <button class="boton boton-secundario" type="button" id="boton-descargar-tabla">
+            Imagen tabla
+          </button>
+        </div>
+
+        <div class="tabla-exportable-scroll">
+          <div class="tabla-exportable" id="tabla-exportable">
+            <div class="tabla-exportable-encabezado">
+              <strong>Tabla de posiciones</strong>
+              <span id="tabla-vista-exportable">General</span>
+            </div>
+            <div class="tabla-posiciones-wrap" id="tabla-posiciones"></div>
+            <div class="leyenda-tabla" aria-label="Leyenda de clasificacion">
+              <span><i class="leyenda-color leyenda-octavos"></i>Octavos de Final</span>
+              <span><i class="leyenda-color leyenda-dieciseisavos"></i>16avos de Final</span>
+              <span><i class="leyenda-color leyenda-plata"></i>Copa Plata</span>
+            </div>
+          </div>
+        </div>
         <div class="detalle-tabla" id="detalle-tabla" hidden></div>
         <div class="advertencias" id="advertencias-tabla"></div>
       </section>

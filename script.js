@@ -21,6 +21,7 @@ let cacheResultadosOficialesHardcodeados = null;
 let cacheGruposOficialesHardcodeados = null;
 let ultimoResultadoTabla = null;
 let participanteDetalleTabla = "";
+let ultimaVistaTabla = "general";
 
 document.addEventListener("DOMContentLoaded", inicializarApp);
 
@@ -567,6 +568,8 @@ function enlazarAcciones() {
   document.getElementById("boton-limpiar").addEventListener("click", limpiarPronosticoActual);
 
   const botonCalcular = document.getElementById("boton-calcular-puntos");
+  const selectorVistaTabla = document.getElementById("selector-vista-tabla");
+  const botonDescargarTabla = document.getElementById("boton-descargar-tabla");
   const botonGruposWhatsApp = document.getElementById("boton-grupos-whatsapp");
   const botonGruposImagen = document.getElementById("boton-grupos-imagen");
   const botonGruposLimpiar = document.getElementById("boton-grupos-limpiar");
@@ -576,6 +579,16 @@ function enlazarAcciones() {
 
   if (botonCalcular) {
     botonCalcular.addEventListener("click", renderizarResultadoIndividual);
+  }
+
+  if (selectorVistaTabla) {
+    selectorVistaTabla.addEventListener("change", () => {
+      renderizarTablaPosiciones(generarTablaPosiciones());
+    });
+  }
+
+  if (botonDescargarTabla) {
+    botonDescargarTabla.addEventListener("click", descargarImagenTabla);
   }
 
   if (botonGruposWhatsApp) {
@@ -2184,6 +2197,42 @@ async function descargarImagenPronostico() {
   }
 }
 
+async function descargarImagenTabla() {
+  const objetivo = document.getElementById("tabla-exportable");
+  const contenedorAdvertencias = document.getElementById("advertencias-tabla");
+  const contenedorScroll = objetivo ? objetivo.closest(".tabla-exportable-scroll") : null;
+
+  if (!objetivo) {
+    return;
+  }
+
+  if (typeof html2canvas !== "function") {
+    renderizarAdvertencias(contenedorAdvertencias, ["No se pudo cargar la herramienta para generar la imagen. Proba recargar la pagina."]);
+    return;
+  }
+
+  try {
+    if (contenedorScroll) {
+      contenedorScroll.classList.add("exportando-tabla");
+    }
+
+    const canvas = await html2canvas(objetivo, {
+      backgroundColor: "#e7dfc8",
+      scale: 2,
+      useCORS: true
+    });
+    const nombreVista = normalizarNombreArchivo(obtenerNombreVistaTabla(ultimaVistaTabla || "general"));
+
+    await descargarCanvasPng(canvas, `tabla-prode-tafa-${nombreVista || "general"}.png`);
+  } catch (error) {
+    renderizarAdvertencias(contenedorAdvertencias, ["No se pudo descargar la imagen de la tabla. Proba recargar la pagina."]);
+  } finally {
+    if (contenedorScroll) {
+      contenedorScroll.classList.remove("exportando-tabla");
+    }
+  }
+}
+
 function prepararTarjetaImagen() {
   const contenedor = document.getElementById("tarjeta-imagen-pronostico");
   const validacion = validarPronosticoCompleto();
@@ -2925,18 +2974,19 @@ function separarBloquesMensajes(texto) {
   return bloques.filter(Boolean);
 }
 
-function generarTablaPosiciones() {
+function generarTablaPosiciones(vistaTabla = obtenerVistaTablaSeleccionada()) {
   const textoPartidos = obtenerTextoPronosticosHardcodeados();
   const textoGrupos = obtenerTextoPronosticosGruposHardcodeados();
-  const filtroFecha = "__todas__";
   const advertencias = [];
   const cargaOficial = obtenerCargaResultadosOficialesHardcodeados();
   const cargaGruposOficiales = obtenerCargaGruposOficialesHardcodeados();
+  const vistaNormalizada = normalizarVistaTabla(vistaTabla);
 
   if (!textoPartidos.trim() && !textoGrupos.trim()) {
     return {
       filas: [],
-      advertencias: ["Carga uno o mas mensajes en Resultados.js antes de generar la tabla."]
+      advertencias: ["Carga uno o mas mensajes en Resultados.js antes de generar la tabla."],
+      vista: vistaNormalizada
     };
   }
 
@@ -2951,11 +3001,8 @@ function generarTablaPosiciones() {
     advertencias.push("No hay posiciones oficiales de grupos cargadas en Resultados.js. Los grupos figuran como no cargados.");
   }
 
-  const parseoMultiple = parsearMultiplesMensajes(
-    textoPartidos,
-    { fechaFallbackId: filtroFecha !== "__todas__" ? filtroFecha : "" }
-  );
-  const mensajesPorClave = new Map();
+  const parseoMultiple = parsearMultiplesMensajes(textoPartidos);
+  const mensajesPartidos = [];
 
   advertencias.push(...parseoMultiple.advertencias);
 
@@ -2966,28 +3013,102 @@ function generarTablaPosiciones() {
       return;
     }
 
+    mensajesPartidos.push(mensaje);
+  });
+
+  const parseoGrupos = parsearMultiplesMensajesGrupos(textoGrupos, { requiereParticipante: true });
+  const mensajesGrupos = [];
+
+  advertencias.push(...parseoGrupos.advertencias);
+
+  parseoGrupos.mensajes.forEach((mensaje) => {
+    advertencias.push(...mensaje.errores, ...mensaje.advertencias);
+
+    if (!mensaje.participante || !Object.keys(mensaje.grupos).length) {
+      return;
+    }
+
+    mensajesGrupos.push(mensaje);
+  });
+
+  const filasGeneral = construirFilasTabla({
+    mensajesPartidos,
+    mensajesGrupos,
+    cargaGruposOficiales,
+    filtroFecha: "__todas__",
+    incluirGrupos: true,
+    advertencias,
+    registrarDuplicados: true
+  });
+  const filasVista = vistaNormalizada === "general"
+    ? filasGeneral
+    : construirFilasTabla({
+      mensajesPartidos: vistaNormalizada === "grupos" ? [] : mensajesPartidos,
+      mensajesGrupos,
+      cargaGruposOficiales,
+      filtroFecha: vistaNormalizada,
+      incluirGrupos: vistaNormalizada === "grupos",
+      advertencias,
+      registrarDuplicados: false
+    });
+  const posicionesGeneral = new Map(filasGeneral.map((fila) => [fila.clave, fila.posicion]));
+  const filas = filasVista.map((fila) => {
+    const posicionGeneral = posicionesGeneral.get(fila.clave) || fila.posicion;
+
+    return {
+      ...fila,
+      posicionGeneral,
+      zonaClasificacion: obtenerZonaClasificacionTabla(posicionGeneral)
+    };
+  });
+
+  return {
+    filas,
+    advertencias,
+    vista: vistaNormalizada
+  };
+}
+
+function construirFilasTabla(opciones) {
+  const {
+    mensajesPartidos,
+    mensajesGrupos,
+    cargaGruposOficiales,
+    filtroFecha,
+    incluirGrupos,
+    advertencias,
+    registrarDuplicados
+  } = opciones;
+  const mensajesPorClave = new Map();
+  const gruposPorParticipante = new Map();
+  const acumulados = new Map();
+
+  PARTICIPANTES.forEach((participante) => {
+    obtenerAcumuladoTabla(acumulados, participante);
+  });
+
+  mensajesPartidos.forEach((mensaje) => {
     if (filtroFecha !== "__todas__" && mensaje.fecha.id !== filtroFecha) {
       return;
     }
 
-    const clave = `${normalizarTexto(mensaje.participante)}__${mensaje.fecha.id}`;
+    const clave = normalizarTexto(mensaje.participante) + "__" + mensaje.fecha.id;
 
-    if (mensajesPorClave.has(clave)) {
-      advertencias.push(`Se detectó más de un pronóstico para ${mensaje.participante} en ${mensaje.fecha.nombre}. Se usó el último.`);
+    if (mensajesPorClave.has(clave) && registrarDuplicados) {
+      advertencias.push("Se detecto mas de un pronostico para " + mensaje.participante + " en " + mensaje.fecha.nombre + ". Se uso el ultimo.");
     }
 
     mensajesPorClave.set(clave, mensaje);
   });
 
-  const acumulados = new Map();
-
   mensajesPorClave.forEach((mensaje) => {
     const calculo = calcularPronosticoCompleto(mensaje);
-    const claveParticipante = normalizarTexto(mensaje.participante);
-
-    advertencias.push(...calculo.advertencias);
-
     const acumulado = obtenerAcumuladoTabla(acumulados, mensaje.participante);
+
+    if (registrarDuplicados) {
+      advertencias.push(...calculo.advertencias);
+    }
+
     acumulado.puntos += calculo.total;
     acumulado.puntosPartidos += calculo.puntosPartidos;
     acumulado.puntosPenales += calculo.extrasPenales;
@@ -2999,40 +3120,31 @@ function generarTablaPosiciones() {
     acumulado.detalles.push(...calculo.filas);
   });
 
-  const parseoGrupos = parsearMultiplesMensajesGrupos(textoGrupos, { requiereParticipante: true });
-  const gruposPorParticipante = new Map();
+  if (incluirGrupos) {
+    mensajesGrupos.forEach((mensaje) => {
+      const claveParticipante = normalizarTexto(mensaje.participante);
 
-  advertencias.push(...parseoGrupos.advertencias);
+      if (gruposPorParticipante.has(claveParticipante) && registrarDuplicados) {
+        advertencias.push("Se detecto mas de un pronostico de grupos para " + mensaje.participante + ". Se uso el ultimo.");
+      }
 
-  parseoGrupos.mensajes.forEach((mensaje) => {
-    advertencias.push(...mensaje.errores, ...mensaje.advertencias);
+      gruposPorParticipante.set(claveParticipante, mensaje);
+    });
 
-    if (!mensaje.participante || !Object.keys(mensaje.grupos).length) {
-      return;
-    }
+    gruposPorParticipante.forEach((mensaje) => {
+      const calculo = calcularPronosticoGruposHardcodeado(mensaje, cargaGruposOficiales.grupos);
+      const acumulado = obtenerAcumuladoTabla(acumulados, mensaje.participante);
 
-    const claveParticipante = normalizarTexto(mensaje.participante);
+      acumulado.puntos += calculo.puntos;
+      acumulado.puntosGrupos += calculo.puntos;
+      acumulado.gruposAciertos += calculo.aciertos;
+      acumulado.gruposErrores += calculo.errores;
+      acumulado.gruposPendientes += calculo.pendientes;
+      acumulado.detalleGrupos = calculo.detalle;
+    });
+  }
 
-    if (gruposPorParticipante.has(claveParticipante)) {
-      advertencias.push(`Se detecto mas de un pronostico de grupos para ${mensaje.participante}. Se uso el ultimo.`);
-    }
-
-    gruposPorParticipante.set(claveParticipante, mensaje);
-  });
-
-  gruposPorParticipante.forEach((mensaje) => {
-    const calculo = calcularPronosticoGruposHardcodeado(mensaje, cargaGruposOficiales.grupos);
-    const acumulado = obtenerAcumuladoTabla(acumulados, mensaje.participante);
-
-    acumulado.puntos += calculo.puntos;
-    acumulado.puntosGrupos += calculo.puntos;
-    acumulado.gruposAciertos += calculo.aciertos;
-    acumulado.gruposErrores += calculo.errores;
-    acumulado.gruposPendientes += calculo.pendientes;
-    acumulado.detalleGrupos = calculo.detalle;
-  });
-
-  const filas = Array.from(acumulados.values())
+  return Array.from(acumulados.values())
     .map((fila) => ({
       ...fila,
       fechasTexto: Array.from(fila.fechas).join(", ") || "Sin fechas"
@@ -3042,11 +3154,43 @@ function generarTablaPosiciones() {
       ...fila,
       posicion: indice + 1
     }));
+}
 
-  return {
-    filas,
-    advertencias
+function obtenerVistaTablaSeleccionada() {
+  const selector = document.getElementById("selector-vista-tabla");
+  return normalizarVistaTabla(selector ? selector.value : "general");
+}
+
+function normalizarVistaTabla(vista) {
+  return ["general", "fecha-1", "fecha-2", "fecha-3", "grupos"].includes(vista) ? vista : "general";
+}
+
+function obtenerNombreVistaTabla(vista) {
+  const nombres = {
+    general: "General",
+    "fecha-1": "Fecha 1",
+    "fecha-2": "Fecha 2",
+    "fecha-3": "Fecha 3",
+    grupos: "Solo grupos"
   };
+
+  return nombres[normalizarVistaTabla(vista)] || nombres.general;
+}
+
+function obtenerZonaClasificacionTabla(posicionGeneral) {
+  if (posicionGeneral >= 1 && posicionGeneral <= 8) {
+    return "octavos";
+  }
+
+  if (posicionGeneral >= 9 && posicionGeneral <= 24) {
+    return "dieciseisavos";
+  }
+
+  if (posicionGeneral >= 25 && posicionGeneral <= 28) {
+    return "plata";
+  }
+
+  return "";
 }
 
 function obtenerAcumuladoTabla(acumulados, participante) {
@@ -3117,6 +3261,16 @@ function renderizarTablaPosicionesAnterior(resultado) {
   const tabla = document.createElement("table");
   tabla.className = "tabla-posiciones";
   tabla.innerHTML = `
+    <colgroup>
+      <col class="col-pos">
+      <col class="col-participante">
+      <col class="col-puntos">
+      <col class="col-plenos">
+      <col class="col-par">
+      <col class="col-err">
+      <col class="col-nc">
+      <col class="col-ext">
+    </colgroup>
     <thead>
       <tr>
         <th>Posición</th>
@@ -3216,7 +3370,9 @@ function renderizarTablaPosiciones(resultado) {
   const contenedorDetalle = document.getElementById("detalle-tabla");
 
   ultimoResultadoTabla = resultado;
+  ultimaVistaTabla = resultado.vista || "general";
   contenedor.innerHTML = "";
+  actualizarTituloTablaExportable(ultimaVistaTabla);
 
   if (!resultado.filas.length) {
     const vacio = document.createElement("p");
@@ -3234,39 +3390,73 @@ function renderizarTablaPosiciones(resultado) {
     return;
   }
 
+  const esTablaSoloGrupos = ultimaVistaTabla === "grupos";
   const tabla = document.createElement("table");
   tabla.className = "tabla-posiciones";
-  tabla.innerHTML = `
-    <thead>
-      <tr>
-        <th>Pos</th>
-        <th>Participante</th>
-        <th>PTS</th>
-        <th>PLENOS</th>
-        <th>PAR</th>
-        <th>ERR</th>
-        <th>NC</th>
-        <th>EXT</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  `;
+  tabla.innerHTML = esTablaSoloGrupos
+    ? `
+      <thead>
+        <tr>
+          <th>Pos</th>
+          <th>Participante</th>
+          <th>PTS</th>
+          <th>ACIERTOS</th>
+          <th>ERR</th>
+          <th>NC</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    `
+    : `
+      <thead>
+        <tr>
+          <th>Pos</th>
+          <th>Participante</th>
+          <th>PTS</th>
+          <th>PLENOS</th>
+          <th>PAR</th>
+          <th>ERR</th>
+          <th>NC</th>
+          <th>EXT</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    `;
 
   const cuerpo = tabla.querySelector("tbody");
 
   resultado.filas.forEach((fila) => {
     const tr = document.createElement("tr");
-    tr.className = fila.clave === participanteDetalleTabla ? "fila-seleccionada" : "";
-    tr.innerHTML = `
-      <td>${fila.posicion}</td>
-      <td></td>
-      <td>${fila.puntos}</td>
-      <td>${fila.plenos}</td>
-      <td>${fila.parciales}</td>
-      <td>${fila.errores + fila.gruposErrores}</td>
-      <td>${fila.pendientes + fila.gruposPendientes}</td>
-      <td>${fila.puntosGrupos + fila.puntosPenales}</td>
-    `;
+    const clasesFila = [];
+
+    if (fila.clave === participanteDetalleTabla) {
+      clasesFila.push("fila-seleccionada");
+    }
+
+    if (fila.zonaClasificacion) {
+      clasesFila.push(`zona-${fila.zonaClasificacion}`);
+    }
+
+    tr.className = clasesFila.join(" ");
+    tr.innerHTML = esTablaSoloGrupos
+      ? `
+        <td>${fila.posicion}</td>
+        <td></td>
+        <td>${fila.puntosGrupos}</td>
+        <td>${fila.gruposAciertos}</td>
+        <td>${fila.gruposErrores}</td>
+        <td>${fila.gruposPendientes}</td>
+      `
+      : `
+        <td>${fila.posicion}</td>
+        <td></td>
+        <td>${fila.puntos}</td>
+        <td>${fila.plenos}</td>
+        <td>${fila.parciales}</td>
+        <td>${fila.errores + fila.gruposErrores}</td>
+        <td>${fila.pendientes + fila.gruposPendientes}</td>
+        <td>${fila.puntosGrupos + fila.puntosPenales}</td>
+      `;
 
     tr.children[1].appendChild(crearBotonParticipanteTabla(fila));
     cuerpo.appendChild(tr);
@@ -3277,17 +3467,43 @@ function renderizarTablaPosiciones(resultado) {
   renderizarAdvertencias(contenedorAdvertencias, resultado.advertencias);
 }
 
+function actualizarTituloTablaExportable(vista) {
+  const etiquetaVista = document.getElementById("tabla-vista-exportable");
+
+  if (etiquetaVista) {
+    etiquetaVista.textContent = obtenerNombreVistaTabla(vista);
+  }
+}
+
 function crearBotonParticipanteTabla(fila) {
   const boton = document.createElement("button");
+  const escudoMarco = document.createElement("span");
+  const escudo = document.createElement("img");
+  const nombre = document.createElement("span");
+
   boton.type = "button";
   boton.className = "participante-tabla-boton";
-  boton.textContent = fila.participante;
-  boton.setAttribute("aria-label", `Ver detalle de ${fila.participante}`);
+  boton.setAttribute("aria-label", `${fila.clave === participanteDetalleTabla ? "Ocultar" : "Ver"} detalle de ${fila.participante}`);
+  boton.setAttribute("aria-expanded", String(fila.clave === participanteDetalleTabla));
+  escudoMarco.className = "escudo-participante-marco";
+  escudo.className = "escudo-participante";
+  escudo.alt = "";
+  escudo.src = obtenerRutaEscudoParticipante(fila.participante);
+  escudo.onerror = () => {
+    escudoMarco.hidden = true;
+  };
+  escudoMarco.appendChild(escudo);
+  nombre.textContent = fila.participante;
+  boton.append(escudoMarco, nombre);
   boton.addEventListener("click", () => {
-    participanteDetalleTabla = fila.clave;
+    participanteDetalleTabla = participanteDetalleTabla === fila.clave ? "" : fila.clave;
     renderizarTablaPosiciones(ultimoResultadoTabla);
   });
   return boton;
+}
+
+function obtenerRutaEscudoParticipante(participante) {
+  return `assets/escudos/${encodeURIComponent(participante)}.png`;
 }
 
 function renderizarDetalleTablaSeleccionado() {
@@ -3313,6 +3529,7 @@ function renderizarDetalleTablaSeleccionado() {
 function crearDetalleTablaParticipante(fila) {
   const contenedor = document.createElement("article");
   contenedor.className = "detalle-tabla-panel";
+  const esDetalleSoloGrupos = ultimaVistaTabla === "grupos";
 
   const encabezado = document.createElement("div");
   encabezado.className = "detalle-tabla-encabezado";
@@ -3321,26 +3538,41 @@ function crearDetalleTablaParticipante(fila) {
   titulo.textContent = fila.participante;
 
   const total = document.createElement("strong");
-  total.textContent = `${fila.puntos} pts`;
+  total.textContent = `${esDetalleSoloGrupos ? fila.puntosGrupos : fila.puntos} pts`;
 
   encabezado.append(titulo, total);
 
   const resumen = document.createElement("div");
   resumen.className = "detalle-tabla-resumen";
-  resumen.append(
-    crearDatoDetalleTabla("Partidos", `${fila.puntosPartidos} pts`),
-    crearDatoDetalleTabla("Extra", `${fila.puntosGrupos + fila.puntosPenales} pts`),
-    crearDatoDetalleTabla("Plenos", fila.plenos),
-    crearDatoDetalleTabla("No cargados", fila.pendientes + fila.gruposPendientes),
-    crearDatoDetalleTabla("Puestos acertados", fila.gruposAciertos)
-  );
+  if (esDetalleSoloGrupos) {
+    resumen.classList.add("solo-grupos");
+    resumen.append(
+      crearDatoDetalleTabla("Grupos", `${fila.puntosGrupos} pts`),
+      crearDatoDetalleTabla("Puestos acertados", fila.gruposAciertos),
+      crearDatoDetalleTabla("Errores", fila.gruposErrores),
+      crearDatoDetalleTabla("No cargados", fila.gruposPendientes)
+    );
+  } else {
+    resumen.append(
+      crearDatoDetalleTabla("Partidos", `${fila.puntosPartidos} pts`),
+      crearDatoDetalleTabla("Extra", `${fila.puntosGrupos + fila.puntosPenales} pts`),
+      crearDatoDetalleTabla("Plenos", fila.plenos),
+      crearDatoDetalleTabla("No cargados", fila.pendientes + fila.gruposPendientes),
+      crearDatoDetalleTabla("Puestos acertados", fila.gruposAciertos)
+    );
+  }
 
   const secciones = document.createElement("div");
   secciones.className = "detalle-tabla-secciones";
-  secciones.append(
-    crearDetallePartidosTabla(fila),
-    crearDetalleGruposTabla(fila)
-  );
+  if (esDetalleSoloGrupos) {
+    secciones.classList.add("solo-grupos");
+    secciones.appendChild(crearDetalleGruposTabla(fila));
+  } else {
+    secciones.append(
+      crearDetallePartidosTabla(fila),
+      crearDetalleGruposTabla(fila)
+    );
+  }
 
   contenedor.append(encabezado, resumen, secciones);
   return contenedor;
