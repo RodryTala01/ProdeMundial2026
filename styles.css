@@ -1073,6 +1073,262 @@ main {
   font-weight: 700;
 }
 
+.cruces-tabla {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+  border: 1px solid var(--borde-oscuro);
+  background: #d6d6d6;
+}
+
+.tabla-cruces-encabezado,
+.ronda-cruces-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--borde);
+}
+
+.tabla-cruces-encabezado {
+  color: #ffffff;
+  background: var(--verde-oscuro);
+}
+
+.tabla-cruces-encabezado h3,
+.ronda-cruces-titulo h4,
+.ronda-cruces-titulo h5 {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.tabla-cruces-encabezado .seccion-kicker {
+  color: #f1df96;
+}
+
+.tabla-cruces-encabezado > span,
+.ronda-cruces-titulo span {
+  color: var(--texto-suave);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.tabla-cruces-encabezado > span {
+  color: #111111;
+  padding: 2px 6px;
+  border: 1px solid #8a681b;
+  background: var(--dorado);
+}
+
+.ronda-cruces-titulo {
+  background: #cfcfcf;
+}
+
+.ronda-cruces-titulo.sub {
+  padding: 5px 7px;
+  border-top: 1px solid var(--borde);
+  background: #dce7d6;
+}
+
+.ronda-cruces-titulo.sub h5 {
+  font-size: 0.82rem;
+}
+
+.tabla-cruces-participantes,
+.copa-cruces {
+  margin: 0 7px 7px;
+  border: 1px solid var(--borde);
+  background: var(--crema);
+}
+
+.tabla-cruces-scroll {
+  overflow-x: auto;
+}
+
+.tabla-cruces-posiciones {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  background: #e7dfc8;
+  font-size: 0.78rem;
+}
+
+.tabla-cruces-posiciones th,
+.tabla-cruces-posiciones td {
+  padding: 5px 7px;
+  border: 1px solid var(--borde);
+  text-align: center;
+}
+
+.tabla-cruces-posiciones th {
+  color: #ffffff;
+  background: var(--azul);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+}
+
+.tabla-cruces-posiciones td {
+  font-weight: 700;
+}
+
+.tabla-cruces-posiciones td:nth-child(2) {
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tabla-cruces-posiciones tbody tr:nth-child(even) td {
+  background: #dce7d6;
+}
+
+.copas-cruces {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.copa-cruces.copa-oro > .ronda-cruces-titulo {
+  color: #ffffff;
+  background: var(--verde-oscuro);
+}
+
+.copa-cruces.copa-plata > .ronda-cruces-titulo {
+  color: #ffffff;
+  background: #4b4f54;
+}
+
+.copa-cruces > .ronda-cruces-titulo span {
+  color: #e8e8e8;
+}
+
+.ronda-cruces {
+  border-top: 1px solid var(--borde);
+  background: #d7d7d7;
+}
+
+.cruces-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  padding: 7px;
+}
+
+.cruce-card {
+  border: 1px solid #777777;
+  background: #ebe4cf;
+}
+
+.cruce-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--borde);
+  color: #ffffff;
+  background: var(--verde-oscuro);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.copa-plata .cruce-card-top {
+  background: #4b4f54;
+}
+
+.cruce-card-top small {
+  color: #f1df96;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.cruce-equipo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  gap: 5px;
+  align-items: center;
+  min-height: 36px;
+  padding: 5px 6px;
+  border-bottom: 1px solid var(--borde);
+  background: #e7dfc8;
+}
+
+.cruce-equipo:nth-child(3) {
+  background: #dce7d6;
+}
+
+.cruce-equipo.ganador {
+  border-left: 5px solid var(--verde);
+  background: #dcebd4;
+}
+
+.cruce-equipo.pendiente {
+  color: #333333;
+  background: #d1d1d1;
+}
+
+.cruce-equipo-nombre {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cruce-equipo-nombre strong {
+  overflow: hidden;
+  font-size: 0.86rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cruce-equipo-nombre span {
+  color: var(--texto-suave);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.cruce-score {
+  width: 44px;
+  height: 28px;
+  border: 1px solid var(--verde-oscuro);
+  border-radius: 0;
+  color: #111111;
+  background: #fffaf0;
+  font-weight: 800;
+  text-align: center;
+}
+
+.cruce-acciones {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 5px;
+  align-items: center;
+  padding: 5px 6px;
+  background: #d7d7d7;
+}
+
+.cruce-acciones label {
+  color: #333333;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.cruce-acciones select {
+  min-width: 0;
+  height: 28px;
+  border: 1px solid var(--borde);
+  border-radius: 0;
+  background: #fffaf0;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.cruce-acciones select:disabled {
+  color: #555555;
+  background: #d1d1d1;
+}
+
 .controles-tabla {
   display: grid;
   grid-template-columns: minmax(0, 220px) auto;
@@ -2533,6 +2789,37 @@ main {
 
   .puntos-mini {
     text-align: left;
+  }
+
+  .tabla-cruces-encabezado,
+  .ronda-cruces-titulo {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .tabla-cruces-participantes,
+  .copa-cruces {
+    margin-right: 6px;
+    margin-left: 6px;
+  }
+
+  .cruces-grid {
+    grid-template-columns: 1fr;
+    padding: 6px;
+  }
+
+  .cruce-equipo {
+    grid-template-columns: minmax(0, 1fr) 42px;
+    min-height: 38px;
+  }
+
+  .cruce-score {
+    width: 42px;
+  }
+
+  .cruce-acciones {
+    grid-template-columns: 1fr;
   }
 
   .controles-tabla {
