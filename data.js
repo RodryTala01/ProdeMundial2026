@@ -1967,6 +1967,183 @@ const FECHAS = [
         }
       }
     ]
+  },
+  {
+    id: "octavos",
+    nombre: "Octavos",
+    fase: "Eliminacion directa",
+    cierrePronostico: "2026-07-05T13:30:00-03:00",
+    descripcion: "Octavos de final",
+    partidos: [
+      {
+        id: "par-fra-octavos",
+        grupo: "Octavos",
+        dia: "Sabado 4 de julio",
+        fechaISO: "2026-07-04",
+        horario: "16:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "Paraguay",
+          bandera: "",
+          banderaImagen: "assets/flags/par.svg",
+          codigo: "PAR"
+        },
+        visitante: {
+          nombre: "Francia",
+          bandera: "",
+          banderaImagen: "assets/flags/fr.svg",
+          codigo: "FRA"
+        }
+      },
+      {
+        id: "can-mar-octavos",
+        grupo: "Octavos",
+        dia: "Sabado 4 de julio",
+        fechaISO: "2026-07-04",
+        horario: "20:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "Canadá",
+          bandera: "",
+          banderaImagen: "assets/flags/ca.svg",
+          codigo: "CAN"
+        },
+        visitante: {
+          nombre: "Marruecos",
+          bandera: "",
+          banderaImagen: "assets/flags/ma.svg",
+          codigo: "MAR"
+        }
+      },
+      {
+        id: "por-esp-octavos",
+        grupo: "Octavos",
+        dia: "Domingo 5 de julio",
+        fechaISO: "2026-07-05",
+        horario: "16:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "Portugal",
+          bandera: "",
+          banderaImagen: "assets/flags/pt.svg",
+          codigo: "POR"
+        },
+        visitante: {
+          nombre: "España",
+          bandera: "",
+          banderaImagen: "assets/flags/es.svg",
+          codigo: "ESP"
+        }
+      },
+      {
+        id: "usa-bel-octavos",
+        grupo: "Octavos",
+        dia: "Domingo 5 de julio",
+        fechaISO: "2026-07-05",
+        horario: "20:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "Estados Unidos",
+          bandera: "",
+          banderaImagen: "assets/flags/us.svg",
+          codigo: "USA"
+        },
+        visitante: {
+          nombre: "Bélgica",
+          bandera: "",
+          banderaImagen: "assets/flags/bel.svg",
+          codigo: "BEL"
+        }
+      },
+      {
+        id: "bra-nor-octavos",
+        grupo: "Octavos",
+        dia: "Lunes 6 de julio",
+        fechaISO: "2026-07-06",
+        horario: "16:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "Brasil",
+          bandera: "",
+          banderaImagen: "assets/flags/br.svg",
+          codigo: "BRA"
+        },
+        visitante: {
+          nombre: "Noruega",
+          bandera: "",
+          banderaImagen: "assets/flags/nor.svg",
+          codigo: "NOR"
+        }
+      },
+      {
+        id: "mex-eng-octavos",
+        grupo: "Octavos",
+        dia: "Lunes 6 de julio",
+        fechaISO: "2026-07-06",
+        horario: "20:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "México",
+          bandera: "",
+          banderaImagen: "assets/flags/mx.svg",
+          codigo: "MEX"
+        },
+        visitante: {
+          nombre: "Inglaterra",
+          bandera: "",
+          banderaImagen: "assets/flags/gb-eng.svg",
+          codigo: "ENG"
+        }
+      },
+      {
+        id: "arg-egy-octavos",
+        grupo: "Octavos",
+        dia: "Martes 7 de julio",
+        fechaISO: "2026-07-07",
+        horario: "16:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "Argentina",
+          bandera: "",
+          banderaImagen: "assets/flags/ar.svg",
+          codigo: "ARG"
+        },
+        visitante: {
+          nombre: "Egipto",
+          bandera: "",
+          banderaImagen: "assets/flags/egy.svg",
+          codigo: "EGY"
+        }
+      },
+      {
+        id: "sui-col-octavos",
+        grupo: "Octavos",
+        dia: "Martes 7 de julio",
+        fechaISO: "2026-07-07",
+        horario: "20:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "Suiza",
+          bandera: "",
+          banderaImagen: "assets/flags/sui.svg",
+          codigo: "SUI"
+        },
+        visitante: {
+          nombre: "Colombia",
+          bandera: "",
+          banderaImagen: "assets/flags/co.svg",
+          codigo: "COL"
+        }
+      }
+    ]
   }
 ];
 
@@ -2453,6 +2630,38 @@ const RESULTADOS_OFICIALES = {
     golesVisitante: null
   },
   "col-gha-16avos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "par-fra-octavos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "can-mar-octavos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "por-esp-octavos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "usa-bel-octavos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "bra-nor-octavos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "mex-eng-octavos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "arg-egy-octavos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "sui-col-octavos": {
     golesLocal: null,
     golesVisitante: null
   }

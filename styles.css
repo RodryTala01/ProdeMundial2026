@@ -1251,6 +1251,12 @@ main {
   line-height: 1.2;
 }
 
+.cruce-equipo-nombre span {
+  color: var(--texto-suave);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
 .cruce-escudo-marco {
   display: inline-flex;
   align-items: center;

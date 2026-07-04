@@ -66,6 +66,37 @@ const CRUCES_PLATA_OCTAVOS = [
   { numero: 8, local: "Perdedor Lucas Insua / Cristian Serpico", visitante: "Por definir" }
 ];
 
+const POSICIONES_CRUCES = {
+  "Gabriel Talarico": 1,
+  Eze: 2,
+  Benja: 3,
+  Yago: 4,
+  "Verónica Lucchesi": 5,
+  "Renzo Badano": 6,
+  "Rodrigo Soca": 7,
+  "Kevin Sívori": 8,
+  "Lucas Insua": 9,
+  "Pancho Muzzio": 10,
+  "Ignacio Cejas": 11,
+  Santi: 12,
+  "Nahuel González": 13,
+  "Luciano Hufschmid": 14,
+  "Lucas Aguilera": 15,
+  "Rodrigo Talarico": 16,
+  Cami: 17,
+  "Bruno Alonso": 18,
+  Kraiizer: 19,
+  "Nico Avalos": 20,
+  Jhose: 21,
+  Cundo: 22,
+  "Felipe Galante": 23,
+  "Cristian Serpico": 24,
+  "Fabrizio Escolano": 25,
+  "Mario Talarico": 26,
+  "Cristian Hantis": 27,
+  "Moreno Pérez": 28
+};
+
 document.addEventListener("DOMContentLoaded", inicializarApp);
 
 function inicializarApp() {
@@ -3066,6 +3097,7 @@ function crearFilaCruceInformativa(nombre) {
   const esPendiente = esTextoCrucePendiente(texto);
   const contenido = document.createElement("div");
   const escudoMarco = document.createElement("span");
+  const posicion = POSICIONES_CRUCES[texto];
 
   fila.className = `cruce-equipo${esPendiente ? " pendiente" : ""}`;
   escudoMarco.className = "cruce-escudo-marco";
@@ -3087,7 +3119,10 @@ function crearFilaCruceInformativa(nombre) {
   }
 
   contenido.className = "cruce-equipo-nombre";
-  contenido.innerHTML = `<strong>${texto}</strong>`;
+  contenido.innerHTML = `
+    <strong>${texto}</strong>
+    ${!esPendiente && posicion ? `<span>Pos ${posicion} tabla general</span>` : ""}
+  `;
   fila.append(escudoMarco, contenido);
   return fila;
 }
@@ -3160,6 +3195,7 @@ function generarTablaPosiciones(vistaTabla = obtenerVistaTablaSeleccionada()) {
     cargaGruposOficiales,
     filtroFecha: "__todas__",
     incluirGrupos: true,
+    fechasEsperadas: obtenerFechasEsperadasTabla("general", mensajesPartidos, cargaOficial.resultados),
     advertencias,
     registrarDuplicados: true
   });
@@ -3171,6 +3207,7 @@ function generarTablaPosiciones(vistaTabla = obtenerVistaTablaSeleccionada()) {
       cargaGruposOficiales,
       filtroFecha: vistaNormalizada,
       incluirGrupos: vistaNormalizada === "grupos",
+      fechasEsperadas: obtenerFechasEsperadasTabla(vistaNormalizada, mensajesPartidos, cargaOficial.resultados),
       advertencias,
       registrarDuplicados: false
     });
@@ -3199,6 +3236,7 @@ function construirFilasTabla(opciones) {
     cargaGruposOficiales,
     filtroFecha,
     incluirGrupos,
+    fechasEsperadas,
     advertencias,
     registrarDuplicados
   } = opciones;
@@ -3241,6 +3279,10 @@ function construirFilasTabla(opciones) {
     acumulado.pendientes += calculo.pendientes;
     acumulado.fechas.add(mensaje.fecha.nombre);
     acumulado.detalles.push(...calculo.filas);
+  });
+
+  acumulados.forEach((acumulado) => {
+    acumulado.noMandados = calcularPartidosNoMandados(acumulado.participante, fechasEsperadas, mensajesPorClave);
   });
 
   if (incluirGrupos) {
@@ -3300,6 +3342,57 @@ function obtenerNombreVistaTabla(vista) {
   return nombres[normalizarVistaTabla(vista)] || nombres.general;
 }
 
+function obtenerFechasEsperadasTabla(vista, mensajesPartidos, resultadosOficiales) {
+  const vistaNormalizada = normalizarVistaTabla(vista);
+
+  if (vistaNormalizada === "grupos") {
+    return [];
+  }
+
+  if (vistaNormalizada !== "general") {
+    const fecha = FECHAS.find((item) => item.id === vistaNormalizada);
+    return fecha ? [fecha] : [];
+  }
+
+  const ids = new Set();
+
+  mensajesPartidos.forEach((mensaje) => {
+    if (mensaje.fecha && mensaje.fecha.id) {
+      ids.add(mensaje.fecha.id);
+    }
+  });
+
+  Object.entries(resultadosOficiales || {}).forEach(([partidoId, resultado]) => {
+    if (!resultado || resultado.golesLocal === null || resultado.golesVisitante === null || resultado.golesLocal === undefined || resultado.golesVisitante === undefined) {
+      return;
+    }
+
+    const fecha = obtenerFechaPorPartidoId(partidoId);
+
+    if (fecha) {
+      ids.add(fecha.id);
+    }
+  });
+
+  return FECHAS.filter((fecha) => ids.has(fecha.id));
+}
+
+function obtenerFechaPorPartidoId(partidoId) {
+  return FECHAS.find((fecha) => fecha.partidos.some((partido) => partido.id === partidoId)) || null;
+}
+
+function calcularPartidosNoMandados(participante, fechasEsperadas, mensajesPorClave) {
+  const claveParticipante = normalizarTexto(participante);
+
+  return fechasEsperadas.reduce((total, fecha) => {
+    const mensaje = mensajesPorClave.get(`${claveParticipante}__${fecha.id}`);
+    const partidosEnviados = new Set((mensaje ? mensaje.pronosticos : []).map((pronostico) => pronostico.partido.id));
+    const faltantes = fecha.partidos.filter((partido) => !partidosEnviados.has(partido.id)).length;
+
+    return total + faltantes;
+  }, 0);
+}
+
 function obtenerZonaClasificacionTabla(posicionGeneral) {
   if (posicionGeneral >= 1 && posicionGeneral <= 8) {
     return "octavos";
@@ -3331,6 +3424,7 @@ function obtenerAcumuladoTabla(acumulados, participante) {
       parciales: 0,
       errores: 0,
       pendientes: 0,
+      noMandados: 0,
       gruposAciertos: 0,
       gruposErrores: 0,
       gruposPendientes: 0,
@@ -3539,7 +3633,7 @@ function renderizarTablaPosiciones(resultado) {
           <th>PLENOS</th>
           <th>PAR</th>
           <th>ERR</th>
-          <th>NC</th>
+          <th>NM</th>
           <th>EXT</th>
         </tr>
       </thead>
@@ -3576,8 +3670,8 @@ function renderizarTablaPosiciones(resultado) {
         <td>${fila.puntos}</td>
         <td>${fila.plenos}</td>
         <td>${fila.parciales}</td>
-        <td>${fila.errores + fila.gruposErrores}</td>
-        <td>${fila.pendientes + fila.gruposPendientes}</td>
+        <td>${fila.errores}</td>
+        <td>${fila.noMandados}</td>
         <td>${fila.puntosGrupos + fila.puntosPenales}</td>
       `;
 
@@ -3681,11 +3775,11 @@ function crearDetalleTablaParticipante(fila) {
     );
   } else {
     resumen.append(
-      crearDatoDetalleTabla("Partidos", `${fila.puntosPartidos} pts`),
-      crearDatoDetalleTabla("Extra", `${fila.puntosGrupos + fila.puntosPenales} pts`),
       crearDatoDetalleTabla("Plenos", fila.plenos),
-      crearDatoDetalleTabla("No cargados", fila.pendientes + fila.gruposPendientes),
-      crearDatoDetalleTabla("Puestos acertados", fila.gruposAciertos)
+      crearDatoDetalleTabla("Parciales", fila.parciales),
+      crearDatoDetalleTabla("Errores", fila.errores),
+      crearDatoDetalleTabla("No mandados", fila.noMandados),
+      crearDatoDetalleTabla("Grupos", `${fila.puntosGrupos} pts`)
     );
   }
 
