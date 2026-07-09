@@ -2149,91 +2149,91 @@ const FECHAS = [
     id: "cuartos",
     nombre: "Cuartos",
     fase: "Eliminacion directa",
-    cierrePronostico: "2026-07-10T15:30:00-03:00",
+    cierrePronostico: "2026-07-09T16:30:00-03:00",
     descripcion: "Cuartos de final",
     partidos: [
       {
-        id: "ganador-par-fra-vs-ganador-can-mar-cuartos",
+        id: "fra-mar-cuartos",
+        grupo: "Cuartos",
+        dia: "Jueves 9 de julio",
+        fechaISO: "2026-07-09",
+        horario: "17:00",
+        estadio: "Gillette Stadium",
+        ciudad: "Boston",
+        local: {
+          nombre: "Francia",
+          bandera: "",
+          banderaImagen: "assets/flags/fr.svg",
+          codigo: "FRA"
+        },
+        visitante: {
+          nombre: "Marruecos",
+          bandera: "",
+          banderaImagen: "assets/flags/ma.svg",
+          codigo: "MAR"
+        }
+      },
+      {
+        id: "esp-bel-cuartos",
         grupo: "Cuartos",
         dia: "Viernes 10 de julio",
         fechaISO: "2026-07-10",
         horario: "16:00",
-        estadio: "Por definir",
-        ciudad: "Por definir",
+        estadio: "SoFi Stadium",
+        ciudad: "Los Ángeles",
         local: {
-          nombre: "Ganador Paraguay/Francia",
+          nombre: "España",
           bandera: "",
-          banderaImagen: "",
-          codigo: "G1"
+          banderaImagen: "assets/flags/es.svg",
+          codigo: "ESP"
         },
         visitante: {
-          nombre: "Ganador Canada/Marruecos",
+          nombre: "Bélgica",
           bandera: "",
-          banderaImagen: "",
-          codigo: "G2"
+          banderaImagen: "assets/flags/bel.svg",
+          codigo: "BEL"
         }
       },
       {
-        id: "ganador-por-esp-vs-ganador-usa-bel-cuartos",
+        id: "nor-eng-cuartos",
         grupo: "Cuartos",
-        dia: "Viernes 10 de julio",
-        fechaISO: "2026-07-10",
-        horario: "20:00",
-        estadio: "Por definir",
-        ciudad: "Por definir",
-        local: {
-          nombre: "Ganador Portugal/Espana",
-          bandera: "",
-          banderaImagen: "",
-          codigo: "G3"
-        },
-        visitante: {
-          nombre: "Ganador Estados Unidos/Belgica",
-          bandera: "",
-          banderaImagen: "",
-          codigo: "G4"
-        }
-      },
-      {
-        id: "ganador-bra-nor-vs-ganador-mex-eng-cuartos",
-        grupo: "Cuartos",
-        dia: "Sabado 11 de julio",
+        dia: "Sábado 11 de julio",
         fechaISO: "2026-07-11",
-        horario: "16:00",
-        estadio: "Por definir",
-        ciudad: "Por definir",
+        horario: "18:00",
+        estadio: "Hard Rock Stadium",
+        ciudad: "Miami",
         local: {
-          nombre: "Ganador Brasil/Noruega",
+          nombre: "Noruega",
           bandera: "",
-          banderaImagen: "",
-          codigo: "G5"
+          banderaImagen: "assets/flags/nor.svg",
+          codigo: "NOR"
         },
         visitante: {
-          nombre: "Ganador Mexico/Inglaterra",
+          nombre: "Inglaterra",
           bandera: "",
-          banderaImagen: "",
-          codigo: "G6"
+          banderaImagen: "assets/flags/gb-eng.svg",
+          codigo: "ENG"
         }
       },
       {
-        id: "ganador-arg-egy-vs-ganador-sui-col-cuartos",
+        id: "arg-sui-cuartos",
         grupo: "Cuartos",
-        dia: "Sabado 11 de julio",
+        dia: "Sábado 11 de julio",
         fechaISO: "2026-07-11",
-        horario: "20:00",
-        estadio: "Por definir",
-        ciudad: "Por definir",
+        horario: "22:00",
+        estadio: "Arrowhead Stadium",
+        ciudad: "Kansas City",
         local: {
-          nombre: "Ganador Argentina/Egipto",
+          nombre: "Argentina",
           bandera: "",
-          banderaImagen: "",
-          codigo: "G7"
+          banderaImagen: "assets/flags/ar.svg",
+          codigo: "ARG"
         },
         visitante: {
-          nombre: "Ganador Suiza/Colombia",
+          nombre: "Suiza",
           bandera: "",
-          banderaImagen: "",
-          codigo: "G8"
+          banderaImagen: "assets/flags/sui.svg",
+          codigo: "SUI"
         }
       }
     ]
@@ -2758,19 +2758,19 @@ const RESULTADOS_OFICIALES = {
     golesLocal: null,
     golesVisitante: null
   },
-  "ganador-par-fra-vs-ganador-can-mar-cuartos": {
+  "fra-mar-cuartos": {
     golesLocal: null,
     golesVisitante: null
   },
-  "ganador-por-esp-vs-ganador-usa-bel-cuartos": {
+  "esp-bel-cuartos": {
     golesLocal: null,
     golesVisitante: null
   },
-  "ganador-bra-nor-vs-ganador-mex-eng-cuartos": {
+  "nor-eng-cuartos": {
     golesLocal: null,
     golesVisitante: null
   },
-  "ganador-arg-egy-vs-ganador-sui-col-cuartos": {
+  "arg-sui-cuartos": {
     golesLocal: null,
     golesVisitante: null
   }
