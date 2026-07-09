@@ -148,7 +148,26 @@ Croacia 2 - 1 Ghana
 Colombia 0 - 0 Portugal
 RD Congo 3 - 1 Uzbekistan
 Argelia 3 - 3 Austria
-Jordania 1 - 3 Argentina`
+Jordania 1 - 3 Argentina`,
+
+`Fecha: 16avos
+
+Sudafrica 0 - 1 Canada
+Brasil 2 - 1 Japon
+Alemania 1 - 1 *Paraguay
+Paises Bajos 1 - 1 *Marruecos
+Costa de Marfil 1 - 2 Noruega
+Francia 3 - 0 Suecia
+Mexico 2 - 0 Ecuador
+Inglaterra 2 - 1 RD Congo
+Belgica 3 - 2 Senegal
+Estados Unidos 2 - 0 Bosnia y Herzegovina
+Espana 3 - 0 Austria
+Portugal 2 - 1 Croacia
+Suiza 2 - 0 Argelia
+Australia 1 - 1 *Egipto
+Argentina 3 - 2 Cabo Verde
+Colombia 1 - 0 Ghana`
   ],
 
   oficialesGrupos: [
@@ -2470,6 +2489,511 @@ Portugal 2 - 0 RD Congo
 Inglaterra 1 - 1 Croacia
 Ghana 2 - 0 Panamá
 Uzbekistán 0 - 2 Colombia
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Lucas Insua
+
+Sudafrica 0 - 2 *Canada
+Brasil 2 - 3 *Japon
+Alemania 2 - 1 *Paraguay
+Paises Bajos 1 - 1 *Marruecos
+Costa de Marfil 1 - 2 *Noruega
+*Francia 3 - 1 Suecia
+*Mexico 1 - 2 Ecuador
+*Inglaterra 3 - 0 RD Congo
+Belgica 0 - 1 *Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+*Espana 2 - 0 Austria
+*Portugal 1 - 0 Croacia
+Suiza 1 - 2 *Argelia
+Australia 0 - 1 *Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 2 - 1 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Cristian Serpico
+
+*Paises Bajos 1 - 0 Marruecos
+*Costa de Marfil 0 - 1 Noruega
+*Francia 1 - 0 Suecia
+*Mexico 1 - 0 Ecuador
+*Inglaterra 1 - 0 RD Congo
+Belgica 1 - 0 *Senegal
+*Estados Unidos 1 - 0 Bosnia y Herzegovina
+Espana 0 - 1 *Austria
+Portugal 0 - 1 *Croacia
+*Suiza 0 - 1 Argelia
+*Australia 1 - 0 Egipto
+*Argentina 1 - 0 Cabo Verde
+*Colombia 1 - 0 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Ignacio Cejas
+
+Sudafrica 0 - 2 *Canada
+
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Cundo
+
+Sudafrica 1 - 2 *Canada
+Brasil 2 - 2 *Japon
+*Alemania 2 - 1 Paraguay
+*Paises Bajos 1 - 1 Marruecos
+Costa de Marfil 0 - 2 *Noruega
+*Francia 3 - 0 Suecia
+*Mexico 1 - 1 Ecuador
+*Inglaterra 4 - 1 RD Congo
+Belgica 0 - 0 *Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+*Espana 3 - 1 Austria
+*Portugal 1 - 1 Croacia
+Suiza 0 - 1 *Argelia
+*Australia 2 - 1 Egipto
+*Argentina 3 - 0 Cabo Verde
+*Colombia 2 - 1 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Nahuel González
+
+Sudafrica 1 - 2 *Canada
+Brasil 2 - 1 *Japon
+Alemania 2 - 0 *Paraguay
+*Paises Bajos 1 - 2 Marruecos
+Costa de Marfil 0 - 2 *Noruega
+*Francia 3 - 0 Suecia
+Mexico 0 - 1 *Ecuador
+*Inglaterra 2 - 0 RD Congo
+*Belgica 1 - 1 Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+*Espana 3 - 1 Austria
+*Portugal 2 - 0 Croacia
+*Suiza 1 - 0 Argelia
+*Australia 1 - 0 Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 2 - 1 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Lucas Aguilera
+
+Sudafrica 1 - 2 *Canada
+*Brasil 3 - 1 Japon
+Alemania 3 - 0 *Paraguay
+Paises Bajos 2 - 1 *Marruecos
+*Costa de Marfil 2 - 1 Noruega
+*Francia 3 - 0 Suecia
+Mexico 2 - 1 *Ecuador
+*Inglaterra 3 - 0 RD Congo
+Belgica 2 - 1 *Senegal
+*Estados Unidos 3 - 0 Bosnia y Herzegovina
+*Espana 2 - 0 Austria
+*Portugal 2 - 1 Croacia
+*Suiza 1 - 0 Argelia
+Australia 2 - 1 *Egipto
+*Argentina 3 - 0 Cabo Verde
+*Colombia 2 - 0 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Bruno Alonso
+
+Sudafrica 0 - 2 *Canada
+Brasil 1 - 1 *Japon
+Alemania 2 - 0 *Paraguay
+*Paises Bajos 2 - 2 Marruecos
+*Costa de Marfil 0 - 3 Noruega
+*Francia 3 - 0 Suecia
+*Mexico 1 - 1 Ecuador
+*Inglaterra 4 - 0 RD Congo
+Belgica 1 - 1 *Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+Espana 2 - 0 *Austria
+Portugal 2 - 1 *Croacia
+*Suiza 0 - 1 Argelia
+Australia 0 - 1 *Egipto
+*Argentina 3 - 0 Cabo Verde
+*Colombia 2 - 0 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Pancho Muzzio
+
+Sudafrica 0 - 2 *Canada
+*Brasil 2 - 0 Japon
+*Alemania 2 - 0 Paraguay
+Paises Bajos 1 - 1 *Marruecos
+Costa de Marfil 0 - 2 *Noruega
+*Francia 3 - 1 Suecia
+*Mexico 1 - 1 Ecuador
+*Inglaterra 2 - 0 RD Congo
+*Belgica 2 - 1 Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+*Espana 3 - 1 Austria
+*Portugal 2 - 0 Croacia
+*Suiza 1 - 0 Argelia
+Australia 1 - 1 *Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 1 - 0 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Santi
+
+Sudafrica 1 - 1 *Canada
+*Brasil 1 - 0 Japon
+*Alemania 2 - 0 Paraguay
+Paises Bajos 1 - 1 *Marruecos
+Costa de Marfil 1 - 2 *Noruega
+*Francia 1 - 0 Suecia
+Mexico 0 - 0 *Ecuador
+*Inglaterra 1 - 1 RD Congo
+*Belgica 0 - 1 Senegal
+*Estados Unidos 2 - 2 Bosnia y Herzegovina
+*Espana 1 - 1 Austria
+Portugal 1 - 2 *Croacia
+*Suiza 1 - 0 Argelia
+*Australia 1 - 1 Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 1 - 1 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Jhose
+
+Sudafrica 0 - 1 *Canada
+Brasil 1 - 2 *Japon
+Alemania 5 - 0 *Paraguay
+Paises Bajos 1 - 1 *Marruecos
+Costa de Marfil 0 - 2 *Noruega
+*Francia 3 - 1 Suecia
+Mexico 1 - 2 *Ecuador
+Inglaterra 5 - 0 *RD Congo
+Belgica 2 - 1 *Senegal
+*Estados Unidos 3 - 0 Bosnia y Herzegovina
+*Espana 2 - 0 Austria
+Portugal 1 - 1 *Croacia
+*Suiza 2 - 0 Argelia
+Australia 0 - 2 *Egipto
+*Argentina 1 - 0 Cabo Verde
+Colombia 2 - 2 *Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Luciano Hufschmid
+
+Sudafrica 1 - 2 *Canada
+*Brasil 2 - 1 Japon
+*Alemania 2 - 0 Paraguay
+Paises Bajos 2 - 1 *Marruecos
+Costa de Marfil 1 - 2 *Noruega
+*Francia 3 - 1 Suecia
+Mexico 1 - 1 *Ecuador
+*Inglaterra 3 - 1 RD Congo
+*Belgica 2 - 1 Senegal
+*Estados Unidos 2 - 1 Bosnia y Herzegovina
+*Espana 2 - 1 Austria
+*Portugal 2 - 1 Croacia
+*Suiza 1 - 0 Argelia
+Australia 0 - 1 *Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 1 - 0 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Kraiizer
+
+Sudafrica 0 - 2 *Canada
+*Brasil 2 - 0 Japon
+*Alemania 2 - 1 Paraguay
+Paises Bajos 0 - 2 *Marruecos
+Costa de Marfil 0 - 2 *Noruega
+*Francia 3 - 1 Suecia
+Mexico 1 - 2 *Ecuador
+*Inglaterra 3 - 0 RD Congo
+*Belgica 3 - 1 Senegal
+*Estados Unidos 3 - 0 Bosnia y Herzegovina
+*Espana 1 - 0 Austria
+*Portugal 1 - 2 Croacia
+*Suiza 2 - 0 Argelia
+*Australia 2 - 1 Egipto
+*Argentina 3 - 0 Cabo Verde
+*Colombia 2 - 0 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Rodrigo Talarico
+
+Sudafrica 0 - 2 *Canada
+Brasil 2 - 1 *Japon
+Alemania 2 - 1 *Paraguay
+*Paises Bajos 1 - 0 Marruecos
+Costa de Marfil 1 - 1 *Noruega
+*Francia 3 - 0 Suecia
+*Mexico 2 - 0 Ecuador
+*Inglaterra 3 - 1 RD Congo
+Belgica 2 - 0 *Senegal
+*Estados Unidos 3 - 0 Bosnia y Herzegovina
+Espana 3 - 0 *Austria
+Portugal 1 - 2 *Croacia
+*Suiza 3 - 1 Argelia
+Australia 0 - 2 *Egipto
+*Argentina 3 - 0 Cabo Verde
+*Colombia 2 - 1 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Cami
+
+Sudafrica 0 - 2 *Canada
+Brasil 2 - 1 *Japon
+*Alemania 3 - 0 Paraguay
+*Paises Bajos 1 - 1 Marruecos
+*Costa de Marfil 0 - 2 Noruega
+*Francia 3 - 1 Suecia
+*Mexico 1 - 2 Ecuador
+*Inglaterra 2 - 0 RD Congo
+*Belgica 1 - 1 Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+*Espana 1 - 0 Austria
+Portugal 1 - 1 *Croacia
+*Suiza 0 - 1 Argelia
+*Australia 2 - 1 Egipto
+*Argentina 2 - 0 Cabo Verde
+Colombia 3 - 1 *Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Fabrizio Escolano
+
+Sudafrica 9 - 9 *Canada
+Brasil 1 - 1 *Japon
+*Alemania 2 - 1 Paraguay
+Paises Bajos 1 - 2 *Marruecos
+Costa de Marfil 2 - 0 *Noruega
+*Francia 3 - 1 Suecia
+Mexico 1 - 1 *Ecuador
+Inglaterra 3 - 0 *RD Congo
+*Belgica 1 - 1 Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+Espana 3 - 0 *Austria
+Portugal 1 - 1 *Croacia
+*Suiza 2 - 1 Argelia
+*Australia 2 - 0 Egipto
+*Argentina 2 - 1 Cabo Verde
+Colombia 1 - 1 *Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Mario Talarico
+
+Sudafrica 1 - 2 *Canada
+*Brasil 2 - 1 Japon
+*Alemania 3 - 1 Paraguay
+*Paises Bajos 3 - 2 Marruecos
+*Costa de Marfil 2 - 2 Noruega
+*Francia 4 - 1 Suecia
+*Mexico 1 - 0 Ecuador
+*Inglaterra 2 - 1 RD Congo
+*Belgica 3 - 2 Senegal
+*Estados Unidos 3 - 2 Bosnia y Herzegovina
+*Espana 2 - 1 Austria
+*Portugal 2 - 1 Croacia
+*Suiza 3 - 1 Argelia
+Australia 0 - 1 *Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 0 - 0 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Cristian Hantis
+
+Sudafrica 9 - 9 *Canada
+*Brasil 4 - 1 Japon
+Alemania 2 - 0 *Paraguay
+Paises Bajos 3 - 1 *Marruecos
+Costa de Marfil 2 - 3 *Noruega
+*Francia 4 - 2 Suecia
+Mexico 1 - 1 *Ecuador
+*Inglaterra 2 - 0 RD Congo
+*Belgica 1 - 1 Senegal
+*Estados Unidos 3 - 2 Bosnia y Herzegovina
+*Espana 1 - 0 Austria
+Portugal 2 - 1 *Croacia
+*Suiza 2 - 1 Argelia
+*Australia 2 - 1 Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 3 - 1 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Gabriel Talarico
+
+Sudafrica 0 - 1 *Canada
+*Brasil 1 - 1 Japon
+*Alemania 2 - 0 Paraguay
+*Paises Bajos 1 - 1 Marruecos
+Costa de Marfil 0 - 2 *Noruega
+*Francia 2 - 0 Suecia
+*Mexico 1 - 0 Ecuador
+*Inglaterra 2 - 0 RD Congo
+*Belgica 1 - 0 Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+*Espana 2 - 0 Austria
+*Portugal 1 - 0 Croacia
+*Suiza 1 - 0 Argelia
+*Australia 1 - 0 Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 2 - 0 Ghana
+
+ Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Benja
+
+Sudafrica 1 - 2 *Canada
+*Brasil 2 - 1 Japon
+*Alemania 2 - 0 Paraguay
+*Paises Bajos 2 - 1 Marruecos
+Costa de Marfil 0 - 2 *Noruega
+*Francia 2 - 0 Suecia
+Mexico 1 - 2 *Ecuador
+*Inglaterra 2 - 0 RD Congo
+*Belgica 2 - 1 Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+*Espana 2 - 1 Austria
+*Portugal 2 - 1 Croacia
+*Suiza 2 - 0 Argelia
+*Australia 2 - 1 Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 2 - 1 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Verónica Lucchesi
+
+*Sudafrica 2 - 0 Canada
+*Brasil 2 - 1 Japon
+*Alemania 3 - 1 Paraguay
+*Paises Bajos 2 - 1 Marruecos
+Costa de Marfil 1 - 2 *Noruega
+*Francia 2 - 0 Suecia
+*Mexico 2 - 0 Ecuador
+*Inglaterra 3 - 0 RD Congo
+*Belgica 2 - 1 Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+*Espana 2 - 1 Austria
+*Portugal 2 - 1 Croacia
+*Suiza 1 - 0 Argelia
+*Australia 1 - 1 Egipto
+*Argentina 3 - 0 Cabo Verde
+*Colombia 2 - 1 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Rodrigo Soca
+
+Sudafrica 1 - 2 *Canada
+*Brasil 2 - 0 Japon
+*Alemania 3 - 0 Paraguay
+*Paises Bajos 2 - 1 Marruecos
+Costa de Marfil 1 - 2 *Noruega
+*Francia 3 - 0 Suecia
+*Mexico 1 - 1 Ecuador
+*Inglaterra 3 - 1 RD Congo
+*Belgica 2 - 1 Senegal
+*Estados Unidos 1 - 0 Bosnia y Herzegovina
+*Espana 2 - 0 Austria
+*Portugal 2 - 1 Croacia
+*Suiza 1 - 1 Argelia
+Australia 1 - 2 *Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 2 - 1 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Yago
+
+Sudafrica 1 - 2 *Canada
+*Brasil 2 - 0 Japon
+Alemania 2 - 1 *Paraguay
+Paises Bajos 1 - 0 *Marruecos
+Costa de Marfil 0 - 2 *Noruega
+*Francia 3 - 1 Suecia
+Mexico 2 - 1 *Ecuador
+*Inglaterra 2 - 0 RD Congo
+Belgica 1 - 0 *Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+Espana 1 - 0 *Austria
+Portugal 0 - 1 *Croacia
+*Suiza 1 - 1 Argelia
+Australia 0 - 1 *Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 1 - 0 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Renzo Badano
+
+*Alemania 2 - 1 Paraguay
+*Paises Bajos 2 - 0 Marruecos
+Costa de Marfil 0 - 3 *Noruega
+*Francia 3 - 1 Suecia
+Mexico 0 - 1 *Ecuador
+*Inglaterra 2 - 1 RD Congo
+Belgica 1 - 1 *Senegal
+Estados Unidos 2 - 0 *Bosnia y Herzegovina
+*Espana 1 - 0 Austria
+Portugal 0 - 0 *Croacia
+Suiza 2 - 1 *Argelia
+*Australia 1 - 1 Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 2 - 1 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Kevin Sívori
+
+Sudafrica 0 - 1 *Canada
+*Brasil 2 - 0 Japon
+*Alemania 2 - 0 Paraguay
+*Paises Bajos 2 - 1 Marruecos
+*Costa de Marfil 1 - 2 Noruega
+*Francia 3 - 0 Suecia
+Mexico 0 - 1 *Ecuador
+*Inglaterra 2 - 0 RD Congo
+*Belgica 2 - 1 Senegal
+*Estados Unidos 2 - 0 Bosnia y Herzegovina
+*Espana 1 - 0 Austria
+*Portugal 2 - 1 Croacia
+*Suiza 1 - 0 Argelia
+Australia 0 - 1 *Egipto
+*Argentina 2 - 0 Cabo Verde
+*Colombia 1 - 0 Ghana
+
+Prode TAFA Copa del Mundo 2026
+Fecha: 16avos
+Participante: Eze
+
+*Brasil 2 - 1 Japon
+*Alemania 3 - 1 Paraguay
+*Paises Bajos 2 - 1 Marruecos
+*Costa de Marfil 2 - 1 Noruega
+*Francia 3 - 0 Suecia
+*Mexico 1 - 2 Ecuador
+*Inglaterra 2 - 0 RD Congo
+*Belgica 2 - 1 Senegal
+*Estados Unidos 1 - 0 Bosnia y Herzegovina
+*Espana 2 - 0 Austria
+*Portugal 2 - 1 Croacia
+*Suiza 1 - 0 Argelia
+Australia 0 - 1 *Egipto
+*Argentina 3 - 0 Cabo Verde
+*Colombia 2 - 1 Ghana
 `
   ],
 

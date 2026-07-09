@@ -19,51 +19,149 @@ let estadoApp = {
 
 let cacheResultadosOficialesHardcodeados = null;
 let cacheGruposOficialesHardcodeados = null;
+let cacheMensajesCrucesHardcodeados = null;
+let cachePosicionesGeneralesCruces = null;
 let ultimoResultadoTabla = null;
 let participanteDetalleTabla = "";
 let ultimaVistaTabla = "general";
 
 /*
   CRUCES FASE FINAL
-  Bloque informativo. Edita estos arrays solo si cambia algun cruce.
-  No carga resultados ni ganadores; la pagina solo muestra las llaves.
+  Edita estos arrays si cambia algun cruce.
+  fechaId indica que fecha del fixture se usa para calcular el duelo.
+  partidoInicio y partidoFin usan el orden de partidos cargado en data.js.
 */
 const CRUCES_ORO_16AVOS = [
-  { numero: 1, local: "Lucas Insua", visitante: "Cristian Serpico" },
-  { numero: 2, local: "Pancho Muzzio", visitante: "Felipe Galante" },
-  { numero: 3, local: "Ignacio Cejas", visitante: "Cundo" },
-  { numero: 4, local: "Santi", visitante: "Jhose" },
-  { numero: 5, local: "Nahuel González", visitante: "Nico Avalos" },
-  { numero: 6, local: "Luciano Hufschmid", visitante: "Kraiizer" },
-  { numero: 7, local: "Lucas Aguilera", visitante: "Bruno Alonso" },
-  { numero: 8, local: "Rodrigo Talarico", visitante: "Cami" }
+  { numero: 1, local: "Lucas Insua", visitante: "Cristian Serpico", fechaId: "16avos", partidoInicio: 1, partidoFin: 8 },
+  { numero: 2, local: "Pancho Muzzio", visitante: "Felipe Galante", fechaId: "16avos", partidoInicio: 1, partidoFin: 8 },
+  { numero: 3, local: "Ignacio Cejas", visitante: "Cundo", fechaId: "16avos", partidoInicio: 1, partidoFin: 8 },
+  { numero: 4, local: "Santi", visitante: "Jhose", fechaId: "16avos", partidoInicio: 1, partidoFin: 8 },
+  { numero: 5, local: "Nahuel González", visitante: "Nico Avalos", fechaId: "16avos", partidoInicio: 1, partidoFin: 8 },
+  { numero: 6, local: "Luciano Hufschmid", visitante: "Kraiizer", fechaId: "16avos", partidoInicio: 1, partidoFin: 8 },
+  { numero: 7, local: "Lucas Aguilera", visitante: "Bruno Alonso", fechaId: "16avos", partidoInicio: 1, partidoFin: 8 },
+  { numero: 8, local: "Rodrigo Talarico", visitante: "Cami", fechaId: "16avos", partidoInicio: 1, partidoFin: 8 }
 ];
 
 const CRUCES_ORO_OCTAVOS = [
-  { numero: 1, local: "Gabriel Talarico", visitante: "Ganador Rodrigo Talarico / Cami" },
-  { numero: 2, local: "Eze", visitante: "Ganador Lucas Aguilera / Bruno Alonso" },
-  { numero: 3, local: "Benja", visitante: "Ganador Luciano Hufschmid / Kraiizer" },
-  { numero: 4, local: "Yago", visitante: "Ganador Nahuel González / Nico Avalos" },
-  { numero: 5, local: "Verónica Lucchesi", visitante: "Ganador Santi / Jhose" },
-  { numero: 6, local: "Renzo Badano", visitante: "Ganador Ignacio Cejas / Cundo" },
-  { numero: 7, local: "Rodrigo Soca", visitante: "Ganador Pancho Muzzio / Felipe Galante" },
-  { numero: 8, local: "Kevin Sívori", visitante: "Ganador Lucas Insua / Cristian Serpico" }
+  { numero: 1, local: "Gabriel Talarico", visitante: "Ganador Rodrigo Talarico / Cami", fechaId: "16avos", partidoInicio: 9, partidoFin: 16 },
+  { numero: 2, local: "Eze", visitante: "Ganador Lucas Aguilera / Bruno Alonso", fechaId: "16avos", partidoInicio: 9, partidoFin: 16 },
+  { numero: 3, local: "Benja", visitante: "Ganador Luciano Hufschmid / Kraiizer", fechaId: "16avos", partidoInicio: 9, partidoFin: 16 },
+  { numero: 4, local: "Yago", visitante: "Ganador Nahuel González / Nico Avalos", fechaId: "16avos", partidoInicio: 9, partidoFin: 16 },
+  { numero: 5, local: "Verónica Lucchesi", visitante: "Ganador Santi / Jhose", fechaId: "16avos", partidoInicio: 9, partidoFin: 16 },
+  { numero: 6, local: "Renzo Badano", visitante: "Ganador Ignacio Cejas / Cundo", fechaId: "16avos", partidoInicio: 9, partidoFin: 16 },
+  { numero: 7, local: "Rodrigo Soca", visitante: "Ganador Pancho Muzzio / Felipe Galante", fechaId: "16avos", partidoInicio: 9, partidoFin: 16 },
+  { numero: 8, local: "Kevin Sívori", visitante: "Ganador Lucas Insua / Cristian Serpico", fechaId: "16avos", partidoInicio: 9, partidoFin: 16 }
 ];
 
-const CRUCES_PLATA_16AVOS = [
-  { numero: 1, local: "Fabrizio Escolano", visitante: "Moreno Pérez" },
-  { numero: 2, local: "Mario Talarico", visitante: "Cristian Hantis" }
-];
-
-const CRUCES_PLATA_OCTAVOS = [
-  { numero: 1, local: "Ganador Fabrizio Escolano / Moreno Pérez", visitante: "Perdedor Rodrigo Talarico / Cami" },
-  { numero: 2, local: "Ganador Mario Talarico / Cristian Hantis", visitante: "Perdedor Lucas Aguilera / Bruno Alonso" },
-  { numero: 3, local: "Perdedor Luciano Hufschmid / Kraiizer", visitante: "Por definir" },
-  { numero: 4, local: "Perdedor Nahuel González / Nico Avalos", visitante: "Por definir" },
-  { numero: 5, local: "Perdedor Santi / Jhose", visitante: "Por definir" },
-  { numero: 6, local: "Perdedor Ignacio Cejas / Cundo", visitante: "Por definir" },
-  { numero: 7, local: "Perdedor Pancho Muzzio / Felipe Galante", visitante: "Por definir" },
-  { numero: 8, local: "Perdedor Lucas Insua / Cristian Serpico", visitante: "Por definir" }
+const CRUCES_PLATA_FECHAS = [
+  {
+    numero: 1,
+    titulo: "Fecha 1",
+    subtitulo: "Fabrizio vs Moreno y Mario vs Hantis · Partidos 1 al 4 de 16avos",
+    fechaId: "16avos",
+    partidoInicio: 1,
+    partidoFin: 4,
+    cruces: [
+      { numero: 1, local: "Fabrizio Escolano", visitante: "Moreno Pérez" },
+      { numero: 2, local: "Mario Talarico", visitante: "Cristian Hantis" }
+    ]
+  },
+  {
+    numero: 2,
+    titulo: "Fecha 2",
+    subtitulo: "Ingresan perdedores de 16avos de Copa Oro · Partidos 5 al 8 de 16avos",
+    fechaId: "16avos",
+    partidoInicio: 5,
+    partidoFin: 8,
+    cruces: [
+      { numero: 1, local: "Ganador Plata Fecha 1 - Cruce 1", visitante: "Perdedor Rodrigo Talarico / Cami" },
+      { numero: 2, local: "Ganador Plata Fecha 1 - Cruce 2", visitante: "Perdedor Lucas Aguilera / Bruno Alonso" },
+      { numero: 3, local: "Perdedor Luciano Hufschmid / Kraiizer", visitante: "Perdedor Nahuel González / Nico Avalos" },
+      { numero: 4, local: "Perdedor Santi / Jhose", visitante: "Perdedor Ignacio Cejas / Cundo" },
+      { numero: 5, local: "Perdedor Pancho Muzzio / Felipe Galante", visitante: "Perdedor Lucas Insua / Cristian Serpico" }
+    ]
+  },
+  {
+    numero: 3,
+    titulo: "Fecha 3",
+    subtitulo: "Ingresan perdedores de octavos de Copa Oro · Partidos 9 al 12 de 16avos",
+    fechaId: "16avos",
+    partidoInicio: 9,
+    partidoFin: 12,
+    cruces: [
+      { numero: 1, local: "Ganador Plata Fecha 2 - Cruce 1", visitante: "Perdedor Copa Oro Octavos - Cruce 1" },
+      { numero: 2, local: "Ganador Plata Fecha 2 - Cruce 2", visitante: "Perdedor Copa Oro Octavos - Cruce 2" },
+      { numero: 3, local: "Ganador Plata Fecha 2 - Cruce 3", visitante: "Perdedor Copa Oro Octavos - Cruce 3" },
+      { numero: 4, local: "Ganador Plata Fecha 2 - Cruce 4", visitante: "Perdedor Copa Oro Octavos - Cruce 4" },
+      { numero: 5, local: "Ganador Plata Fecha 2 - Cruce 5", visitante: "Perdedor Copa Oro Octavos - Cruce 5" },
+      { numero: 6, local: "Perdedor Copa Oro Octavos - Cruce 6", visitante: "Perdedor Copa Oro Octavos - Cruce 7" },
+      { numero: 7, local: "Perdedor Copa Oro Octavos - Cruce 8", visitante: "Por definir" }
+    ]
+  },
+  {
+    numero: 4,
+    titulo: "Fecha 4",
+    subtitulo: "Los que siguen · Últimos 4 partidos de 16avos",
+    fechaId: "16avos",
+    partidoInicio: 13,
+    partidoFin: 16,
+    cruces: [
+      { numero: 1, local: "Ganador Plata Fecha 3 - Cruce 1", visitante: "Ganador Plata Fecha 3 - Cruce 2" },
+      { numero: 2, local: "Ganador Plata Fecha 3 - Cruce 3", visitante: "Ganador Plata Fecha 3 - Cruce 4" },
+      { numero: 3, local: "Ganador Plata Fecha 3 - Cruce 5", visitante: "Ganador Plata Fecha 3 - Cruce 6" },
+      { numero: 4, local: "Ganador Plata Fecha 3 - Cruce 7", visitante: "Por definir" }
+    ]
+  },
+  {
+    numero: 5,
+    titulo: "Fecha 5",
+    subtitulo: "Ingresan perdedores de cuartos de Copa Oro · Primeros 4 partidos de octavos",
+    fechaId: "octavos",
+    partidoInicio: 1,
+    partidoFin: 4,
+    cruces: [
+      { numero: 1, local: "Ganador Plata Fecha 4 - Cruce 1", visitante: "Perdedor Copa Oro Cuartos - Cruce 1" },
+      { numero: 2, local: "Ganador Plata Fecha 4 - Cruce 2", visitante: "Perdedor Copa Oro Cuartos - Cruce 2" },
+      { numero: 3, local: "Ganador Plata Fecha 4 - Cruce 3", visitante: "Perdedor Copa Oro Cuartos - Cruce 3" },
+      { numero: 4, local: "Ganador Plata Fecha 4 - Cruce 4", visitante: "Perdedor Copa Oro Cuartos - Cruce 4" }
+    ]
+  },
+  {
+    numero: 6,
+    titulo: "Fecha 6",
+    subtitulo: "Ingresan perdedores de semis de Copa Oro · Últimos 4 partidos de octavos",
+    fechaId: "octavos",
+    partidoInicio: 5,
+    partidoFin: 8,
+    cruces: [
+      { numero: 1, local: "Ganador Plata Fecha 5 - Cruce 1", visitante: "Perdedor Copa Oro Semis - Cruce 1" },
+      { numero: 2, local: "Ganador Plata Fecha 5 - Cruce 2", visitante: "Perdedor Copa Oro Semis - Cruce 2" },
+      { numero: 3, local: "Ganador Plata Fecha 5 - Cruce 3", visitante: "Ganador Plata Fecha 5 - Cruce 4" }
+    ]
+  },
+  {
+    numero: 7,
+    titulo: "Fecha 7",
+    subtitulo: "Semifinales de Plata · 4 cuartos del Mundial",
+    fechaId: "cuartos",
+    partidoInicio: 1,
+    partidoFin: 4,
+    cruces: [
+      { numero: 1, local: "Ganador Plata Fecha 6 - Cruce 1", visitante: "Ganador Plata Fecha 6 - Cruce 2" },
+      { numero: 2, local: "Ganador Plata Fecha 6 - Cruce 3", visitante: "Por definir" }
+    ]
+  },
+  {
+    numero: 8,
+    titulo: "Fecha 8",
+    subtitulo: "Final de Plata · Últimos 4 partidos del Mundial",
+    fechaId: "final",
+    partidoInicio: 1,
+    partidoFin: 4,
+    cruces: [
+      { numero: 1, local: "Ganador Plata Fecha 7 - Cruce 1", visitante: "Ganador Plata Fecha 7 - Cruce 2" }
+    ]
+  }
 ];
 
 const POSICIONES_CRUCES = {
@@ -96,6 +194,8 @@ const POSICIONES_CRUCES = {
   "Cristian Hantis": 27,
   "Moreno Pérez": 28
 };
+
+const IDS_FECHAS_TABLA_GENERAL = ["fecha-1", "fecha-2", "fecha-3"];
 
 document.addEventListener("DOMContentLoaded", inicializarApp);
 
@@ -384,13 +484,25 @@ function crearTarjetaPartido(partido) {
   grupo.className = "partido-grupo";
   grupo.textContent = partido.grupo;
 
-  const cuando = document.createElement("p");
+  const cuando = document.createElement("div");
   cuando.className = "partido-cuando";
-  cuando.textContent = `${partido.dia} · ${partido.horario} hs`;
+  const dia = document.createElement("span");
+  dia.className = "partido-dia";
+  dia.textContent = partido.dia;
+  const hora = document.createElement("strong");
+  hora.className = "partido-hora";
+  hora.textContent = `${partido.horario} hs`;
+  cuando.append(dia, hora);
 
-  const sede = document.createElement("p");
+  const sede = document.createElement("div");
   sede.className = "partido-sede";
-  sede.textContent = `${partido.estadio} · ${partido.ciudad}`;
+  const estadio = document.createElement("span");
+  estadio.className = "partido-estadio";
+  estadio.textContent = partido.estadio;
+  const ciudad = document.createElement("small");
+  ciudad.className = "partido-ciudad";
+  ciudad.textContent = partido.ciudad;
+  sede.append(estadio, ciudad);
 
   meta.append(grupo, cuando, sede);
 
@@ -403,7 +515,7 @@ function crearTarjetaPartido(partido) {
     crearBloqueEquipo(partido.visitante, "visitante")
   );
 
-  tarjeta.append(meta, equipos);
+  tarjeta.append(equipos, meta);
   return tarjeta;
 }
 
@@ -414,19 +526,18 @@ function crearBloqueEquipo(equipo, lado) {
   const bandera = crearBanderaEquipo(equipo, "bandera", true);
 
   const textos = document.createElement("span");
-  textos.className = "equipo-nombre";
-  textos.textContent = equipo.nombre;
+  textos.className = "equipo-textos";
+
+  const nombre = document.createElement("span");
+  nombre.className = "equipo-nombre";
+  nombre.textContent = equipo.nombre;
 
   const codigo = document.createElement("span");
   codigo.className = "equipo-codigo";
   codigo.textContent = equipo.codigo;
-  textos.appendChild(codigo);
+  textos.append(nombre, codigo);
 
-  if (lado === "visitante") {
-    contenedor.append(textos, bandera);
-  } else {
-    contenedor.append(bandera, textos);
-  }
+  contenedor.append(bandera, textos);
 
   return contenedor;
 }
@@ -465,14 +576,20 @@ function crearBanderaEquipo(equipo, clase, usarCargaDiferida) {
 function crearMarcador(partido) {
   const marcador = document.createElement("div");
   marcador.className = "marcador";
+  const etiqueta = document.createElement("span");
+  const filaGoles = document.createElement("div");
 
+  etiqueta.className = "marcador-vs";
+  etiqueta.textContent = "VS";
+  filaGoles.className = "marcador-goles";
   const inputLocal = crearInputGol(partido, "local", partido.local.nombre);
   const separador = document.createElement("span");
   separador.className = "separador-goles";
   separador.textContent = "-";
   const inputVisitante = crearInputGol(partido, "visitante", partido.visitante.nombre);
 
-  marcador.append(inputLocal, separador, inputVisitante);
+  filaGoles.append(inputLocal, separador, inputVisitante);
+  marcador.append(etiqueta, filaGoles);
 
   if (fechaPermiteGanadorPenales(obtenerFechaSeleccionada())) {
     marcador.classList.add("marcador-con-penales");
@@ -646,6 +763,8 @@ function enlazarAcciones() {
   const botonCalcular = document.getElementById("boton-calcular-puntos");
   const selectorVistaTabla = document.getElementById("selector-vista-tabla");
   const botonDescargarTabla = document.getElementById("boton-descargar-tabla");
+  const botonDescargarCopaOro = document.getElementById("boton-descargar-copa-oro");
+  const botonDescargarCopaPlata = document.getElementById("boton-descargar-copa-plata");
   const botonGruposWhatsApp = document.getElementById("boton-grupos-whatsapp");
   const botonGruposImagen = document.getElementById("boton-grupos-imagen");
   const botonGruposLimpiar = document.getElementById("boton-grupos-limpiar");
@@ -665,6 +784,14 @@ function enlazarAcciones() {
 
   if (botonDescargarTabla) {
     botonDescargarTabla.addEventListener("click", descargarImagenTabla);
+  }
+
+  if (botonDescargarCopaOro) {
+    botonDescargarCopaOro.addEventListener("click", () => descargarImagenLlaves("oro"));
+  }
+
+  if (botonDescargarCopaPlata) {
+    botonDescargarCopaPlata.addEventListener("click", () => descargarImagenLlaves("plata"));
   }
 
   if (botonGruposWhatsApp) {
@@ -2309,6 +2436,723 @@ async function descargarImagenTabla() {
   }
 }
 
+async function descargarImagenLlaves(tipo = "oro") {
+  const contenedorAdvertencias = document.getElementById("advertencias-tabla");
+  const tipoNormalizado = tipo === "plata" ? "plata" : "oro";
+
+  if (typeof html2canvas !== "function") {
+    renderizarAdvertencias(contenedorAdvertencias, ["No se pudo cargar la herramienta para generar la imagen. Proba recargar la pagina."]);
+    return;
+  }
+
+  const tarjeta = crearTarjetaImagenLlaves(tipoNormalizado);
+  document.body.appendChild(tarjeta);
+
+  try {
+    await Promise.all(Array.from(tarjeta.querySelectorAll("img")).map(esperarImagenIndividual));
+
+    const canvas = await html2canvas(tarjeta, {
+      backgroundColor: "#082e61",
+      scale: 2,
+      useCORS: true
+    });
+
+    await descargarCanvasPng(canvas, `llaves-prode-tafa-copa-${tipoNormalizado}.png`);
+  } catch (error) {
+    renderizarAdvertencias(contenedorAdvertencias, ["No se pudo descargar la imagen de las llaves. Proba recargar la pagina."]);
+  } finally {
+    tarjeta.remove();
+  }
+}
+
+function crearTarjetaImagenLlaves(tipo = "oro") {
+  const esPlata = tipo === "plata";
+  const tarjeta = document.createElement("div");
+  const encabezado = document.createElement("div");
+  const cuerpo = document.createElement("div");
+  const panel = document.createElement("section");
+
+  tarjeta.className = `imagen-llaves-export imagen-llaves-${esPlata ? "plata" : "oro"}-export`;
+  encabezado.className = "imagen-llaves-header";
+  encabezado.innerHTML = `
+    <div>
+      <span>Prode TAFA Copa del Mundo 2026</span>
+      <h2>${esPlata ? "Llaves Copa Plata" : "Llaves Copa Oro"}</h2>
+    </div>
+    <strong>Fase final</strong>
+  `;
+
+  cuerpo.className = "imagen-llaves-cuerpo";
+  panel.className = `imagen-llaves-panel imagen-llaves-${esPlata ? "plata" : "oro"}`;
+  panel.append(
+    crearTituloImagenLlaves(
+      esPlata ? "Copa Plata" : "Copa Oro",
+      esPlata ? "Ingresos por perdedores y fechas de juego" : "16avos, octavos y camino al campeon"
+    ),
+    esPlata ? crearBracketCopaPlataImagen() : crearBracketCopaOroImagen()
+  );
+
+  cuerpo.append(panel);
+  tarjeta.append(encabezado, cuerpo);
+  return tarjeta;
+}
+
+function crearTituloImagenLlaves(titulo, subtitulo) {
+  const contenedor = document.createElement("div");
+  contenedor.className = "imagen-llaves-titulo";
+  contenedor.innerHTML = `
+    <h3>${titulo}</h3>
+    <span>${subtitulo}</span>
+  `;
+  return contenedor;
+}
+
+function crearBracketCopaOroImagen() {
+  const bracket = document.createElement("div");
+  const cruces = obtenerCrucesCopaOroImagenCalculados();
+
+  bracket.className = "imagen-bracket";
+  bracket.append(
+    crearColumnaBracketImagen("16avos", cruces.dieciseisavos.map((calculo) => crearPartidoBracketImagen(calculo))),
+    crearColumnaBracketImagen("Octavos", cruces.octavos.map((calculo) => crearPartidoBracketImagen(calculo))),
+    crearColumnaBracketImagen("Cuartos", cruces.cuartos.map((calculo) => crearPartidoBracketImagen(calculo))),
+    crearColumnaBracketImagen("Semis", cruces.semis.map((calculo) => crearPartidoBracketImagen(calculo))),
+    crearColumnaBracketImagen("Final", cruces.final.map((calculo) => crearPartidoBracketImagen(calculo)))
+  );
+  return bracket;
+}
+
+function obtenerCrucesCopaOroImagenCalculados() {
+  const cruces = obtenerCrucesCopaOroCalculados();
+
+  return {
+    ...cruces,
+    dieciseisavos: obtenerCruces16OrdenadosParaImagenOro()
+  };
+}
+
+function crearCrucesDesdeGanadoresImagen(crucesPrevios, datosRonda) {
+  const cantidadCruces = Math.max(1, Math.ceil(crucesPrevios.length / 2));
+
+  return Array.from({ length: cantidadCruces }, (_, indice) => {
+    const local = obtenerGanadorCruceCalculado(crucesPrevios[indice * 2]) || "Por definir";
+    const visitante = obtenerGanadorCruceCalculado(crucesPrevios[(indice * 2) + 1]) || "Por definir";
+
+    return calcularCrucePronosticos({
+      numero: indice + 1,
+      local,
+      visitante,
+      fechaId: datosRonda.fechaId,
+      partidoInicio: datosRonda.partidoInicio,
+      partidoFin: datosRonda.partidoFin
+    });
+  });
+}
+
+function obtenerCruces16OrdenadosParaImagenOro() {
+  const cruces16 = CRUCES_ORO_16AVOS.map((cruce) => calcularCrucePronosticos(cruce));
+  const indicesUsados = new Set();
+  const ordenados = [];
+
+  CRUCES_ORO_OCTAVOS.forEach((octavo) => {
+    const nombresSlot = obtenerNombresSlotGanador(octavo.visitante);
+
+    if (!nombresSlot.length) {
+      return;
+    }
+
+    const indice = cruces16.findIndex((calculo, indiceCruce) => {
+      return !indicesUsados.has(indiceCruce)
+        && nombresSlot.includes(normalizarTexto(calculo.cruce.local))
+        && nombresSlot.includes(normalizarTexto(calculo.cruce.visitante));
+    });
+
+    if (indice !== -1) {
+      indicesUsados.add(indice);
+      ordenados.push(cruces16[indice]);
+    }
+  });
+
+  cruces16.forEach((calculo, indice) => {
+    if (!indicesUsados.has(indice)) {
+      ordenados.push(calculo);
+    }
+  });
+
+  return ordenados;
+}
+
+function obtenerNombresSlotGanador(slot) {
+  const texto = String(slot || "");
+
+  if (!texto.startsWith("Ganador ")) {
+    return [];
+  }
+
+  return texto
+    .replace(/^Ganador\s+/i, "")
+    .split("/")
+    .map((nombre) => normalizarTexto(nombre))
+    .filter(Boolean);
+}
+
+function obtenerClasificadoParaSlot(slot, crucesPrevios) {
+  const texto = String(slot || "Por definir");
+
+  if (!texto.startsWith("Ganador ")) {
+    return texto;
+  }
+
+  const nombres = obtenerNombresSlotGanador(texto);
+  const cruce = crucesPrevios.find((calculo) => {
+    return nombres.includes(normalizarTexto(calculo.cruce.local))
+      && nombres.includes(normalizarTexto(calculo.cruce.visitante));
+  });
+
+  if (!cruce || !cruce.ganador) {
+    return "Por definir";
+  }
+
+  return cruce.ganador === "local" ? cruce.cruce.local : cruce.cruce.visitante;
+}
+
+function crearBracketCopaPlataImagen() {
+  const mapa = document.createElement("div");
+  const contextoPlata = obtenerContextoCopaPlata();
+
+  mapa.className = "imagen-plata-mapa";
+
+  CRUCES_PLATA_FECHAS.forEach((fechaPlata) => {
+    const crucesCalculados = fechaPlata.cruces
+      .map((cruce) => contextoPlata.cruces.get(crearClaveCrucePlata(fechaPlata.numero, cruce.numero)))
+      .filter(Boolean)
+      .map((item) => item.calculo);
+
+    mapa.appendChild(crearFechaPlataImagenDesdeCalculos(fechaPlata.titulo, fechaPlata.subtitulo, crucesCalculados));
+  });
+
+  return mapa;
+
+  const perdedores16 = obtenerPerdedoresOro16avosParaPlata();
+  const perdedoresOctavos = obtenerPerdedoresOroOctavosParaPlata();
+
+  mapa.className = "imagen-plata-mapa";
+  mapa.append(
+    crearFechaPlataImagen("Fecha 1", "Partidos 1 al 4 de 16avos", [
+      [entradaPlata("", "Fabrizio Escolano"), entradaPlata("", "Moreno Pérez")],
+      [entradaPlata("", "Mario Talarico"), entradaPlata("", "Cristian Hantis")]
+    ]),
+    crearFechaPlataImagen("Fecha 2", "Partidos 5 al 8 de 16avos · ingresan perdedores de 16avos Oro", [
+      [entradaGanadorPlata(contextoPlata, 1, 1), perdedores16[0]],
+      [entradaGanadorPlata(contextoPlata, 1, 2), perdedores16[1]],
+      [perdedores16[2], perdedores16[3]],
+      [perdedores16[4], perdedores16[5]],
+      [perdedores16[6], perdedores16[7]]
+    ]),
+    crearFechaPlataImagen("Fecha 3", "Partidos 9 al 12 de 16avos · ingresan perdedores de octavos Oro", [
+      [entradaGanadorPlata(contextoPlata, 2, 1), perdedoresOctavos[0]],
+      [entradaGanadorPlata(contextoPlata, 2, 2), perdedoresOctavos[1]],
+      [entradaGanadorPlata(contextoPlata, 2, 3), perdedoresOctavos[2]],
+      [entradaGanadorPlata(contextoPlata, 2, 4), perdedoresOctavos[3]],
+      [entradaGanadorPlata(contextoPlata, 2, 5), perdedoresOctavos[4]],
+      [perdedoresOctavos[5], perdedoresOctavos[6]],
+      [perdedoresOctavos[7], entradaPlata("Libre", "A definir")]
+    ]),
+    crearFechaPlataImagen("Fecha 4", "Últimos 4 partidos de 16avos", [
+      [entradaGanadorPlata(contextoPlata, 3, 1), entradaGanadorPlata(contextoPlata, 3, 2)],
+      [entradaGanadorPlata(contextoPlata, 3, 3), entradaGanadorPlata(contextoPlata, 3, 4)],
+      [entradaGanadorPlata(contextoPlata, 3, 5), entradaGanadorPlata(contextoPlata, 3, 6)],
+      [entradaGanadorPlata(contextoPlata, 3, 7), entradaPlata("Libre", "A definir")]
+    ]),
+    crearFechaPlataImagen("Fecha 5", "Primeros 4 partidos de octavos · ingresan perdedores de cuartos Oro", [
+      [entradaGanadorPlata(contextoPlata, 4, 1), entradaPlata("Perdedor cuartos Oro", "Cruce 1")],
+      [entradaGanadorPlata(contextoPlata, 4, 2), entradaPlata("Perdedor cuartos Oro", "Cruce 2")],
+      [entradaGanadorPlata(contextoPlata, 4, 3), entradaPlata("Perdedor cuartos Oro", "Cruce 3")],
+      [entradaGanadorPlata(contextoPlata, 4, 4), entradaPlata("Perdedor cuartos Oro", "Cruce 4")]
+    ]),
+    crearFechaPlataImagen("Fecha 6", "Últimos 4 partidos de octavos · ingresan perdedores de semis Oro", [
+      [entradaGanadorPlata(contextoPlata, 5, 1), entradaPlata("Perdedor semis Oro", "Cruce 1")],
+      [entradaGanadorPlata(contextoPlata, 5, 2), entradaPlata("Perdedor semis Oro", "Cruce 2")],
+      [entradaGanadorPlata(contextoPlata, 5, 3), entradaGanadorPlata(contextoPlata, 5, 4)]
+    ]),
+    crearFechaPlataImagen("Fecha 7", "Semifinales de Plata · 4 cuartos del Mundial", [
+      [entradaGanadorPlata(contextoPlata, 6, 1), entradaGanadorPlata(contextoPlata, 6, 2)],
+      [entradaGanadorPlata(contextoPlata, 6, 3), entradaPlata("Libre", "A definir")]
+    ]),
+    crearFechaPlataImagen("Fecha 8", "Final de Plata · últimos 4 partidos del Mundial", [
+      [entradaGanadorPlata(contextoPlata, 7, 1), entradaGanadorPlata(contextoPlata, 7, 2)]
+    ])
+  );
+  return mapa;
+}
+
+function crearFechaPlataImagenDesdeCalculos(titulo, subtitulo, crucesCalculados) {
+  const fecha = document.createElement("section");
+  const encabezado = document.createElement("div");
+  const lista = document.createElement("div");
+
+  fecha.className = "imagen-plata-fecha-card";
+  encabezado.className = "imagen-plata-fecha-top";
+  encabezado.innerHTML = `
+    <h4>${titulo}</h4>
+    <span>${subtitulo}</span>
+  `;
+  lista.className = "imagen-plata-cruces";
+
+  crucesCalculados.forEach((calculo) => {
+    lista.appendChild(crearCrucePlataImagenDesdeCalculo(calculo));
+  });
+
+  fecha.append(encabezado, lista);
+  return fecha;
+}
+
+function crearCrucePlataImagenDesdeCalculo(calculo) {
+  const cruce = document.createElement("article");
+  const numeroElemento = document.createElement("strong");
+  const resultadoLinea = document.createElement("div");
+  const resultadoTexto = obtenerTextoResultadoPlataImagen(calculo);
+  const hayPuntaje = resultadoTexto !== "-";
+
+  cruce.className = `imagen-plata-cruce estado-${calculo.estado}${calculo.ganadorPorTabla ? " desempate" : ""}`;
+  numeroElemento.textContent = calculo.cruce.numero;
+  numeroElemento.className = "imagen-plata-cruce-numero";
+  resultadoLinea.className = "imagen-plata-resultado-linea";
+  resultadoLinea.textContent = resultadoTexto !== "-" ? `Resultado: ${resultadoTexto}` : "Resultado pendiente";
+  cruce.append(
+    numeroElemento,
+    crearLadoCrucePlataImagen(crearEntradaPlataDesdeCalculo(calculo.cruce.local, calculo.ganador === "local", hayPuntaje ? calculo.local.total : null)),
+    crearMarcadorPlataImagen(calculo),
+    crearLadoCrucePlataImagen(crearEntradaPlataDesdeCalculo(calculo.cruce.visitante, calculo.ganador === "visitante", hayPuntaje ? calculo.visitante.total : null)),
+    resultadoLinea
+  );
+  return cruce;
+}
+
+function crearEntradaPlataDesdeCalculo(nombre, esGanador, puntos = null) {
+  const texto = String(nombre || "Por definir");
+  const esPendiente = esTextoCrucePendiente(texto);
+  const posicion = obtenerPosicionGeneralCruce(texto);
+  const etiquetas = [];
+
+  if (!esPendiente && Number.isFinite(posicion)) {
+    etiquetas.push(`${posicion}`);
+  }
+
+  if (esGanador) {
+    etiquetas.push("Clasifica");
+  }
+
+  return {
+    etiqueta: etiquetas.join(" - ") || "Participante",
+    nombre: texto,
+    ganador: esGanador,
+    puntos
+  };
+}
+
+function crearMarcadorPlataImagen(calculo) {
+  const marcador = document.createElement("div");
+  const etiqueta = document.createElement("span");
+  const resultado = document.createElement("strong");
+  const textoResultado = obtenerTextoResultadoPlataImagen(calculo);
+  const hayPuntaje = textoResultado !== "-";
+
+  marcador.className = `imagen-plata-marcador${hayPuntaje ? "" : " sin-resultado"}`;
+  etiqueta.textContent = hayPuntaje ? "PTS" : "VS";
+  resultado.textContent = textoResultado;
+
+  marcador.append(etiqueta, resultado);
+  return marcador;
+}
+
+function obtenerTextoResultadoPlataImagen(calculo) {
+  if (!calculo.partidos.length || calculo.local.esSlotPendiente || calculo.visitante.esSlotPendiente) {
+    return "-";
+  }
+
+  return `${calculo.local.total} - ${calculo.visitante.total}`;
+}
+
+function entradaGanadorPlata(contextoPlata, fecha, cruce) {
+  const ganador = contextoPlata.ganadores.get(crearClaveCrucePlata(fecha, cruce));
+  return entradaPlata(`Clasif. Plata F${fecha}`, ganador || `Cruce ${cruce}`);
+}
+
+function obtenerPerdedoresOro16avosParaPlata() {
+  return obtenerEntradasPerdedoresDesdeCruces(
+    obtenerCruces16OrdenadosParaImagenOro(),
+    "Perdedor 16avos Oro"
+  );
+}
+
+function obtenerPerdedoresOroOctavosParaPlata() {
+  return obtenerEntradasPerdedoresDesdeCruces(
+    obtenerCrucesOroOctavosConClasificados().map((cruce) => calcularCrucePronosticos(cruce)),
+    "Perdedor octavos Oro",
+    true
+  );
+}
+
+function obtenerEntradasPerdedoresDesdeCruces(crucesCalculados, etiqueta, usarNumeroCruceComoFallback = false) {
+  return crucesCalculados.map((calculo) => {
+    const perdedor = obtenerPerdedorCruceCalculado(calculo);
+    const referencia = usarNumeroCruceComoFallback
+      ? `Cruce ${calculo.cruce.numero}`
+      : `${calculo.cruce.local} / ${calculo.cruce.visitante}`;
+
+    return entradaPlata(etiqueta, perdedor || referencia);
+  });
+}
+
+function obtenerPerdedorCruceCalculado(calculo) {
+  if (!calculo || !calculo.ganador) {
+    return "";
+  }
+
+  return calculo.ganador === "local" ? calculo.cruce.visitante : calculo.cruce.local;
+}
+
+function resolverCrucePlataConGanadores(cruce, ganadoresPlata) {
+  return {
+    ...cruce,
+    local: resolverTextoCrucePlata(cruce.local, ganadoresPlata),
+    visitante: resolverTextoCrucePlata(cruce.visitante, ganadoresPlata)
+  };
+}
+
+function resolverTextoCrucePlata(texto, ganadoresPlata) {
+  const ganadorPlata = resolverTextoGanadorPlata(texto, ganadoresPlata);
+
+  if (ganadorPlata) {
+    return ganadorPlata;
+  }
+
+  return resolverTextoPerdedorOro(texto);
+}
+
+function resolverTextoGanadorPlata(texto, ganadoresPlata) {
+  const valor = String(texto || "");
+  const coincidencia = valor.match(/^Ganador Plata Fecha\s+(\d+)\s*-\s*Cruce\s+(\d+)$/i);
+
+  if (!coincidencia) {
+    return "";
+  }
+
+  return ganadoresPlata.get(crearClaveCrucePlata(Number(coincidencia[1]), Number(coincidencia[2]))) || "";
+}
+
+function crearClaveCrucePlata(fecha, cruce) {
+  return `${fecha}-${cruce}`;
+}
+
+function obtenerGanadorCruceCalculado(calculo) {
+  if (!calculo || !calculo.ganador) {
+    return "";
+  }
+
+  return calculo.ganador === "local" ? calculo.cruce.local : calculo.cruce.visitante;
+}
+
+function obtenerContextoCopaPlata() {
+  const ganadores = new Map();
+  const cruces = new Map();
+
+  CRUCES_PLATA_FECHAS.forEach((fechaPlata) => {
+    const fechaNumero = Number(fechaPlata.numero);
+
+    fechaPlata.cruces.forEach((cruce) => {
+      const cruceResuelto = resolverCrucePlataConGanadores(cruce, ganadores);
+      const cruceCompleto = {
+        ...cruceResuelto,
+        fechaId: fechaPlata.fechaId,
+        partidoInicio: fechaPlata.partidoInicio,
+        partidoFin: fechaPlata.partidoFin
+      };
+      const calculo = calcularCrucePronosticos(cruceCompleto);
+      const ganador = obtenerGanadorCruceCalculado(calculo);
+      const clave = crearClaveCrucePlata(fechaNumero, cruce.numero);
+
+      cruces.set(clave, { cruce: cruceCompleto, calculo });
+
+      if (ganador) {
+        ganadores.set(clave, ganador);
+      }
+    });
+  });
+
+  return { ganadores, cruces };
+}
+
+function resolverTextoPerdedorOro(texto) {
+  const valor = String(texto || "");
+
+  if (!valor.startsWith("Perdedor ")) {
+    return valor;
+  }
+
+  const copaOro = obtenerCrucesCopaOroCalculados();
+  const perdedorCuartos = resolverPerdedorOroPorNumero(valor, "Perdedor Copa Oro Cuartos - Cruce", copaOro.cuartos);
+
+  if (perdedorCuartos) {
+    return perdedorCuartos;
+  }
+
+  const perdedorSemis = resolverPerdedorOroPorNumero(valor, "Perdedor Copa Oro Semis - Cruce", copaOro.semis);
+
+  if (perdedorSemis) {
+    return perdedorSemis;
+  }
+
+  const perdedorOctavos = resolverPerdedorOroPorNumero(valor, "Perdedor Copa Oro Octavos - Cruce", obtenerCrucesOroOctavosConClasificados());
+
+  if (perdedorOctavos) {
+    return perdedorOctavos;
+  }
+
+  const textoSinPrefijo = valor.replace(/^Perdedor\s+/i, "");
+
+  if (textoSinPrefijo.includes("/")) {
+    const perdedor16 = resolverPerdedorOroPorNombres(textoSinPrefijo, CRUCES_ORO_16AVOS);
+
+    if (perdedor16) {
+      return perdedor16;
+    }
+  }
+
+  return valor;
+}
+
+function resolverPerdedorOroPorNumero(texto, prefijo, cruces) {
+  if (!texto.startsWith(prefijo)) {
+    return "";
+  }
+
+  const numero = Number(texto.replace(prefijo, "").trim());
+  const cruce = cruces[numero - 1];
+
+  if (!cruce) {
+    return "";
+  }
+
+  return obtenerPerdedorCruceCalculado(cruce.cruce ? cruce : calcularCrucePronosticos(cruce));
+}
+
+function resolverPerdedorOroPorNombres(texto, cruces) {
+  const nombres = texto.split("/").map((nombre) => normalizarTexto(nombre)).filter(Boolean);
+  const cruce = cruces.find((item) => {
+    return nombres.includes(normalizarTexto(item.local))
+      && nombres.includes(normalizarTexto(item.visitante));
+  });
+
+  return cruce ? obtenerPerdedorCruceCalculado(calcularCrucePronosticos(cruce)) : "";
+}
+
+function entradaPlata(etiqueta, nombre) {
+  return { etiqueta, nombre };
+}
+
+function crearFechaPlataImagen(titulo, subtitulo, cruces) {
+  const fecha = document.createElement("section");
+  const encabezado = document.createElement("div");
+  const lista = document.createElement("div");
+
+  fecha.className = "imagen-plata-fecha-card";
+  encabezado.className = "imagen-plata-fecha-top";
+  encabezado.innerHTML = `
+    <h4>${titulo}</h4>
+    <span>${subtitulo}</span>
+  `;
+  lista.className = "imagen-plata-cruces";
+
+  cruces.forEach(([local, visitante], indice) => {
+    lista.appendChild(crearCrucePlataImagen(indice + 1, local, visitante));
+  });
+
+  fecha.append(encabezado, lista);
+  return fecha;
+}
+
+function crearCrucePlataImagen(numero, local, visitante) {
+  const cruce = document.createElement("article");
+  const numeroElemento = document.createElement("strong");
+  const versus = document.createElement("span");
+
+  cruce.className = "imagen-plata-cruce";
+  numeroElemento.textContent = numero;
+  numeroElemento.className = "imagen-plata-cruce-numero";
+  versus.textContent = "vs";
+  versus.className = "imagen-plata-vs";
+  cruce.append(
+    numeroElemento,
+    crearLadoCrucePlataImagen(local),
+    versus,
+    crearLadoCrucePlataImagen(visitante)
+  );
+  return cruce;
+}
+
+function crearLadoCrucePlataImagen(entrada) {
+  const lado = document.createElement("div");
+  const escudoMarco = document.createElement("span");
+  const contenido = document.createElement("div");
+  const etiqueta = document.createElement("span");
+  const nombre = document.createElement("strong");
+  const puntos = document.createElement("b");
+  const participante = obtenerParticipanteRealPlata(entrada.nombre || "");
+
+  lado.className = `imagen-plata-lado${entrada.ganador ? " ganador" : ""}`;
+  escudoMarco.className = "imagen-plata-escudo";
+
+  if (participante) {
+    const escudo = document.createElement("img");
+    escudo.alt = "";
+    escudo.src = obtenerRutaEscudoParticipante(participante);
+    escudo.onerror = () => {
+      escudoMarco.classList.add("sin-escudo");
+      escudo.remove();
+    };
+    escudoMarco.appendChild(escudo);
+  } else {
+    escudoMarco.classList.add("sin-escudo");
+  }
+
+  etiqueta.textContent = entrada.etiqueta || "Participante";
+  nombre.innerHTML = formatearNombrePlataImagen(entrada.nombre || "");
+  puntos.className = "imagen-plata-puntos";
+  puntos.textContent = Number.isFinite(entrada.puntos) ? `${entrada.puntos} pts` : "";
+  contenido.append(etiqueta, nombre);
+
+  if (puntos.textContent) {
+    contenido.appendChild(puntos);
+  }
+
+  lado.append(escudoMarco, contenido);
+  return lado;
+}
+
+function obtenerParticipanteRealPlata(nombre) {
+  const normalizado = normalizarTexto(nombre);
+
+  if (!normalizado || normalizado.includes("/") || normalizado.startsWith("cruce") || normalizado.includes("definir")) {
+    return "";
+  }
+
+  return PARTICIPANTES.find((participante) => normalizarTexto(participante) === normalizado) || "";
+}
+
+function formatearNombrePlataImagen(nombre) {
+  return String(nombre || "")
+    .split("/")
+    .map((parte) => parte.trim())
+    .filter(Boolean)
+    .join("<br>");
+}
+
+function crearColumnaBracketImagen(titulo, items) {
+  const columna = document.createElement("div");
+  const encabezado = document.createElement("h4");
+  const lista = document.createElement("div");
+
+  columna.className = "imagen-bracket-col";
+  encabezado.textContent = titulo;
+  lista.className = "imagen-bracket-lista";
+  items.forEach((item) => lista.appendChild(item));
+  columna.append(encabezado, lista);
+  return columna;
+}
+
+function crearCajasPendientesBracket(cantidad, texto) {
+  return Array.from({ length: cantidad }, (_, indice) => {
+    const caja = document.createElement("div");
+    caja.className = "imagen-bracket-pendiente";
+    caja.textContent = "";
+    return caja;
+  });
+}
+
+function crearPartidoPlataImagen(local, visitante, metaTexto) {
+  const calculo = calcularCrucePronosticos({
+    local,
+    visitante,
+    fechaId: "16avos",
+    partidoInicio: 1,
+    partidoFin: 4
+  });
+
+  return crearPartidoBracketImagen({
+    ...calculo,
+    estadoTexto: metaTexto
+  });
+}
+
+function crearIngresoPlataImagen(texto) {
+  const caja = document.createElement("div");
+  caja.className = "imagen-bracket-pendiente imagen-bracket-perdedor";
+  caja.textContent = texto;
+  return caja;
+}
+
+function crearPartidoBracketImagen(calculo) {
+  const partido = document.createElement("article");
+
+  partido.className = `imagen-bracket-partido estado-${calculo.estado}`;
+  partido.append(
+    crearEquipoBracketImagen(calculo.cruce.local, calculo.local, calculo.ganador === "local"),
+    crearEquipoBracketImagen(calculo.cruce.visitante, calculo.visitante, calculo.ganador === "visitante")
+  );
+  return partido;
+}
+
+function crearEquipoBracketImagen(nombre, datos, esGanador) {
+  const texto = String(nombre || "Por definir");
+  const pendiente = esTextoCrucePendiente(texto);
+  const equipo = document.createElement("div");
+  const escudo = document.createElement("span");
+  const nombreEquipo = document.createElement("strong");
+  const puntos = document.createElement("em");
+
+  equipo.className = `imagen-bracket-equipo${pendiente ? " pendiente" : ""}${esGanador ? " ganador" : ""}`;
+  escudo.className = "imagen-bracket-escudo";
+
+  if (pendiente) {
+    escudo.textContent = "";
+  } else {
+    const imagen = document.createElement("img");
+    imagen.alt = "";
+    imagen.src = obtenerRutaEscudoParticipante(texto);
+    imagen.onerror = () => {
+      escudo.textContent = "?";
+      imagen.remove();
+    };
+    escudo.appendChild(imagen);
+  }
+
+  nombreEquipo.textContent = pendiente ? "" : texto;
+  puntos.textContent = pendiente ? "" : `${datos.total} pts`;
+  equipo.append(escudo, nombreEquipo, puntos);
+  return equipo;
+}
+
+function crearResumenCopaPlataImagen() {
+  const contenedor = document.createElement("div");
+  contenedor.className = "imagen-plata-fechas";
+
+  CRUCES_PLATA_FECHAS.forEach((fechaPlata) => {
+    const item = document.createElement("div");
+    const titulo = document.createElement("strong");
+    const descripcion = document.createElement("span");
+
+    item.className = "imagen-plata-fecha";
+    titulo.textContent = fechaPlata.titulo;
+    descripcion.textContent = fechaPlata.subtitulo;
+    item.append(titulo, descripcion);
+    contenedor.appendChild(item);
+  });
+
+  return contenedor;
+}
+
 function prepararTarjetaImagen() {
   const contenedor = document.getElementById("tarjeta-imagen-pronostico");
   const validacion = validarPronosticoCompleto();
@@ -3051,10 +3895,151 @@ function separarBloquesMensajes(texto) {
 }
 
 function renderizarCrucesTabla() {
-  renderizarListaCruces("cruces-oro-16avos", CRUCES_ORO_16AVOS, "16avos");
-  renderizarListaCruces("cruces-oro-octavos", CRUCES_ORO_OCTAVOS, "Octavos");
-  renderizarListaCruces("cruces-plata-16avos", CRUCES_PLATA_16AVOS, "16avos");
-  renderizarListaCruces("cruces-plata-octavos", CRUCES_PLATA_OCTAVOS, "Octavos");
+  const copaOro = obtenerCrucesCopaOroCalculados();
+
+  renderizarListaCrucesCalculados("cruces-oro-16avos", copaOro.dieciseisavos, "16avos");
+  renderizarListaCrucesCalculados("cruces-oro-octavos", copaOro.octavos, "Octavos");
+  prepararRondaDinamica(".fase-cuartos", "Clasificados de octavos - primeros 4 partidos de octavos");
+  renderizarListaCrucesPorSelector(".fase-cuartos .cruces-grid", copaOro.cuartos, "Cuartos");
+  prepararRondaDinamica(".fase-semifinales", "Ganadores de cuartos - ultimos 4 partidos de octavos");
+  renderizarListaCrucesPorSelector(".fase-semifinales .cruces-grid", copaOro.semis, "Semifinales");
+  prepararRondaDinamica(".fase-tercer-puesto", "Perdedores de semifinales");
+  renderizarListaCrucesPorSelector(".fase-tercer-puesto .cruces-grid", copaOro.tercerPuesto, "Tercer puesto");
+  prepararRondaDinamica(".fase-final", "Ganadores de semifinales");
+  renderizarListaCrucesPorSelector(".fase-final .cruces-grid", copaOro.final, "Final");
+  renderizarFechasCopaPlata();
+}
+
+function prepararRondaDinamica(selector, subtitulo) {
+  const ronda = document.querySelector(selector);
+  const subtituloElemento = ronda ? ronda.querySelector(".ronda-cruces-titulo.sub span") : null;
+
+  if (!ronda) {
+    return;
+  }
+
+  ronda.classList.remove("fase-pendiente");
+
+  if (subtituloElemento) {
+    subtituloElemento.textContent = subtitulo;
+  }
+}
+
+function obtenerCrucesCopaOroCalculados() {
+  const dieciseisavos = CRUCES_ORO_16AVOS.map((cruce) => calcularCrucePronosticos(cruce));
+  const octavos = obtenerCrucesOroOctavosConClasificados().map((cruce) => calcularCrucePronosticos(cruce));
+  const cuartos = crearCrucesDesdeGanadoresCalculados(octavos, {
+    fechaId: "octavos",
+    partidoInicio: 1,
+    partidoFin: 4
+  });
+  const semis = crearCrucesDesdeGanadoresCalculados(cuartos, {
+    fechaId: "octavos",
+    partidoInicio: 5,
+    partidoFin: 8
+  });
+  const tercerPuesto = crearCrucesDesdePerdedoresCalculados(semis, {
+    fechaId: "final",
+    partidoInicio: 1,
+    partidoFin: 1
+  });
+  const final = crearCrucesDesdeGanadoresCalculados(semis, {
+    fechaId: "final",
+    partidoInicio: 1,
+    partidoFin: 4
+  });
+
+  return {
+    dieciseisavos,
+    octavos,
+    cuartos,
+    semis,
+    tercerPuesto,
+    final
+  };
+}
+
+function crearCrucesDesdeGanadoresCalculados(crucesPrevios, datosRonda) {
+  const cantidadCruces = Math.max(1, Math.ceil(crucesPrevios.length / 2));
+
+  return Array.from({ length: cantidadCruces }, (_, indice) => {
+    const local = obtenerGanadorCruceCalculado(crucesPrevios[indice * 2]) || "Por definir";
+    const visitante = obtenerGanadorCruceCalculado(crucesPrevios[(indice * 2) + 1]) || "Por definir";
+
+    return calcularCrucePronosticos({
+      numero: indice + 1,
+      local,
+      visitante,
+      fechaId: datosRonda.fechaId,
+      partidoInicio: datosRonda.partidoInicio,
+      partidoFin: datosRonda.partidoFin
+    });
+  });
+}
+
+function crearCrucesDesdePerdedoresCalculados(crucesPrevios, datosRonda) {
+  if (!crucesPrevios.length) {
+    return [];
+  }
+
+  return [
+    calcularCrucePronosticos({
+      numero: 1,
+      local: obtenerPerdedorCruceCalculado(crucesPrevios[0]) || "Por definir",
+      visitante: obtenerPerdedorCruceCalculado(crucesPrevios[1]) || "Por definir",
+      fechaId: datosRonda.fechaId,
+      partidoInicio: datosRonda.partidoInicio,
+      partidoFin: datosRonda.partidoFin
+    })
+  ];
+}
+
+function obtenerCrucesOroOctavosConClasificados() {
+  const cruces16 = CRUCES_ORO_16AVOS.map((cruce) => calcularCrucePronosticos(cruce));
+
+  return CRUCES_ORO_OCTAVOS.map((cruce) => ({
+    ...cruce,
+    visitante: obtenerClasificadoParaSlot(cruce.visitante, cruces16)
+  }));
+}
+
+function renderizarFechasCopaPlata() {
+  const contenedor = document.getElementById("cruces-plata-fechas");
+
+  if (!contenedor) {
+    return;
+  }
+
+  const contextoPlata = obtenerContextoCopaPlata();
+
+  contenedor.innerHTML = "";
+  CRUCES_PLATA_FECHAS.forEach((fechaPlata) => {
+    const ronda = document.createElement("div");
+    const titulo = document.createElement("div");
+    const grilla = document.createElement("div");
+
+    ronda.className = `ronda-cruces ronda-plata-fecha fase-plata fase-plata-${fechaPlata.numero}`;
+    titulo.className = "ronda-cruces-titulo sub";
+    titulo.innerHTML = `
+      <h5>${fechaPlata.titulo}</h5>
+      <span>${fechaPlata.subtitulo}</span>
+    `;
+    grilla.className = "cruces-grid";
+
+    fechaPlata.cruces.forEach((cruce) => {
+      const cruceResuelto = resolverCrucePlataConGanadores(cruce, contextoPlata.ganadores);
+
+      grilla.appendChild(crearTarjetaCruce({
+        ...cruceResuelto,
+        fechaId: fechaPlata.fechaId,
+        partidoInicio: fechaPlata.partidoInicio,
+        partidoFin: fechaPlata.partidoFin
+      }, fechaPlata.titulo));
+    });
+
+    ronda.append(titulo, grilla);
+    contenedor.appendChild(ronda);
+  });
 }
 
 function renderizarListaCruces(contenedorId, cruces, ronda) {
@@ -3070,36 +4055,128 @@ function renderizarListaCruces(contenedorId, cruces, ronda) {
   });
 }
 
+function renderizarListaCrucesCalculados(contenedorId, crucesCalculados, ronda) {
+  const contenedor = document.getElementById(contenedorId);
+
+  if (!contenedor) {
+    return;
+  }
+
+  renderizarCrucesCalculadosEnContenedor(contenedor, crucesCalculados, ronda);
+}
+
+function renderizarListaCrucesPorSelector(selector, crucesCalculados, ronda) {
+  const contenedor = document.querySelector(selector);
+
+  if (!contenedor) {
+    return;
+  }
+
+  renderizarCrucesCalculadosEnContenedor(contenedor, crucesCalculados, ronda);
+}
+
+function renderizarCrucesCalculadosEnContenedor(contenedor, crucesCalculados, ronda) {
+  contenedor.classList.remove("cruces-grid-pendientes");
+  contenedor.innerHTML = "";
+
+  crucesCalculados.forEach((calculo) => {
+    contenedor.appendChild(crearTarjetaCruceDesdeCalculo(calculo, ronda));
+  });
+}
+
 function crearTarjetaCruce(cruce, ronda) {
+  return crearTarjetaCruceDesdeCalculo(calcularCrucePronosticos(cruce), ronda);
+}
+
+function crearTarjetaCruceDesdeCalculo(calculo, ronda) {
   const tarjeta = document.createElement("article");
   const encabezado = document.createElement("div");
-  const crucePendiente = esTextoCrucePendiente(cruce.local) || esTextoCrucePendiente(cruce.visitante);
+  const pie = document.createElement("div");
+  const cruce = calculo.cruce;
+  const etiquetaPartidos = obtenerEtiquetaPartidosCruce(calculo);
+  const textosMeta = [
+    etiquetaPartidos,
+    calculo.ganadorPorTabla ? "Desempate tabla general" : ""
+  ].filter(Boolean);
 
-  tarjeta.className = "cruce-card";
+  tarjeta.className = `cruce-card estado-${calculo.estado}${calculo.ganadorPorTabla ? " desempate" : ""}`;
   encabezado.className = "cruce-card-top";
   encabezado.innerHTML = `
-    <span>${ronda} · Cruce ${cruce.numero}</span>
-    <small>${crucePendiente ? "Por definir" : "Cruce definido"}</small>
+    <span>${ronda}</span>
+    <strong>Cruce ${cruce.numero}</strong>
+  `;
+
+  pie.className = "cruce-card-pie";
+  pie.innerHTML = `
+    ${textosMeta.map((texto) => `<span>${texto}</span>`).join("")}
   `;
 
   tarjeta.append(
     encabezado,
-    crearFilaCruceInformativa(cruce.local),
-    crearFilaCruceInformativa(cruce.visitante)
+    crearVersusCruce(calculo),
+    pie
   );
+
+  const detalle = crearDetalleCrucePronosticos(calculo);
+
+  if (detalle) {
+    tarjeta.appendChild(detalle);
+  }
 
   return tarjeta;
 }
 
-function crearFilaCruceInformativa(nombre) {
+function crearVersusCruce(calculo) {
+  const versus = document.createElement("div");
+  const motivoGanador = obtenerMotivoGanadorCruce(calculo);
+
+  versus.className = "cruce-versus";
+  versus.append(
+    crearFilaCruceInformativa(calculo.cruce.local, calculo.local, calculo.ganador === "local", motivoGanador),
+    crearMarcadorCruce(calculo),
+    crearFilaCruceInformativa(calculo.cruce.visitante, calculo.visitante, calculo.ganador === "visitante", motivoGanador)
+  );
+  return versus;
+}
+
+function crearMarcadorCruce(calculo) {
+  const marcador = document.createElement("div");
+  const etiqueta = document.createElement("span");
+  const resultado = document.createElement("div");
+  const local = document.createElement("strong");
+  const separador = document.createElement("span");
+  const visitante = document.createElement("strong");
+
+  marcador.className = "cruce-marcador";
+  etiqueta.className = "cruce-marcador-label";
+  etiqueta.textContent = calculo.ganador ? "PTS" : "VS";
+  resultado.className = "cruce-marcador-resultado";
+  local.textContent = calculo.local.esSlotPendiente || !calculo.partidos.length ? "-" : calculo.local.total;
+  separador.textContent = "-";
+  visitante.textContent = calculo.visitante.esSlotPendiente || !calculo.partidos.length ? "-" : calculo.visitante.total;
+  resultado.append(local, separador, visitante);
+  marcador.append(etiqueta, resultado);
+  return marcador;
+}
+
+function crearFilaCruceInformativa(nombre, datos = null, esGanador = false, motivoGanador = "") {
   const fila = document.createElement("div");
   const texto = String(nombre || "Por definir");
   const esPendiente = esTextoCrucePendiente(texto);
   const contenido = document.createElement("div");
   const escudoMarco = document.createElement("span");
-  const posicion = POSICIONES_CRUCES[texto];
+  const posicion = obtenerPosicionGeneralCruce(texto);
+  const metadatos = [];
 
-  fila.className = `cruce-equipo${esPendiente ? " pendiente" : ""}`;
+  if (!esPendiente && Number.isFinite(posicion)) {
+    metadatos.push(`${posicion}°`);
+  }
+
+  if (esGanador) {
+    metadatos.push(motivoGanador || "Clasifica");
+  }
+
+  fila.className = `cruce-equipo${esPendiente ? " pendiente" : ""}${esGanador ? " ganador" : ""}`;
   escudoMarco.className = "cruce-escudo-marco";
 
   if (esPendiente) {
@@ -3121,10 +4198,313 @@ function crearFilaCruceInformativa(nombre) {
   contenido.className = "cruce-equipo-nombre";
   contenido.innerHTML = `
     <strong>${texto}</strong>
-    ${!esPendiente && posicion ? `<span>Pos ${posicion} tabla general</span>` : ""}
+    ${metadatos.length ? `<span>${metadatos.join(" · ")}</span>` : ""}
   `;
   fila.append(escudoMarco, contenido);
   return fila;
+}
+
+function obtenerEtiquetaPartidosCruce(calculo) {
+  if (!calculo.fecha || !calculo.partidos.length) {
+    return "";
+  }
+
+  const inicio = Math.max(1, Number(calculo.cruce.partidoInicio) || 1);
+  const fin = Math.min(calculo.fecha.partidos.length, Number(calculo.cruce.partidoFin) || calculo.fecha.partidos.length);
+  const rango = inicio === fin ? `P${inicio}` : `P${inicio}-${fin}`;
+
+  return `${calculo.fecha.nombre} · ${rango}`;
+}
+
+function obtenerMotivoGanadorCruce(calculo) {
+  if (!calculo.ganador) {
+    return "";
+  }
+
+  return calculo.ganadorPorTabla ? "Clasifica por tabla" : "Clasifica";
+}
+
+function calcularCrucePronosticos(cruce) {
+  const { fecha, partidos } = obtenerPartidosParaCruce(cruce);
+  const local = calcularParticipanteCruce(cruce.local, cruce.fechaId, partidos);
+  const visitante = calcularParticipanteCruce(cruce.visitante, cruce.fechaId, partidos);
+  const haySlotPendiente = local.esSlotPendiente || visitante.esSlotPendiente;
+  const resultadosCompletos = partidos.length > 0 && partidos.every((partido) => {
+    const oficial = obtenerResultadoOficial(partido.id);
+    return !esResultadoOficialPendiente(oficial);
+  });
+  let estado = "pendiente";
+  let estadoTexto = "Por definir";
+  let ganador = "";
+  let ganadorPorTabla = false;
+
+  if (!fecha) {
+    estadoTexto = "Fecha por cargar";
+  } else if (!partidos.length) {
+    estadoTexto = "Sin partidos";
+  } else if (haySlotPendiente) {
+    estadoTexto = "Por definir";
+  } else if (!resultadosCompletos) {
+    estadoTexto = !local.enviado || !visitante.enviado ? "Faltan pronósticos" : "Esperando oficiales";
+  } else if (local.total === visitante.total) {
+    ganador = obtenerGanadorEmpatePorTabla(cruce.local, cruce.visitante);
+    ganadorPorTabla = Boolean(ganador);
+    estado = ganador ? "definido desempate" : "empate";
+    estadoTexto = ganador ? "Desempate tabla general" : "Empate";
+  } else {
+    ganador = local.total > visitante.total ? "local" : "visitante";
+    estado = "definido";
+    estadoTexto = "Definido";
+  }
+
+  return {
+    cruce,
+    fecha,
+    partidos,
+    local,
+    visitante,
+    estado,
+    estadoTexto,
+    ganador,
+    ganadorPorTabla
+  };
+}
+
+function obtenerGanadorEmpatePorTabla(nombreLocal, nombreVisitante) {
+  const posicionLocal = obtenerPosicionGeneralCruce(nombreLocal);
+  const posicionVisitante = obtenerPosicionGeneralCruce(nombreVisitante);
+
+  if (!Number.isFinite(posicionLocal) && !Number.isFinite(posicionVisitante)) {
+    return "";
+  }
+
+  if (posicionLocal === posicionVisitante) {
+    return "";
+  }
+
+  return posicionLocal < posicionVisitante ? "local" : "visitante";
+}
+
+function obtenerPosicionGeneralCruce(nombre) {
+  const clave = normalizarTexto(nombre);
+
+  if (!clave) {
+    return Number.POSITIVE_INFINITY;
+  }
+
+  return obtenerMapaPosicionesGeneralesCruces().get(clave) || Number.POSITIVE_INFINITY;
+}
+
+function obtenerMapaPosicionesGeneralesCruces() {
+  if (cachePosicionesGeneralesCruces) {
+    return cachePosicionesGeneralesCruces;
+  }
+
+  const tablaGeneral = generarTablaPosiciones("general");
+
+  cachePosicionesGeneralesCruces = new Map(tablaGeneral.filas.map((fila) => [
+    normalizarTexto(fila.participante),
+    fila.posicion
+  ]));
+
+  return cachePosicionesGeneralesCruces;
+}
+
+function calcularParticipanteCruce(nombre, fechaId, partidos) {
+  const texto = String(nombre || "Por definir");
+  const esSlotPendiente = esTextoCrucePendiente(texto);
+  const base = {
+    nombre: texto,
+    esSlotPendiente,
+    enviado: false,
+    total: 0,
+    plenos: 0,
+    parciales: 0,
+    errores: 0,
+    pendientes: 0,
+    noCargados: 0,
+    detalles: []
+  };
+
+  if (esSlotPendiente || !fechaId || !partidos.length) {
+    return base;
+  }
+
+  const mensaje = obtenerMensajePronosticoCruce(texto, fechaId);
+  const pronosticosPorPartido = new Map();
+
+  if (mensaje) {
+    mensaje.pronosticos.forEach((pronostico) => {
+      pronosticosPorPartido.set(pronostico.partido.id, pronostico);
+    });
+    base.enviado = true;
+  }
+
+  partidos.forEach((partido) => {
+    const pronostico = pronosticosPorPartido.get(partido.id) || null;
+    const oficial = obtenerResultadoOficial(partido.id);
+
+    if (!pronostico) {
+      base.noCargados += 1;
+      base.detalles.push({
+        partido,
+        pronostico: null,
+        oficial,
+        estado: "sin-envio",
+        descripcion: "No mandó",
+        puntos: 0,
+        extra: 0,
+        resultadoOficialTexto: formatearResultadoOficial(partido, oficial)
+      });
+      return;
+    }
+
+    const puntaje = calcularPuntosPartido(pronostico, oficial);
+    const puntosTotales = puntaje.puntos + (puntaje.extra || 0);
+
+    base.total += puntosTotales;
+    base.plenos += puntaje.estado === "pleno" ? 1 : 0;
+    base.parciales += puntaje.estado === "parcial" ? 1 : 0;
+    base.errores += puntaje.estado === "error" ? 1 : 0;
+    base.pendientes += puntaje.estado === "pendiente" ? 1 : 0;
+    base.detalles.push({
+      partido,
+      pronostico,
+      oficial,
+      estado: puntaje.estado,
+      descripcion: puntaje.descripcion,
+      puntos: puntaje.puntos,
+      extra: puntaje.extra || 0,
+      resultadoOficialTexto: formatearResultadoOficial(partido, oficial)
+    });
+  });
+
+  return base;
+}
+
+function obtenerMensajePronosticoCruce(participante, fechaId) {
+  const carga = obtenerMensajesCrucesHardcodeados();
+  return carga.mensajes.get(crearClaveMensajeCruce(participante, fechaId)) || null;
+}
+
+function obtenerMensajesCrucesHardcodeados() {
+  if (cacheMensajesCrucesHardcodeados) {
+    return cacheMensajesCrucesHardcodeados;
+  }
+
+  const parseo = parsearMultiplesMensajes(obtenerTextoPronosticosHardcodeados());
+  const mensajes = new Map();
+
+  parseo.mensajes.forEach((mensaje) => {
+    if (!mensaje.fecha || !mensaje.participante) {
+      return;
+    }
+
+    mensajes.set(crearClaveMensajeCruce(mensaje.participante, mensaje.fecha.id), mensaje);
+  });
+
+  cacheMensajesCrucesHardcodeados = {
+    mensajes,
+    advertencias: parseo.advertencias
+  };
+
+  return cacheMensajesCrucesHardcodeados;
+}
+
+function crearClaveMensajeCruce(participante, fechaId) {
+  return `${normalizarTexto(participante)}__${fechaId}`;
+}
+
+function obtenerPartidosParaCruce(cruce) {
+  const fecha = FECHAS.find((fechaItem) => fechaItem.id === cruce.fechaId) || null;
+
+  if (!fecha) {
+    return {
+      fecha: null,
+      partidos: []
+    };
+  }
+
+  const inicio = Math.max(1, Number(cruce.partidoInicio) || 1);
+  const fin = Math.min(fecha.partidos.length, Number(cruce.partidoFin) || fecha.partidos.length);
+
+  return {
+    fecha,
+    partidos: fecha.partidos.slice(inicio - 1, fin)
+  };
+}
+
+function esResultadoOficialPendiente(oficial) {
+  return !oficial
+    || oficial.golesLocal === null
+    || oficial.golesVisitante === null
+    || oficial.golesLocal === undefined
+    || oficial.golesVisitante === undefined;
+}
+
+function crearDetalleCrucePronosticos(calculo) {
+  if (!calculo.partidos.length || calculo.local.esSlotPendiente || calculo.visitante.esSlotPendiente) {
+    return null;
+  }
+
+  const detalle = document.createElement("details");
+  const resumen = document.createElement("summary");
+  const lista = document.createElement("div");
+
+  detalle.className = "cruce-detalle";
+  resumen.textContent = "Ver pronósticos";
+  lista.className = "cruce-detalle-lista";
+  lista.append(
+    crearColumnaDetalleCruce(calculo.local),
+    crearColumnaDetalleCruce(calculo.visitante)
+  );
+
+  detalle.append(resumen, lista);
+  return detalle;
+}
+
+function crearColumnaDetalleCruce(participante) {
+  const columna = document.createElement("section");
+  const encabezado = document.createElement("div");
+  const lista = document.createElement("div");
+
+  columna.className = "cruce-detalle-columna";
+  encabezado.className = "cruce-detalle-columna-top";
+  encabezado.innerHTML = `
+    <span>${participante.nombre}</span>
+    <strong>${participante.total} pts</strong>
+  `;
+  lista.className = "cruce-pronostico-lista";
+
+  participante.detalles.forEach((item) => {
+    lista.appendChild(crearPronosticoDetalleCruce(item));
+  });
+
+  columna.append(encabezado, lista);
+  return columna;
+}
+
+function crearPronosticoDetalleCruce(item) {
+  const fila = document.createElement("article");
+  const texto = document.createElement("div");
+  const puntos = document.createElement("strong");
+
+  fila.className = `cruce-pronostico-item estado-${item ? item.estado : "sin-envio"}`;
+  texto.innerHTML = `
+    <b>${item && item.pronostico ? formatearPronosticoCruce(item.partido, item.pronostico) : "No mandó"}</b>
+    <span>${item ? item.resultadoOficialTexto : "Oficial: No cargado"}</span>
+  `;
+  puntos.textContent = item && item.extra ? `${item.puntos}+${item.extra}` : String(item ? item.puntos : 0);
+  fila.append(texto, puntos);
+  return fila;
+}
+
+function formatearPronosticoCruce(partido, pronostico) {
+  const ganador = obtenerGanadorPenalesResultado(pronostico);
+  const marcaLocal = ganador === "local" ? "*" : "";
+  const marcaVisitante = ganador === "visitante" ? "*" : "";
+
+  return `${marcaLocal}${partido.local.nombre} ${pronostico.golesLocal} - ${pronostico.golesVisitante} ${marcaVisitante}${partido.visitante.nombre}`;
 }
 
 function esTextoCrucePendiente(texto) {
@@ -3189,13 +4569,15 @@ function generarTablaPosiciones(vistaTabla = obtenerVistaTablaSeleccionada()) {
     mensajesGrupos.push(mensaje);
   });
 
+  const mensajesPartidosTablaGeneral = mensajesPartidos.filter((mensaje) => esFechaTablaGeneral(mensaje.fecha && mensaje.fecha.id));
+
   const filasGeneral = construirFilasTabla({
-    mensajesPartidos,
+    mensajesPartidos: mensajesPartidosTablaGeneral,
     mensajesGrupos,
     cargaGruposOficiales,
     filtroFecha: "__todas__",
     incluirGrupos: true,
-    fechasEsperadas: obtenerFechasEsperadasTabla("general", mensajesPartidos, cargaOficial.resultados),
+    fechasEsperadas: obtenerFechasEsperadasTabla("general", mensajesPartidosTablaGeneral, cargaOficial.resultados),
     advertencias,
     registrarDuplicados: true
   });
@@ -3330,6 +4712,10 @@ function normalizarVistaTabla(vista) {
   return ["general", "fecha-1", "fecha-2", "fecha-3", "grupos"].includes(vista) ? vista : "general";
 }
 
+function esFechaTablaGeneral(fechaId) {
+  return IDS_FECHAS_TABLA_GENERAL.includes(fechaId);
+}
+
 function obtenerNombreVistaTabla(vista) {
   const nombres = {
     general: "General",
@@ -3354,27 +4740,7 @@ function obtenerFechasEsperadasTabla(vista, mensajesPartidos, resultadosOficiale
     return fecha ? [fecha] : [];
   }
 
-  const ids = new Set();
-
-  mensajesPartidos.forEach((mensaje) => {
-    if (mensaje.fecha && mensaje.fecha.id) {
-      ids.add(mensaje.fecha.id);
-    }
-  });
-
-  Object.entries(resultadosOficiales || {}).forEach(([partidoId, resultado]) => {
-    if (!resultado || resultado.golesLocal === null || resultado.golesVisitante === null || resultado.golesLocal === undefined || resultado.golesVisitante === undefined) {
-      return;
-    }
-
-    const fecha = obtenerFechaPorPartidoId(partidoId);
-
-    if (fecha) {
-      ids.add(fecha.id);
-    }
-  });
-
-  return FECHAS.filter((fecha) => ids.has(fecha.id));
+  return FECHAS.filter((fecha) => esFechaTablaGeneral(fecha.id));
 }
 
 function obtenerFechaPorPartidoId(partidoId) {

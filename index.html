@@ -223,50 +223,102 @@
               <p class="seccion-kicker">Fase final</p>
               <h3>Cruces Copa Oro y Copa Plata</h3>
             </div>
-            <span>Llaves informativas</span>
+            <span>Empate: clasifica mejor tabla general</span>
           </div>
 
           <div class="copas-cruces">
+            <section class="fase-torneo fase-grupos-tabla">
+              <div class="ronda-cruces-titulo">
+                <h4>Fase de grupos</h4>
+                <span>General cerrada con Fecha 1, Fecha 2, Fecha 3 y pronóstico de grupos</span>
+              </div>
+              <div class="fase-grupos-resumen">
+                <article>
+                  <strong>Fecha 1</strong>
+                  <span>Primer bloque de partidos</span>
+                </article>
+                <article>
+                  <strong>Fecha 2</strong>
+                  <span>Segundo bloque de partidos</span>
+                </article>
+                <article>
+                  <strong>Fecha 3</strong>
+                  <span>Tercer bloque de partidos</span>
+                </article>
+                <article>
+                  <strong>Grupos</strong>
+                  <span>Puestos finales acertados</span>
+                </article>
+              </div>
+            </section>
+
             <section class="copa-cruces copa-oro">
               <div class="ronda-cruces-titulo">
                 <h4>Copa Oro</h4>
                 <span>Puestos 1 al 8 esperan en octavos</span>
               </div>
-              <div class="ronda-cruces">
+              <div class="ronda-cruces fase-dieciseisavos">
                 <div class="ronda-cruces-titulo sub">
                   <h5>16avos</h5>
-                  <span>Del 9 al 24</span>
+                  <span>9° al 24° · partidos 1 al 8 de 16avos</span>
                 </div>
                 <div class="cruces-grid" id="cruces-oro-16avos"></div>
               </div>
-              <div class="ronda-cruces">
+              <div class="ronda-cruces fase-octavos">
                 <div class="ronda-cruces-titulo sub">
                   <h5>Octavos</h5>
-                  <span>Ganadores de 16avos contra puestos 1 al 8</span>
+                  <span>1° al 8° vs clasificados · partidos 9 al 16 de 16avos</span>
                 </div>
                 <div class="cruces-grid" id="cruces-oro-octavos"></div>
+              </div>
+              <div class="ronda-cruces fase-cuartos fase-pendiente">
+                <div class="ronda-cruces-titulo sub">
+                  <h5>Cuartos</h5>
+                  <span>Próxima instancia</span>
+                </div>
+                <div class="cruces-grid cruces-grid-pendientes">
+                  <article class="cruce-card cruce-card-proxima"><strong>Cuarto 1</strong><span>Por definir</span></article>
+                  <article class="cruce-card cruce-card-proxima"><strong>Cuarto 2</strong><span>Por definir</span></article>
+                  <article class="cruce-card cruce-card-proxima"><strong>Cuarto 3</strong><span>Por definir</span></article>
+                  <article class="cruce-card cruce-card-proxima"><strong>Cuarto 4</strong><span>Por definir</span></article>
+                </div>
+              </div>
+              <div class="ronda-cruces fase-semifinales fase-pendiente">
+                <div class="ronda-cruces-titulo sub">
+                  <h5>Semifinales</h5>
+                  <span>Ganadores de cuartos</span>
+                </div>
+                <div class="cruces-grid cruces-grid-pendientes">
+                  <article class="cruce-card cruce-card-proxima"><strong>Semi 1</strong><span>Por definir</span></article>
+                  <article class="cruce-card cruce-card-proxima"><strong>Semi 2</strong><span>Por definir</span></article>
+                </div>
+              </div>
+              <div class="ronda-cruces fase-tercer-puesto fase-pendiente">
+                <div class="ronda-cruces-titulo sub">
+                  <h5>Tercer puesto</h5>
+                  <span>Perdedores de semifinales</span>
+                </div>
+                <div class="cruces-grid cruces-grid-pendientes">
+                  <article class="cruce-card cruce-card-proxima"><strong>3° puesto</strong><span>Por definir</span></article>
+                </div>
+              </div>
+              <div class="ronda-cruces fase-final fase-pendiente">
+                <div class="ronda-cruces-titulo sub">
+                  <h5>Final</h5>
+                  <span>Campeón Copa Oro</span>
+                </div>
+                <div class="cruces-grid cruces-grid-pendientes">
+                  <article class="cruce-card cruce-card-proxima final"><strong>Final Copa Oro</strong><span>Por definir</span></article>
+                </div>
               </div>
             </section>
 
             <section class="copa-cruces copa-plata">
               <div class="ronda-cruces-titulo">
                 <h4>Copa Plata</h4>
-                <span>Puestos 25 al 28 + perdedores de 16avos de Copa Oro</span>
+                <span>Ganadores avanzan por fecha e ingresan perdedores de Oro</span>
               </div>
-              <div class="ronda-cruces">
-                <div class="ronda-cruces-titulo sub">
-                  <h5>16avos</h5>
-                  <span>Puestos 25 al 28</span>
-                </div>
-                <div class="cruces-grid" id="cruces-plata-16avos"></div>
-              </div>
-              <div class="ronda-cruces">
-                <div class="ronda-cruces-titulo sub">
-                  <h5>Octavos</h5>
-                  <span>Ingresan perdedores de 16avos de Copa Oro</span>
-                </div>
-                <div class="cruces-grid" id="cruces-plata-octavos"></div>
-              </div>
+              <div id="cruces-plata-fechas"></div>
             </section>
           </div>
         </div>
@@ -275,15 +327,21 @@
           <label class="campo campo-vista-tabla">
             <span>Vista</span>
             <select id="selector-vista-tabla">
-              <option value="general">General</option>
+              <option value="general" selected>General</option>
               <option value="fecha-1">Fecha 1</option>
               <option value="fecha-2">Fecha 2</option>
               <option value="fecha-3">Fecha 3</option>
-              <option value="grupos" selected>Solo grupos</option>
+              <option value="grupos">Solo grupos</option>
             </select>
           </label>
           <button class="boton boton-secundario" type="button" id="boton-descargar-tabla">
             Imagen tabla
+          </button>
+          <button class="boton boton-secundario" type="button" id="boton-descargar-copa-oro">
+            Imagen Copa Oro
+          </button>
+          <button class="boton boton-secundario" type="button" id="boton-descargar-copa-plata">
+            Imagen Copa Plata
           </button>
         </div>
 

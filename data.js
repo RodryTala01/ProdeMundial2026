@@ -2144,6 +2144,99 @@ const FECHAS = [
         }
       }
     ]
+  },
+  {
+    id: "cuartos",
+    nombre: "Cuartos",
+    fase: "Eliminacion directa",
+    cierrePronostico: "2026-07-10T15:30:00-03:00",
+    descripcion: "Cuartos de final",
+    partidos: [
+      {
+        id: "ganador-par-fra-vs-ganador-can-mar-cuartos",
+        grupo: "Cuartos",
+        dia: "Viernes 10 de julio",
+        fechaISO: "2026-07-10",
+        horario: "16:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "Ganador Paraguay/Francia",
+          bandera: "",
+          banderaImagen: "",
+          codigo: "G1"
+        },
+        visitante: {
+          nombre: "Ganador Canada/Marruecos",
+          bandera: "",
+          banderaImagen: "",
+          codigo: "G2"
+        }
+      },
+      {
+        id: "ganador-por-esp-vs-ganador-usa-bel-cuartos",
+        grupo: "Cuartos",
+        dia: "Viernes 10 de julio",
+        fechaISO: "2026-07-10",
+        horario: "20:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "Ganador Portugal/Espana",
+          bandera: "",
+          banderaImagen: "",
+          codigo: "G3"
+        },
+        visitante: {
+          nombre: "Ganador Estados Unidos/Belgica",
+          bandera: "",
+          banderaImagen: "",
+          codigo: "G4"
+        }
+      },
+      {
+        id: "ganador-bra-nor-vs-ganador-mex-eng-cuartos",
+        grupo: "Cuartos",
+        dia: "Sabado 11 de julio",
+        fechaISO: "2026-07-11",
+        horario: "16:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "Ganador Brasil/Noruega",
+          bandera: "",
+          banderaImagen: "",
+          codigo: "G5"
+        },
+        visitante: {
+          nombre: "Ganador Mexico/Inglaterra",
+          bandera: "",
+          banderaImagen: "",
+          codigo: "G6"
+        }
+      },
+      {
+        id: "ganador-arg-egy-vs-ganador-sui-col-cuartos",
+        grupo: "Cuartos",
+        dia: "Sabado 11 de julio",
+        fechaISO: "2026-07-11",
+        horario: "20:00",
+        estadio: "Por definir",
+        ciudad: "Por definir",
+        local: {
+          nombre: "Ganador Argentina/Egipto",
+          bandera: "",
+          banderaImagen: "",
+          codigo: "G7"
+        },
+        visitante: {
+          nombre: "Ganador Suiza/Colombia",
+          bandera: "",
+          banderaImagen: "",
+          codigo: "G8"
+        }
+      }
+    ]
   }
 ];
 
@@ -2662,6 +2755,22 @@ const RESULTADOS_OFICIALES = {
     golesVisitante: null
   },
   "sui-col-octavos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "ganador-par-fra-vs-ganador-can-mar-cuartos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "ganador-por-esp-vs-ganador-usa-bel-cuartos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "ganador-bra-nor-vs-ganador-mex-eng-cuartos": {
+    golesLocal: null,
+    golesVisitante: null
+  },
+  "ganador-arg-egy-vs-ganador-sui-col-cuartos": {
     golesLocal: null,
     golesVisitante: null
   }
