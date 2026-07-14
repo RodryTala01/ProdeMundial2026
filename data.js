@@ -2237,6 +2237,57 @@ const FECHAS = [
         }
       }
     ]
+  },
+  {
+    id: "semifinales",
+    nombre: "Semifinales",
+    fase: "Eliminacion directa",
+    cierrePronostico: "2026-07-14T15:30:00-03:00",
+    descripcion: "Semifinales",
+    partidos: [
+      {
+        id: "fra-esp-semifinales",
+        grupo: "Semifinales",
+        dia: "Martes 14 de julio",
+        fechaISO: "2026-07-14",
+        horario: "16:00",
+        estadio: "Dallas Stadium",
+        ciudad: "Arlington",
+        local: {
+          nombre: "Francia",
+          bandera: "",
+          banderaImagen: "assets/flags/fr.svg",
+          codigo: "FRA"
+        },
+        visitante: {
+          nombre: "España",
+          bandera: "",
+          banderaImagen: "assets/flags/es.svg",
+          codigo: "ESP"
+        }
+      },
+      {
+        id: "eng-arg-semifinales",
+        grupo: "Semifinales",
+        dia: "Miércoles 15 de julio",
+        fechaISO: "2026-07-15",
+        horario: "16:00",
+        estadio: "Atlanta Stadium",
+        ciudad: "Atlanta",
+        local: {
+          nombre: "Inglaterra",
+          bandera: "",
+          banderaImagen: "assets/flags/gb-eng.svg",
+          codigo: "ENG"
+        },
+        visitante: {
+          nombre: "Argentina",
+          bandera: "",
+          banderaImagen: "assets/flags/ar.svg",
+          codigo: "ARG"
+        }
+      }
+    ]
   }
 ];
 
@@ -2759,18 +2810,26 @@ const RESULTADOS_OFICIALES = {
     golesVisitante: null
   },
   "fra-mar-cuartos": {
-    golesLocal: null,
-    golesVisitante: null
+    golesLocal: 2,
+    golesVisitante: 0
   },
   "esp-bel-cuartos": {
-    golesLocal: null,
-    golesVisitante: null
+    golesLocal: 2,
+    golesVisitante: 1
   },
   "nor-eng-cuartos": {
+    golesLocal: 1,
+    golesVisitante: 2
+  },
+  "arg-sui-cuartos": {
+    golesLocal: 3,
+    golesVisitante: 1
+  },
+  "fra-esp-semifinales": {
     golesLocal: null,
     golesVisitante: null
   },
-  "arg-sui-cuartos": {
+  "eng-arg-semifinales": {
     golesLocal: null,
     golesVisitante: null
   }

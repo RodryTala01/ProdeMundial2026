@@ -28,9 +28,9 @@
             <span class="nav-texto-desktop">Grupos</span>
             <span class="nav-texto-mobile">Grupos</span>
           </button>
-          <button class="nav-boton nav-deshabilitado" type="button" data-seccion="calcular" aria-selected="false" aria-disabled="true" disabled title="Puntos deshabilitado por ahora">
-            <span class="nav-texto-desktop">Puntos</span>
-            <span class="nav-texto-mobile">Puntos</span>
+          <button class="nav-boton" type="button" data-seccion="calcular" aria-selected="false">
+            <span class="nav-texto-desktop">Calculadora</span>
+            <span class="nav-texto-mobile">Calc</span>
           </button>
           <button class="nav-boton" type="button" data-seccion="tabla" aria-selected="false">
             <span class="nav-texto-desktop">Tabla</span>
@@ -181,9 +181,10 @@
       <section class="seccion-app" id="seccion-calcular" aria-labelledby="titulo-seccion-calcular" hidden>
         <div class="barra-seccion">
           <div>
-            <p class="seccion-kicker">Puntos</p>
-            <h2 id="titulo-seccion-calcular">Calcular</h2>
+            <p class="seccion-kicker">Puntaje</p>
+            <h2 id="titulo-seccion-calcular">Calculadora</h2>
           </div>
+          <p class="resumen-seleccion">Pega un mensaje y revisa los puntos</p>
         </div>
 
         <div class="panel-herramienta">
@@ -194,7 +195,12 @@
 
           <label class="campo campo-textarea">
             <span>Mensaje WhatsApp</span>
-            <textarea id="textarea-pronostico-calculo" rows="8" placeholder="Pegá mensaje"></textarea>
+            <textarea id="textarea-pronostico-calculo" rows="10" placeholder="Pega aca el mensaje completo de la fecha. Ej:
+Prode TAFA Copa del Mundo 2026
+Fecha: Cuartos
+Participante: Nombre
+
+Francia 2 - 0 Marruecos"></textarea>
           </label>
 
           <div class="acciones-pronostico">

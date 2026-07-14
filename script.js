@@ -2,7 +2,7 @@ const CLAVE_ESTADO = "prodeTafa2026_state";
 const CLAVE_NOTIFICACIONES_VISTAS = "prodeTafa2026_notificaciones_vistas";
 const CLAVE_NOTIFICACIONES_INTERACCION = "prodeTafa2026_notificaciones_interaccion";
 const CLAVE_AVISOS_VISUALES_CERRADOS = "prodeTafa2026_avisos_visuales_cerrados";
-const SECCIONES_DESHABILITADAS = new Set(["calcular"]);
+const SECCIONES_DESHABILITADAS = new Set();
 
 let intervaloCuentaRegresiva = null;
 let modalGrupoActivo = {

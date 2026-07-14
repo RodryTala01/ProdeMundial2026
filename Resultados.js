@@ -168,6 +168,14 @@ Suiza 2 - 0 Argelia
 Australia 1 - 1 *Egipto
 Argentina 3 - 2 Cabo Verde
 Colombia 1 - 0 Ghana`
+,
+
+`Fecha: Cuartos
+
+Francia 2 - 0 Marruecos
+Espana 2 - 1 Belgica
+Noruega 1 - 2 Inglaterra
+Argentina 3 - 1 Suiza`
   ],
 
   oficialesGrupos: [
