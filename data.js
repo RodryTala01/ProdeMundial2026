@@ -2778,36 +2778,37 @@ const RESULTADOS_OFICIALES = {
     golesVisitante: null
   },
   "par-fra-octavos": {
-    golesLocal: null,
-    golesVisitante: null
+    golesLocal: 0,
+    golesVisitante: 1
   },
   "can-mar-octavos": {
-    golesLocal: null,
-    golesVisitante: null
+    golesLocal: 0,
+    golesVisitante: 3
   },
   "por-esp-octavos": {
-    golesLocal: null,
-    golesVisitante: null
+    golesLocal: 0,
+    golesVisitante: 1
   },
   "usa-bel-octavos": {
-    golesLocal: null,
-    golesVisitante: null
+    golesLocal: 1,
+    golesVisitante: 4
   },
   "bra-nor-octavos": {
-    golesLocal: null,
-    golesVisitante: null
+    golesLocal: 1,
+    golesVisitante: 2
   },
   "mex-eng-octavos": {
-    golesLocal: null,
-    golesVisitante: null
+    golesLocal: 2,
+    golesVisitante: 3
   },
   "arg-egy-octavos": {
-    golesLocal: null,
-    golesVisitante: null
+    golesLocal: 3,
+    golesVisitante: 2
   },
   "sui-col-octavos": {
-    golesLocal: null,
-    golesVisitante: null
+    golesLocal: 0,
+    golesVisitante: 0,
+    ganadorPenales: "local"
   },
   "fra-mar-cuartos": {
     golesLocal: 2,
@@ -2819,11 +2820,13 @@ const RESULTADOS_OFICIALES = {
   },
   "nor-eng-cuartos": {
     golesLocal: 1,
-    golesVisitante: 2
+    golesVisitante: 1,
+    ganadorPenales: "visitante"
   },
   "arg-sui-cuartos": {
-    golesLocal: 3,
-    golesVisitante: 1
+    golesLocal: 1,
+    golesVisitante: 1,
+    ganadorPenales: "local"
   },
   "fra-esp-semifinales": {
     golesLocal: null,

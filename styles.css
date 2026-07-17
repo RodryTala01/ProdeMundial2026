@@ -1312,12 +1312,6 @@ main {
   background: var(--verde-oscuro);
 }
 
-.copa-cruces.copa-plata > .ronda-cruces-titulo {
-  color: #ffffff;
-  border-bottom: 4px solid var(--dorado);
-  background: #4b4f54;
-}
-
 .copa-cruces > .ronda-cruces-titulo span {
   color: #e8e8e8;
 }
@@ -1329,10 +1323,6 @@ main {
   border-radius: 8px;
   overflow: hidden;
   background: #cfd5c8;
-}
-
-.copa-plata .ronda-cruces {
-  border-top-color: #4b4f54;
 }
 
 .ronda-cruces + .ronda-cruces {
@@ -1453,29 +1443,6 @@ main {
   font-size: 1.25rem;
 }
 
-#cruces-plata-fechas {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  padding: 12px;
-}
-
-.copa-plata .ronda-plata-fecha {
-  margin: 0;
-}
-
-.fase-plata {
-  border-top-color: #4b4f54;
-}
-
-.fase-plata:nth-child(odd) {
-  background: #d7d7d7;
-}
-
-.fase-plata:nth-child(even) {
-  background: #d8d0ba;
-}
-
 .cruces-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -1530,10 +1497,6 @@ main {
   color: #111111;
   background: var(--dorado);
   font-size: 0.68rem;
-}
-
-.copa-plata .cruce-card-top {
-  background: #4b4f54;
 }
 
 .cruce-equipo {
@@ -1726,10 +1689,6 @@ main {
   font-size: 0.72rem;
   font-weight: 800;
   text-transform: uppercase;
-}
-
-.copa-plata .cruce-detalle-columna-top {
-  background: #4b4f54;
 }
 
 .cruce-detalle-columna-top span {
@@ -2082,8 +2041,7 @@ main {
   --fase-borde-hover: rgba(104, 42, 50, 0.42);
 }
 
-.fase-tercer-puesto,
-.fase-plata {
+.fase-tercer-puesto {
   --fase-color: #4b4f54;
   --fase-color-oscuro: #2f3337;
   --fase-card: #e6e2d5;
@@ -2468,14 +2426,6 @@ main {
   background: #ead4aa;
 }
 
-.tabla-posiciones tbody tr.zona-plata td {
-  background: #d7d7d7;
-}
-
-.tabla-posiciones tbody tr.zona-plata:hover td {
-  background: #cccccc;
-}
-
 .tabla-posiciones td:nth-child(1),
 .tabla-posiciones td:nth-child(3),
 .tabla-posiciones td:nth-child(4),
@@ -2578,10 +2528,6 @@ main {
 
 .leyenda-dieciseisavos {
   background: #f0dfbd;
-}
-
-.leyenda-plata {
-  background: #d7d7d7;
 }
 
 .detalle-participante {
@@ -4334,8 +4280,7 @@ main {
     margin-left: 6px;
   }
 
-  .copa-oro,
-  #cruces-plata-fechas {
+  .copa-oro {
     grid-template-columns: 1fr;
   }
 
@@ -4345,10 +4290,6 @@ main {
 
   .fase-final {
     border-top-width: 8px;
-  }
-
-  #cruces-plata-fechas {
-    padding: 6px;
   }
 
   .cruces-grid {
@@ -4775,10 +4716,6 @@ main {
   background: #08391f;
 }
 
-#bloque-cruces-tabla .copa-plata > .ronda-cruces-titulo {
-  background: #34383d;
-}
-
 #bloque-cruces-tabla .copa-oro {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4838,8 +4775,7 @@ main {
   --fase-hover: rgba(104, 42, 50, 0.48);
 }
 
-#bloque-cruces-tabla .fase-tercer-puesto,
-#bloque-cruces-tabla .fase-plata {
+#bloque-cruces-tabla .fase-tercer-puesto {
   --fase-color: #4b4f54;
   --fase-color-dark: #2f3337;
   --fase-soft: #ebe6d8;
@@ -4873,8 +4809,7 @@ main {
   color: #4f390e;
 }
 
-#bloque-cruces-tabla .cruces-grid,
-#bloque-cruces-tabla #cruces-plata-fechas {
+#bloque-cruces-tabla .cruces-grid {
   display: grid;
   gap: 10px;
   padding: 10px;
@@ -4886,15 +4821,6 @@ main {
 
 #bloque-cruces-tabla .fase-dieciseisavos .cruces-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-#bloque-cruces-tabla #cruces-plata-fechas {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  background: #cacaca;
-}
-
-#bloque-cruces-tabla .copa-plata .ronda-plata-fecha {
-  margin: 0;
 }
 
 #bloque-cruces-tabla .cruces-grid-pendientes {
@@ -5321,8 +5247,7 @@ main {
 
 @media (max-width: 900px) {
   #bloque-cruces-tabla .fase-grupos-resumen,
-  #bloque-cruces-tabla .copa-oro,
-  #bloque-cruces-tabla #cruces-plata-fechas {
+  #bloque-cruces-tabla .copa-oro {
     grid-template-columns: 1fr;
   }
 
@@ -5357,8 +5282,7 @@ main {
     margin: 0 -7px;
   }
 
-  #bloque-cruces-tabla .cruces-grid,
-  #bloque-cruces-tabla #cruces-plata-fechas {
+  #bloque-cruces-tabla .cruces-grid {
     grid-template-columns: 1fr;
     gap: 8px;
     padding: 7px;
@@ -5465,8 +5389,7 @@ main {
   border-radius: 6px;
 }
 
-#bloque-cruces-tabla .cruces-grid,
-#bloque-cruces-tabla #cruces-plata-fechas {
+#bloque-cruces-tabla .cruces-grid {
   gap: 8px;
   padding: 8px;
 }
@@ -5633,7 +5556,6 @@ main {
   background: #682a32;
 }
 
-#bloque-cruces-tabla .fase-plata .cruce-detalle summary,
 #bloque-cruces-tabla .fase-tercer-puesto .cruce-detalle summary {
   background: #4b4f54;
 }
@@ -5646,8 +5568,7 @@ main {
 
 @media (max-width: 900px) {
   #bloque-cruces-tabla .cruces-grid,
-  #bloque-cruces-tabla .fase-dieciseisavos .cruces-grid,
-  #bloque-cruces-tabla #cruces-plata-fechas {
+  #bloque-cruces-tabla .fase-dieciseisavos .cruces-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -5763,8 +5684,7 @@ main {
 #bloque-cruces-tabla .fase-octavos .cruce-detalle summary,
 #bloque-cruces-tabla .fase-cuartos .cruce-detalle summary,
 #bloque-cruces-tabla .fase-semifinales .cruce-detalle summary,
-#bloque-cruces-tabla .fase-tercer-puesto .cruce-detalle summary,
-#bloque-cruces-tabla .fase-plata .cruce-detalle summary {
+#bloque-cruces-tabla .fase-tercer-puesto .cruce-detalle summary {
   color: #ffffff;
 }
 

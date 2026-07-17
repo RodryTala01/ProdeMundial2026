@@ -154,10 +154,10 @@ const CRUCES_PLATA_FECHAS = [
   {
     numero: 8,
     titulo: "Fecha 8",
-    subtitulo: "Final de Plata · Últimos 4 partidos del Mundial",
-    fechaId: "final",
+    subtitulo: "Final de Plata - semifinales del Mundial",
+    fechaId: "semifinales",
     partidoInicio: 1,
-    partidoFin: 4,
+    partidoFin: 2,
     cruces: [
       { numero: 1, local: "Ganador Plata Fecha 7 - Cruce 1", visitante: "Ganador Plata Fecha 7 - Cruce 2" }
     ]
@@ -602,11 +602,11 @@ function crearMarcador(partido) {
 function crearControlGanadorPenales(partido) {
   const control = document.createElement("div");
   control.className = "penales-control";
-  control.setAttribute("aria-label", "Ganador por penales");
+  control.setAttribute("aria-label", "Equipo que clasifica");
 
   const etiqueta = document.createElement("span");
   etiqueta.className = "penales-etiqueta";
-  etiqueta.textContent = "Penales";
+  etiqueta.textContent = "Clasifica";
 
   const botonLocal = crearBotonGanadorPenales(partido, "local", partido.local.codigo, partido.local.nombre);
   const botonVisitante = crearBotonGanadorPenales(partido, "visitante", partido.visitante.codigo, partido.visitante.nombre);
@@ -623,7 +623,7 @@ function crearBotonGanadorPenales(partido, ganador, texto, nombreEquipo) {
   boton.dataset.partidoId = partido.id;
   boton.dataset.ganador = ganador;
   boton.setAttribute("aria-pressed", "false");
-  boton.setAttribute("aria-label", `Gana por penales ${nombreEquipo}`);
+  boton.setAttribute("aria-label", `Clasifica ${nombreEquipo}`);
   boton.addEventListener("click", manejarGanadorPenales);
   return boton;
 }
@@ -764,7 +764,6 @@ function enlazarAcciones() {
   const selectorVistaTabla = document.getElementById("selector-vista-tabla");
   const botonDescargarTabla = document.getElementById("boton-descargar-tabla");
   const botonDescargarCopaOro = document.getElementById("boton-descargar-copa-oro");
-  const botonDescargarCopaPlata = document.getElementById("boton-descargar-copa-plata");
   const botonGruposWhatsApp = document.getElementById("boton-grupos-whatsapp");
   const botonGruposImagen = document.getElementById("boton-grupos-imagen");
   const botonGruposLimpiar = document.getElementById("boton-grupos-limpiar");
@@ -788,10 +787,6 @@ function enlazarAcciones() {
 
   if (botonDescargarCopaOro) {
     botonDescargarCopaOro.addEventListener("click", () => descargarImagenLlaves("oro"));
-  }
-
-  if (botonDescargarCopaPlata) {
-    botonDescargarCopaPlata.addEventListener("click", () => descargarImagenLlaves("plata"));
   }
 
   if (botonGruposWhatsApp) {
@@ -1061,7 +1056,7 @@ function validarPronosticoCompleto() {
     if (partidoSinGanadorPenales) {
       return {
         valido: false,
-        mensaje: `Elegi quien pasa por penales en ${partidoSinGanadorPenales.partido.local.nombre} vs ${partidoSinGanadorPenales.partido.visitante.nombre}.`
+        mensaje: `Elegi quien clasifica en ${partidoSinGanadorPenales.partido.local.nombre} vs ${partidoSinGanadorPenales.partido.visitante.nombre}.`
       };
     }
   }
@@ -2438,14 +2433,13 @@ async function descargarImagenTabla() {
 
 async function descargarImagenLlaves(tipo = "oro") {
   const contenedorAdvertencias = document.getElementById("advertencias-tabla");
-  const tipoNormalizado = tipo === "plata" ? "plata" : "oro";
 
   if (typeof html2canvas !== "function") {
     renderizarAdvertencias(contenedorAdvertencias, ["No se pudo cargar la herramienta para generar la imagen. Proba recargar la pagina."]);
     return;
   }
 
-  const tarjeta = crearTarjetaImagenLlaves(tipoNormalizado);
+  const tarjeta = crearTarjetaImagenLlaves();
   document.body.appendChild(tarjeta);
 
   try {
@@ -2457,7 +2451,7 @@ async function descargarImagenLlaves(tipo = "oro") {
       useCORS: true
     });
 
-    await descargarCanvasPng(canvas, `llaves-prode-tafa-copa-${tipoNormalizado}.png`);
+    await descargarCanvasPng(canvas, "llaves-prode-tafa-copa-oro.png");
   } catch (error) {
     renderizarAdvertencias(contenedorAdvertencias, ["No se pudo descargar la imagen de las llaves. Proba recargar la pagina."]);
   } finally {
@@ -2465,31 +2459,30 @@ async function descargarImagenLlaves(tipo = "oro") {
   }
 }
 
-function crearTarjetaImagenLlaves(tipo = "oro") {
-  const esPlata = tipo === "plata";
+function crearTarjetaImagenLlaves() {
   const tarjeta = document.createElement("div");
   const encabezado = document.createElement("div");
   const cuerpo = document.createElement("div");
   const panel = document.createElement("section");
 
-  tarjeta.className = `imagen-llaves-export imagen-llaves-${esPlata ? "plata" : "oro"}-export`;
+  tarjeta.className = "imagen-llaves-export imagen-llaves-oro-export";
   encabezado.className = "imagen-llaves-header";
   encabezado.innerHTML = `
     <div>
       <span>Prode TAFA Copa del Mundo 2026</span>
-      <h2>${esPlata ? "Llaves Copa Plata" : "Llaves Copa Oro"}</h2>
+      <h2>Llaves Copa Oro</h2>
     </div>
     <strong>Fase final</strong>
   `;
 
   cuerpo.className = "imagen-llaves-cuerpo";
-  panel.className = `imagen-llaves-panel imagen-llaves-${esPlata ? "plata" : "oro"}`;
+  panel.className = "imagen-llaves-panel imagen-llaves-oro";
   panel.append(
     crearTituloImagenLlaves(
-      esPlata ? "Copa Plata" : "Copa Oro",
-      esPlata ? "Ingresos por perdedores y fechas de juego" : "16avos, octavos y camino al campeon"
+      "Copa Oro",
+      "16avos, octavos y camino al campeon"
     ),
-    esPlata ? crearBracketCopaPlataImagen() : crearBracketCopaOroImagen()
+    crearBracketCopaOroImagen()
   );
 
   cuerpo.append(panel);
@@ -2679,7 +2672,7 @@ function crearBracketCopaPlataImagen() {
       [entradaGanadorPlata(contextoPlata, 6, 1), entradaGanadorPlata(contextoPlata, 6, 2)],
       [entradaGanadorPlata(contextoPlata, 6, 3), entradaPlata("Libre", "A definir")]
     ]),
-    crearFechaPlataImagen("Fecha 8", "Final de Plata · últimos 4 partidos del Mundial", [
+    crearFechaPlataImagen("Fecha 8", "Final de Plata - semifinales del Mundial", [
       [entradaGanadorPlata(contextoPlata, 7, 1), entradaGanadorPlata(contextoPlata, 7, 2)]
     ])
   );
@@ -3596,7 +3589,11 @@ function formatearResultadoOficial(partido, oficial) {
     return "No cargado";
   }
 
-  return `${partido.local.nombre} ${oficial.golesLocal} - ${oficial.golesVisitante} ${partido.visitante.nombre}`;
+  const ganador = obtenerGanadorPenalesResultado(oficial);
+  const marcaLocal = ganador === "local" ? "*" : "";
+  const marcaVisitante = ganador === "visitante" ? "*" : "";
+
+  return `${marcaLocal}${partido.local.nombre} ${oficial.golesLocal} - ${oficial.golesVisitante} ${marcaVisitante}${partido.visitante.nombre}`;
 }
 
 function parsearMensajePronostico(texto, opciones = {}) {
@@ -3899,15 +3896,14 @@ function renderizarCrucesTabla() {
 
   renderizarListaCrucesCalculados("cruces-oro-16avos", copaOro.dieciseisavos, "16avos");
   renderizarListaCrucesCalculados("cruces-oro-octavos", copaOro.octavos, "Octavos");
-  prepararRondaDinamica(".fase-cuartos", "Clasificados de octavos - primeros 4 partidos de octavos");
+  prepararRondaDinamica(".fase-cuartos", "Ganadores de octavos - 8 partidos de octavos");
   renderizarListaCrucesPorSelector(".fase-cuartos .cruces-grid", copaOro.cuartos, "Cuartos");
-  prepararRondaDinamica(".fase-semifinales", "Ganadores de cuartos - ultimos 4 partidos de octavos");
+  prepararRondaDinamica(".fase-semifinales", "Ganadores de cuartos - 4 partidos de cuartos");
   renderizarListaCrucesPorSelector(".fase-semifinales .cruces-grid", copaOro.semis, "Semifinales");
   prepararRondaDinamica(".fase-tercer-puesto", "Perdedores de semifinales");
   renderizarListaCrucesPorSelector(".fase-tercer-puesto .cruces-grid", copaOro.tercerPuesto, "Tercer puesto");
   prepararRondaDinamica(".fase-final", "Ganadores de semifinales");
   renderizarListaCrucesPorSelector(".fase-final .cruces-grid", copaOro.final, "Final");
-  renderizarFechasCopaPlata();
 }
 
 function prepararRondaDinamica(selector, subtitulo) {
@@ -3928,15 +3924,16 @@ function prepararRondaDinamica(selector, subtitulo) {
 function obtenerCrucesCopaOroCalculados() {
   const dieciseisavos = CRUCES_ORO_16AVOS.map((cruce) => calcularCrucePronosticos(cruce));
   const octavos = obtenerCrucesOroOctavosConClasificados().map((cruce) => calcularCrucePronosticos(cruce));
+  // Copa Oro usa los 8 partidos de Octavos del Mundial para cuartos de copa.
   const cuartos = crearCrucesDesdeGanadoresCalculados(octavos, {
     fechaId: "octavos",
     partidoInicio: 1,
-    partidoFin: 4
+    partidoFin: 8
   });
   const semis = crearCrucesDesdeGanadoresCalculados(cuartos, {
-    fechaId: "octavos",
-    partidoInicio: 5,
-    partidoFin: 8
+    fechaId: "cuartos",
+    partidoInicio: 1,
+    partidoFin: 4
   });
   const tercerPuesto = crearCrucesDesdePerdedoresCalculados(semis, {
     fechaId: "final",
@@ -4001,45 +3998,6 @@ function obtenerCrucesOroOctavosConClasificados() {
     ...cruce,
     visitante: obtenerClasificadoParaSlot(cruce.visitante, cruces16)
   }));
-}
-
-function renderizarFechasCopaPlata() {
-  const contenedor = document.getElementById("cruces-plata-fechas");
-
-  if (!contenedor) {
-    return;
-  }
-
-  const contextoPlata = obtenerContextoCopaPlata();
-
-  contenedor.innerHTML = "";
-  CRUCES_PLATA_FECHAS.forEach((fechaPlata) => {
-    const ronda = document.createElement("div");
-    const titulo = document.createElement("div");
-    const grilla = document.createElement("div");
-
-    ronda.className = `ronda-cruces ronda-plata-fecha fase-plata fase-plata-${fechaPlata.numero}`;
-    titulo.className = "ronda-cruces-titulo sub";
-    titulo.innerHTML = `
-      <h5>${fechaPlata.titulo}</h5>
-      <span>${fechaPlata.subtitulo}</span>
-    `;
-    grilla.className = "cruces-grid";
-
-    fechaPlata.cruces.forEach((cruce) => {
-      const cruceResuelto = resolverCrucePlataConGanadores(cruce, contextoPlata.ganadores);
-
-      grilla.appendChild(crearTarjetaCruce({
-        ...cruceResuelto,
-        fechaId: fechaPlata.fechaId,
-        partidoInicio: fechaPlata.partidoInicio,
-        partidoFin: fechaPlata.partidoFin
-      }, fechaPlata.titulo));
-    });
-
-    ronda.append(titulo, grilla);
-    contenedor.appendChild(ronda);
-  });
 }
 
 function renderizarListaCruces(contenedorId, cruces, ronda) {
@@ -4768,10 +4726,6 @@ function obtenerZonaClasificacionTabla(posicionGeneral) {
     return "dieciseisavos";
   }
 
-  if (posicionGeneral >= 25 && posicionGeneral <= 28) {
-    return "plata";
-  }
-
   return "";
 }
 
@@ -4933,7 +4887,7 @@ function crearDetalleParticipanteAnterior(fila) {
 
     const descripcion = document.createElement("span");
     descripcion.textContent = item.extra
-      ? `${item.descripcion} + penales`
+      ? `${item.descripcion} + clasificacion`
       : item.descripcion;
 
     texto.append(pronostico, oficial);
@@ -5218,7 +5172,7 @@ function crearDetallePartidosTabla(fila) {
       <strong>${item.fecha.nombre} · ${item.partido.local.nombre} vs ${item.partido.visitante.nombre}</strong>
       <span>Pronostico: ${item.pronostico.golesLocal} - ${item.pronostico.golesVisitante}</span>
       <span>Oficial: ${item.resultadoOficialTexto}</span>
-      <span>${item.descripcion} · +${item.puntos}${item.extra ? ` · Extra penales +${item.extra}` : ""}</span>
+      <span>${item.descripcion} · +${item.puntos}${item.extra ? ` · Extra clasificacion +${item.extra}` : ""}</span>
     `;
     detalleItem.innerHTML = "";
 
@@ -5240,7 +5194,7 @@ function crearDetallePartidosTabla(fila) {
 
     const descripcion = document.createElement("span");
     descripcion.textContent = item.extra
-      ? `${item.descripcion} + penales`
+      ? `${item.descripcion} + clasificacion`
       : item.descripcion;
 
     texto.append(pronostico, oficial);

@@ -3,7 +3,7 @@
 
   oficiales:
   - Pega aca los resultados reales de cada fecha.
-  - En eliminatorias, marca con * el equipo que paso por penales.
+  - En eliminatorias, carga el resultado de los 90 minutos y marca con * el equipo que clasifico por alargue/penales.
   - Formato esperado:
     `
     Fecha: Fecha 1
@@ -166,16 +166,28 @@ Espana 3 - 0 Austria
 Portugal 2 - 1 Croacia
 Suiza 2 - 0 Argelia
 Australia 1 - 1 *Egipto
-Argentina 3 - 2 Cabo Verde
+*Argentina 2 - 2 Cabo Verde
 Colombia 1 - 0 Ghana`
+,
+
+`Fecha: Octavos
+
+Paraguay 0 - 1 Francia
+Canada 0 - 3 Marruecos
+Portugal 0 - 1 Espana
+Estados Unidos 1 - 4 Belgica
+Brasil 1 - 2 Noruega
+Mexico 2 - 3 Inglaterra
+Argentina 3 - 2 Egipto
+*Suiza 0 - 0 Colombia`
 ,
 
 `Fecha: Cuartos
 
 Francia 2 - 0 Marruecos
 Espana 2 - 1 Belgica
-Noruega 1 - 2 Inglaterra
-Argentina 3 - 1 Suiza`
+Noruega 1 - 1 *Inglaterra
+*Argentina 1 - 1 Suiza`
   ],
 
   oficialesGrupos: [
@@ -3002,6 +3014,143 @@ Participante: Eze
 Australia 0 - 1 *Egipto
 *Argentina 3 - 0 Cabo Verde
 *Colombia 2 - 1 Ghana
+
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Octavos
+Participante: Gabriel Talarico
+
+*Paraguay 0 - 2 Francia
+Canadá 0 - 1 *Marruecos
+*Portugal 2 - 1 España
+*Estados Unidos 1 - 0 Bélgica
+*Brasil 1 - 0 Noruega
+México 0 - 1 *Inglaterra
+*Argentina 1 - 0 Egipto
+Suiza 0 - 1 *Colombia
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Octavos
+Participante: Eze
+
+Estados Unidos 1 - 2 *Bélgica
+*Argentina 3 - 1 Egipto
+Suiza 1 - 2 *Colombia
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Octavos
+Participante: Benja
+
+Paraguay 9 - 9 *Francia
+Canadá 9 - 9 *Marruecos
+Portugal 1 - 2 *España
+Estados Unidos 1 - 2 *Bélgica
+*Brasil 2 - 1 Noruega
+México 0 - 1 *Inglaterra
+*Argentina 2 - 0 Egipto
+Suiza 1 - 2 *Colombia
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Octavos
+Participante: Yago
+
+*Paraguay 1 - 2 Francia
+Canadá 0 - 2 *Marruecos
+*Portugal 1 - 2 España
+*Estados Unidos 1 - 0 Bélgica
+*Brasil 1 - 2 Noruega
+México 0 - 2 *Inglaterra
+*Argentina 2 - 1 Egipto
+*Suiza 0 - 1 Colombia
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Octavos
+Participante: Verónica Lucchesi
+
+Paraguay 1 - 2 *Francia
+Canadá 1 - 2 *Marruecos
+Portugal 1 - 2 *España
+Estados Unidos 1 - 2 *Bélgica
+*Brasil 2 - 1 Noruega
+México 1 - 2 *Inglaterra
+*Argentina 2 - 0 Egipto
+Suiza 1 - 2 *Colombia
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Octavos
+Participante: Renzo Badano
+
+Paraguay 9 - 9 *Francia
+Canadá 9 - 9 *Marruecos
+*Portugal 2 - 1 España
+*Estados Unidos 1 - 0 Bélgica
+Brasil 3 - 2 *Noruega
+México 0 - 2 *Inglaterra
+*Argentina 2 - 0 Egipto
+Suiza 0 - 1 *Colombia
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Octavos
+Participante: Pancho Muzzio
+
+Paraguay 0 - 2 *Francia
+Canadá 1 - 2 *Marruecos
+Portugal 1 - 1 *España
+*Estados Unidos 1 - 0 Bélgica
+*Brasil 2 - 1 Noruega
+*México 1 - 1 Inglaterra
+*Argentina 2 - 1 Egipto
+Suiza 1 - 1 *Colombia
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Octavos
+Participante: Kevin Sívori
+
+Paraguay 0 - 2 *Francia
+Canadá 0 - 3 *Marruecos
+Portugal 1 - 2 *España
+Estados Unidos 0 - 2 *Bélgica
+*Brasil 2 - 1 Noruega
+México 0 - 2 *Inglaterra
+*Argentina 2 - 0 Egipto
+Suiza 0 - 1 *Colombia
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Cuartos
+Participante: Yago
+
+*Francia 2 - 0 Marruecos
+España 1 - 0 *Bélgica
+*Noruega 0 - 1 Inglaterra
+*Argentina 2 - 1 Suiza
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Cuartos
+Participante: Gabriel Talarico
+
+*Francia 2 - 1 Marruecos
+*España 1 - 0 Bélgica
+Noruega 0 - 1 *Inglaterra
+*Argentina 2 - 0 Suiza
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Cuartos
+Participante: Verónica Lucchesi
+
+*Francia 2 - 1 Marruecos
+España 2 - 2 *Bélgica
+Noruega 2 - 3 *Inglaterra
+*Argentina 2 - 1 Suiza
+
+Prode TAFA Copa del Mundo 2026
+Fecha: Cuartos
+Participante: Kevin Sívori
+
+*Francia 2 - 1 Marruecos
+*España 2 - 0 Bélgica
+Noruega 1 - 2 *Inglaterra
+*Argentina 2 - 0 Suiza
+
 `
   ],
 
